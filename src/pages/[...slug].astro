@@ -4,19 +4,53 @@ import BlogPost from '../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+	// Sort posts by publication date (newest first)
+	const sortedPosts = posts.sort(
+		(a, b) => (b.data.pubDate?.valueOf() || 0) - (a.data.pubDate?.valueOf() || 0)
+	);
+	
+	return sortedPosts.map((post, index) => {
+		const prevPost = index > 0 ? sortedPosts[index - 1] : null;
+		const nextPost = index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null;
+		
+		return {
+			params: { slug: post.id },
+			props: {
+				post,
+				prevPost: prevPost ? {
+					id: prevPost.id,
+					title: prevPost.data.title,
+				} : null,
+				nextPost: nextPost ? {
+					id: nextPost.id,
+					title: nextPost.data.title,
+				} : null,
+			},
+		};
+	});
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
+type Props = {
+	post: CollectionEntry<'blog'>;
+	prevPost: { id: string; title: string } | null;
+	nextPost: { id: string; title: string } | null;
+};
+
+const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
 // Get raw content for reading time calculation
 const rawContent = post.body || '';
+// Construct full URL for sharing
+const currentUrl = Astro.url.href;
 ---
 
-<BlogPost {...post.data} rawContent={rawContent}>
+<BlogPost 
+	{...post.data} 
+	rawContent={rawContent}
+	postId={post.id}
+	prevPost={prevPost}
+	nextPost={nextPost}
+	currentUrl={currentUrl}
+>
 	<Content />
 </BlogPost>

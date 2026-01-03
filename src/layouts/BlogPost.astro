@@ -10,9 +10,13 @@ import SettingsModal from '../components/SettingsModal.astro';
 type Props = CollectionEntry<'blog'>['data'] & {
 	body?: string;
 	rawContent?: string;
+	postId?: string;
+	prevPost?: { id: string; title: string } | null;
+	nextPost?: { id: string; title: string } | null;
+	currentUrl?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, coverImage, author, categories, body, rawContent } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, coverImage, author, categories, body, rawContent, postId, prevPost, nextPost, currentUrl } = Astro.props;
 const displayImage = coverImage || heroImage;
 
 // Calculate reading time (average 200 words per minute)
@@ -46,11 +50,11 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 				</div>
 				<div class="w-full max-w-full m-0 p-0">
 					<div class="mb-3 md:mb-4 mt-2 md:mt-3">
-						<h2 class="m-0 py-1 md:py-2 px-2 md:px-3 text-xl md:text-2xl text-center">{title}</h2>
+						<h2 class="m-0 py-1 md:py-2 px-2 md:px-3 text-xl md:text-2xl font-bold text-center">{title}</h2>
 						<ul class="list-none p-0 my-1 md:my-2 flex flex-wrap justify-center items-center gap-2 md:gap-3">
 							{author && (
 								<li class="flex items-center gap-2">
-									<a href={`/author/${author}`} class="no-underline hover:underline" title={`Author - ${author}`}>
+									<a href={`/author/${author}`} class="badge badge-outline hover:badge-primary transition-colors cursor-pointer" title={`Author - ${author}`}>
 										<i class="fas fa-feather-alt mr-1"></i>
 										{author}
 									</a>
@@ -60,7 +64,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 								<>
 									{categories.map((category) => (
 										<li class="flex items-center gap-2">
-											<a href={`/category/${encodeURIComponent(category)}`} class="no-underline hover:underline pl-2" title={`Category - ${category}`}>
+											<a href={`/category/${encodeURIComponent(category)}`} class="badge badge-outline hover:badge-primary transition-colors cursor-pointer" title={`Category - ${category}`}>
 												<i class="fa-solid fa-hashtag mr-1"></i>
 												{category}
 											</a>
@@ -82,11 +86,189 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 							</li>
 						</ul>
 					</div>
-					<slot />
+					<div class="max-w-[48rem] mx-auto">
+						<style>
+							:global(article p) {
+								margin-bottom: 1rem;
+							}
+							:global(article p:last-child) {
+								margin-bottom: 0;
+							}
+							:global(article br) {
+								display: block;
+								margin-bottom: 0.5rem;
+								content: "";
+							}
+							:global(article h1),
+							:global(article h2),
+							:global(article h3),
+							:global(article h4),
+							:global(article h5),
+							:global(article h6) {
+								margin-top: 1.5rem;
+								margin-bottom: 1rem;
+							}
+							:global(article h1:first-child),
+							:global(article h2:first-child),
+							:global(article h3:first-child),
+							:global(article h4:first-child),
+							:global(article h5:first-child),
+							:global(article h6:first-child) {
+								margin-top: 0;
+							}
+							:global(article ul),
+							:global(article ol) {
+								margin-top: 1rem;
+								margin-bottom: 1rem;
+							}
+							:global(article li) {
+								margin-bottom: 0.5rem;
+							}
+							:global(article blockquote) {
+								margin-top: 1rem;
+								margin-bottom: 1rem;
+							}
+						</style>
+						<slot />
+					</div>
+					
+					<!-- Post Details Section -->
+					<div id="post-details" class="mt-8 max-w-[48rem] mx-auto">
+						<!-- Author Box -->
+						{author && (
+							<div id="author-box" class="bg-base-200 rounded-box p-6 mb-4">
+								<div class="text-center">
+									<h6 class="text-sm font-semibold mb-2">
+										<i class="fas fa-feather-alt mr-2"></i>
+										BY
+									</h6>
+									<h4 class="text-xl font-bold mb-3">
+										<a href={`/author/${author}`} class="hover:underline">
+											{author}
+										</a>
+									</h4>
+									{pubDate && (
+										<h6 class="text-sm">
+											<i class="far fa-calendar-alt mr-2"></i>
+											<FormattedDate date={pubDate} />
+										</h6>
+									)}
+								</div>
+							</div>
+						)}
+						
+						<!-- Next/Previous Posts -->
+						{(prevPost || nextPost) && (
+							<div id="next-prev-box" class="bg-base-200 rounded-box p-4 mb-4">
+								<div class={`flex flex-col md:flex-row gap-4 ${!prevPost && nextPost ? 'md:justify-end' : ''}`}>
+									{prevPost && (
+										<div class={`flex-1 ${nextPost ? 'md:border-r md:border-base-content/20 md:pr-4' : ''}`}>
+											<a href={`/${prevPost.id}`} id="prev-post" class="block hover:opacity-80 transition-opacity">
+												<div class="text-left p-2">
+													<span class="block text-xs font-semibold mb-2 pt-2 opacity-70">PREVIOUS POST</span>
+													<p class="text-sm m-0 font-bold">{prevPost.title}</p>
+												</div>
+											</a>
+										</div>
+									)}
+									{nextPost && (
+										<div class={`${prevPost ? 'flex-1 md:pl-4' : 'md:ml-auto'}`}>
+											<a href={`/${nextPost.id}`} id="next-post" class="block hover:opacity-80 transition-opacity">
+												<div class={`p-2 ${prevPost ? 'text-right' : 'text-right'}`}>
+													<span class="block text-xs font-semibold mb-2 pt-2 opacity-70">NEXT POST</span>
+													<p class="text-sm m-0 font-bold">{nextPost.title}</p>
+												</div>
+											</a>
+										</div>
+									)}
+								</div>
+							</div>
+						)}
+						
+						<!-- Share Box -->
+						{currentUrl && (
+							<div id="share-box" class="bg-base-200 rounded-box p-6 text-center">
+								<h4 class="text-xl font-bold mb-4">Share</h4>
+								<div class="max-w-md mx-auto mb-4">
+									<div class="input-group">
+										<span class="input-group-text">
+											<i class="fas fa-link"></i>
+										</span>
+										<input 
+											type="text" 
+											class="input input-bordered flex-1 text-center" 
+											title="Article Link"
+											value={currentUrl}
+											readonly
+											id="post-url-input"
+										/>
+									</div>
+								</div>
+								<ul class="social flex justify-center gap-4 list-none p-0">
+									<li>
+										<a 
+											target="_blank" 
+											rel="noopener noreferrer"
+											href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`}
+											class="text-2xl hover:opacity-80 transition-opacity"
+										>
+											<i class="fab fa-facebook-square"></i>
+										</a>
+									</li>
+									<li>
+										<a 
+											target="_blank" 
+											rel="noopener noreferrer"
+											href={`https://twitter.com/share?url=${encodeURIComponent(currentUrl)}`}
+											class="text-2xl hover:opacity-80 transition-opacity"
+										>
+											<i class="fab fa-twitter-square"></i>
+										</a>
+									</li>
+									<li>
+										<a 
+											target="_blank" 
+											rel="noopener noreferrer"
+											href={`https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`}
+											class="text-2xl hover:opacity-80 transition-opacity"
+										>
+											<i class="fab fa-telegram"></i>
+										</a>
+									</li>
+									<li>
+										<a 
+											target="_blank" 
+											rel="noopener noreferrer"
+											href={`whatsapp://send?text=${encodeURIComponent(currentUrl)}`}
+											class="text-2xl hover:opacity-80 transition-opacity"
+										>
+											<i class="fab fa-whatsapp"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
+						)}
+					</div>
 				</div>
 			</article>
 		</main>
 		<Footer />
 		<SettingsModal />
+		<script>
+			// Copy URL to clipboard functionality
+			const urlInput = document.getElementById('post-url-input') as HTMLInputElement;
+			if (urlInput) {
+				urlInput.addEventListener('click', function() {
+					this.select();
+					document.execCommand('copy');
+					// Optional: Show a toast notification
+					const originalValue = this.value;
+					this.value = 'Copied!';
+					setTimeout(() => {
+						this.value = originalValue;
+					}, 2000);
+				});
+			}
+		</script>
 	</body>
 </html>
