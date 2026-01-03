@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import SettingsModal from '../../components/SettingsModal.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const allPosts = await getCollection('blog');
+
+// Count posts by category
+const categoryCounts = new Map<string, number>();
+allPosts.forEach((post) => {
+	if (post.data.categories) {
+		post.data.categories.forEach((category) => {
+			const count = categoryCounts.get(category) || 0;
+			categoryCounts.set(category, count + 1);
+		});
+	}
+});
+
+// Convert to array and sort by count (descending)
+const categories = Array.from(categoryCounts.entries())
+	.map(([category, count]) => ({ category, count }))
+	.sort((a, b) => b.count - a.count);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Categories - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+	</head>
+	<body>
+		<Header />
+		<main class="w-[960px] max-w-[calc(100%-30px)] mx-auto py-6 md:py-12 px-2 md:px-[15px]">
+			<section>
+				<h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">All Categories</h1>
+				<ul class="list-none p-0 m-0 flex flex-col gap-4">
+					{categories.map(({ category, count }) => (
+						<li>
+							<a 
+								href={`/category/${encodeURIComponent(category)}/`} 
+								class="flex items-center justify-between p-4 bg-base-100 border border-base-content/20 rounded-box shadow-sm hover:shadow-md transition-all no-underline"
+							>
+								<div class="flex items-center gap-3">
+									<i class="fa-solid fa-hashtag text-primary"></i>
+									<span class="text-lg font-semibold">{category}</span>
+								</div>
+								<span class="badge badge-primary badge-lg">{count} {count === 1 ? 'post' : 'posts'}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+		<SettingsModal />
+	</body>
+</html>
+
