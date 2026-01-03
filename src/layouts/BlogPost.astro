@@ -18,6 +18,8 @@ type Props = CollectionEntry<'blog'>['data'] & {
 
 const { title, description, pubDate, updatedDate, heroImage, coverImage, author, categories, body, rawContent, postId, prevPost, nextPost, currentUrl } = Astro.props;
 const displayImage = coverImage || heroImage;
+// Ensure currentUrl is set for sharing
+const shareUrl = currentUrl || Astro.url.href;
 
 // Calculate reading time (average 200 words per minute)
 function calculateReadingTime(content: string | undefined): number {
@@ -186,68 +188,70 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 						)}
 						
 						<!-- Share Box -->
-						{currentUrl && (
-							<div id="share-box" class="bg-base-200 rounded-box p-6 text-center">
-								<h4 class="text-xl font-bold mb-4">Share</h4>
-								<div class="max-w-md mx-auto mb-4">
-									<div class="input-group">
-										<span class="input-group-text">
-											<i class="fas fa-link"></i>
-										</span>
-										<input 
-											type="text" 
-											class="input input-bordered flex-1 text-center" 
-											title="Article Link"
-											value={currentUrl}
-											readonly
-											id="post-url-input"
-										/>
-									</div>
+						<div id="share-box" class="bg-base-200 rounded-box p-6 text-center">
+							<h4 class="text-xl font-bold mb-4">Share</h4>
+							<div class="max-w-md mx-auto mb-4">
+								<div class="input-group">
+									<span class="input-group-text">
+										<i class="fas fa-link"></i>
+									</span>
+									<input 
+										type="text" 
+										class="input input-bordered flex-1 text-center" 
+										title="Article Link"
+										value={shareUrl}
+										readonly
+										id="post-url-input"
+									/>
 								</div>
-								<ul class="social flex justify-center gap-4 list-none p-0">
-									<li>
-										<a 
-											target="_blank" 
-											rel="noopener noreferrer"
-											href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`}
-											class="text-2xl hover:opacity-80 transition-opacity"
-										>
-											<i class="fab fa-facebook-square"></i>
-										</a>
-									</li>
-									<li>
-										<a 
-											target="_blank" 
-											rel="noopener noreferrer"
-											href={`https://twitter.com/share?url=${encodeURIComponent(currentUrl)}`}
-											class="text-2xl hover:opacity-80 transition-opacity"
-										>
-											<i class="fab fa-twitter-square"></i>
-										</a>
-									</li>
-									<li>
-										<a 
-											target="_blank" 
-											rel="noopener noreferrer"
-											href={`https://t.me/share/url?url=${encodeURIComponent(currentUrl)}`}
-											class="text-2xl hover:opacity-80 transition-opacity"
-										>
-											<i class="fab fa-telegram"></i>
-										</a>
-									</li>
-									<li>
-										<a 
-											target="_blank" 
-											rel="noopener noreferrer"
-											href={`whatsapp://send?text=${encodeURIComponent(currentUrl)}`}
-											class="text-2xl hover:opacity-80 transition-opacity"
-										>
-											<i class="fab fa-whatsapp"></i>
-										</a>
-									</li>
-								</ul>
 							</div>
-						)}
+							<ul class="social flex justify-center gap-4 list-none p-0">
+								<li>
+									<a 
+										target="_blank" 
+										rel="noopener noreferrer"
+										href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+										class="text-2xl hover:opacity-80 transition-opacity text-primary"
+										aria-label="Share on Facebook"
+									>
+										<i class="fa-brands fa-facebook"></i>
+									</a>
+								</li>
+								<li>
+									<a 
+										target="_blank" 
+										rel="noopener noreferrer"
+										href={`https://twitter.com/share?url=${encodeURIComponent(shareUrl)}`}
+										class="text-2xl hover:opacity-80 transition-opacity text-primary"
+										aria-label="Share on Twitter"
+									>
+										<i class="fa-brands fa-twitter"></i>
+									</a>
+								</li>
+								<li>
+									<a 
+										target="_blank" 
+										rel="noopener noreferrer"
+										href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}`}
+										class="text-2xl hover:opacity-80 transition-opacity text-primary"
+										aria-label="Share on Telegram"
+									>
+										<i class="fa-brands fa-telegram"></i>
+									</a>
+								</li>
+								<li>
+									<a 
+										target="_blank" 
+										rel="noopener noreferrer"
+										href={`whatsapp://send?text=${encodeURIComponent(shareUrl)}`}
+										class="text-2xl hover:opacity-80 transition-opacity text-primary"
+										aria-label="Share on WhatsApp"
+									>
+										<i class="fa-brands fa-whatsapp"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</article>
