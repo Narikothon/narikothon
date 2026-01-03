@@ -127,31 +127,19 @@ const { hideListGrid = false } = Astro.props;
 <script>
 	// Wait for DOM to be ready
 	function initViewControls() {
-		// Find the posts list - look for ul that comes after ViewControls
+		// Find the posts list - look for ul in main that has grid-view or list-view class
 		function findPostsList() {
-			const viewControls = document.querySelector('.view-controls');
-			if (!viewControls) return null;
-			
-			// Find the next ul sibling after view-controls
-			let nextSibling = viewControls.nextElementSibling;
-			while (nextSibling) {
-				if (nextSibling.tagName === 'UL') {
-					return nextSibling as HTMLElement;
-				}
-				nextSibling = nextSibling.nextElementSibling;
-			}
-			
-			// Fallback: find ul in main > section
-			const section = viewControls.closest('section');
-			if (section) {
-				const ul = section.querySelector('ul');
+			// Look for ul in main that has grid-view or list-view class
+			const main = document.querySelector('main');
+			if (main) {
+				const ul = main.querySelector('ul.grid-view, ul.list-view');
 				if (ul) return ul as HTMLElement;
 			}
 			
-			// Last fallback: any ul that's not pagination
-			const allUls = document.querySelectorAll('ul');
+			// Fallback: find any ul in main that's not pagination
+			const allUls = document.querySelectorAll('main ul');
 			for (const ul of allUls) {
-				if (!ul.closest('.pagination')) {
+				if (!ul.closest('.pagination') && !ul.classList.contains('menu')) {
 					return ul as HTMLElement;
 				}
 			}
@@ -209,7 +197,8 @@ const { hideListGrid = false } = Astro.props;
 			!pathname.match(/^\/category\//) && 
 			!pathname.match(/^\/author\//);
 		
-		if (isBlogPostPage && listBtnEl && gridBtnEl) {
+		// Only hide buttons if we're on a blog post page AND no posts list was found
+		if (isBlogPostPage && !postsList && listBtnEl && gridBtnEl) {
 			listBtnEl.style.display = 'none';
 			gridBtnEl.style.display = 'none';
 		}

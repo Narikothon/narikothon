@@ -37,7 +37,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 
 	<body>
 		<Header />
-		<main class="w-[960px] max-w-[calc(100%-30px)] mx-auto py-12 px-[15px] md:px-4">
+		<main class="w-[960px] max-w-[calc(100%-30px)] mx-auto py-6 md:py-12 px-2 md:px-[15px]">
 			<article class="bg-base-100 p-2 md:p-4 border border-base-content/20 rounded-box">
 				<div class="w-full mb-2">
 					{displayImage && (
@@ -45,9 +45,9 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 					)}
 				</div>
 				<div class="w-full max-w-full m-0 p-0">
-					<div class="mb-4 mt-3">
-						<h2 class="m-0 py-2 px-3 text-2xl text-center">{title}</h2>
-						<ul class="list-none p-0 my-2 flex flex-wrap justify-center items-center gap-3">
+					<div class="mb-3 md:mb-4 mt-2 md:mt-3">
+						<h2 class="m-0 py-1 md:py-2 px-2 md:px-3 text-xl md:text-2xl text-center">{title}</h2>
+						<ul class="list-none p-0 my-1 md:my-2 flex flex-wrap justify-center items-center gap-2 md:gap-3">
 							{author && (
 								<li class="flex items-center gap-2">
 									<a href={`/author/${author}`} class="no-underline hover:underline" title={`Author - ${author}`}>
@@ -69,7 +69,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 								</>
 							)}
 						</ul>
-						<ul class="list-none p-0 my-2 flex flex-wrap justify-center items-center gap-3">
+						<ul class="list-none p-0 my-1 md:my-2 flex flex-wrap justify-center items-center gap-2 md:gap-3">
 							{pubDate && (
 								<li class="flex items-center gap-2">
 									<i class="far fa-calendar-alt mr-1"></i>

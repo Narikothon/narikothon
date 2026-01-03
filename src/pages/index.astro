@@ -72,9 +72,9 @@ const paginationNumbers = getPaginationNumbers(currentPage, totalPages);
 	</head>
 	<body>
 		<Header />
-		<main class="w-[960px] max-w-[calc(100%-30px)] mx-auto py-12 px-[15px] md:px-4">
+		<main class="w-[960px] max-w-[calc(100%-30px)] mx-auto py-6 md:py-12 px-2 md:px-[15px]">
 			<section>
-				<ul class="grid-view flex flex-wrap gap-8 list-none m-0 p-0">
+				<ul class="grid-view flex flex-wrap gap-x-8 gap-y-[30px] md:gap-y-8 list-none m-0 p-0">
 					{
 						posts.map((post: any) => (
 							<li>

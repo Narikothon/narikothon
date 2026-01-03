@@ -55,26 +55,26 @@ const postUrl = `/${post.id}/`;
 
 <!-- Grid View: DaisyUI Card -->
 <div class="grid-view-card block">
-	<div class="card bg-base-100 shadow-sm h-full flex flex-col min-h-[500px]">
+	<div class="card bg-base-100 shadow-sm h-full flex flex-col">
 		{thumbnail && displayImage && (
-			<figure class="h-56 overflow-hidden flex-shrink-0">
-				<a href={postUrl}>
-					<Image width={400} height={225} src={displayImage} alt={post.data.title || ''} class="w-full h-full object-cover" />
+			<figure class="h-56 overflow-hidden flex-shrink-0 m-0 p-0">
+				<a href={postUrl} class="block h-full">
+					<Image width={400} height={225} src={displayImage} alt={post.data.title || ''} class="w-full h-full object-cover rounded-t-box" />
 				</a>
 			</figure>
 		)}
 		{!thumbnail && displayImage && (
-			<figure class="h-56 bg-base-200 flex-shrink-0"></figure>
+			<figure class="h-56 bg-base-200 flex-shrink-0 m-0 rounded-t-box"></figure>
 		)}
-		<div class="card-body flex-1 flex flex-col">
+		<div class="card-body flex-1 flex flex-col gap-0 p-3 pb-2 pt-2">
 			{title && post.data.title && (
-				<h2 class="card-title line-clamp-3 text-xs min-h-[3rem]">
+				<h2 class="card-title line-clamp-3 text-base mb-0.5">
 					<a href={postUrl} class="no-underline">{post.data.title}</a>
 				</h2>
 			)}
-			{!title && <div class="h-12"></div>}
+			{!title && <div class="h-4"></div>}
 			{author && post.data.author && (
-				<div>
+				<div class="mb-1">
 					<a 
 						href={`/author/${post.data.author}/`} 
 						class="link link-primary text-sm"
@@ -84,12 +84,12 @@ const postUrl = `/${post.id}/`;
 					</a>
 				</div>
 			)}
-			{!author && <div class="h-6"></div>}
+			{!author && <div class="h-3 mb-1"></div>}
 			{excerpt && excerptText && (
-				<p class="text-sm text-base-content/70 line-clamp-3 flex-1">{excerptText}</p>
+				<p class="text-sm text-base-content/70 line-clamp-3 flex-1 mb-0">{excerptText}</p>
 			)}
 			{!excerpt && <div class="flex-1"></div>}
-			<div class="card-actions justify-start text-xs text-base-content/60 mt-auto">
+			<div class="card-actions justify-start text-xs text-base-content/60 mt-0 pt-0 pb-0">
 				{date && post.data.pubDate && (
 					<span>
 						<FormattedDate date={post.data.pubDate} />
@@ -104,64 +104,27 @@ const postUrl = `/${post.id}/`;
 </div>
 
 <!-- List View: Simple layout with thumbnail on left -->
-<div class="list-view-card hidden flex flex-row gap-4 items-stretch card bg-base-100 shadow-sm p-4 w-full">
-	{thumbnail && displayImage && (
-		<div class="w-1/3 flex-shrink-0">
-			<a href={postUrl}>
-				<Image width={300} height={200} src={displayImage} alt={post.data.title || ''} class="w-full h-40 object-cover rounded-box" />
-			</a>
-		</div>
-	)}
-	<div class="flex-1">
-		{title && post.data.title && (
-			<h3 class="text-2xl font-semibold mb-2">
-				<a href={postUrl} class="no-underline hover:text-primary">{post.data.title}</a>
-			</h3>
-		)}
-		{author && post.data.author && (
-			<div class="mb-2">
-				<a 
-					href={`/author/${post.data.author}/`} 
-					class="link link-primary text-sm"
-					onclick={(e: Event) => e.stopPropagation()}
-				>
-					{post.data.author}
-				</a>
-			</div>
-		)}
-		{excerpt && excerptText && (
-			<p class="text-sm text-base-content/70 mb-2 line-clamp-2">{excerptText}</p>
-		)}
-		<div class="flex items-center gap-2 text-xs text-base-content/60">
-			{date && post.data.pubDate && (
-				<span>
-					<FormattedDate date={post.data.pubDate} />
-				</span>
-			)}
-			{readingTime && (
-				<span>• {readingTimeMinutes} min read</span>
-			)}
-		</div>
-	</div>
-</div>
-
+<div class="list-view-card hidden flex flex-row gap-2 items-start card bg-base-100 shadow-sm p-2 w-full">
 <style is:global>
-	/* View switching - using Tailwind classes */
+	/* View switching */
+	.grid-view-card {
+		display: block;
+	}
+	.list-view-card {
+		display: none;
+	}
 	ul.list-view .grid-view-card {
 		display: none !important;
 	}
 	ul.list-view .list-view-card {
 		display: flex !important;
 	}
-	/* Ensure list view items have equal width */
 	ul.list-view li {
 		width: 100%;
 	}
 	ul.list-view .list-view-card {
-		width: 100%;
-		min-height: 200px;
+		min-height: auto;
 	}
-	/* Grid view responsive widths */
 	ul.grid-view li {
 		width: calc(33.333% - 1.334rem);
 	}
@@ -177,19 +140,51 @@ const postUrl = `/${post.id}/`;
 		ul {
 			gap: 0.5rem;
 		}
-		.list-view-card h3 {
-			font-size: 1.25rem !important;
+		.list-view-card .w-\[120px\] {
+			width: 120px !important;
 		}
-		main {
-			padding: 1em 0.5em;
-		}
-		img {
-			display: block;
-			margin-left: auto;
-			margin-right: auto;
-		}
-		p {
-			text-align: justify;
+		.list-view-card .w-\[120px\] img {
+			height: 68px !important;
 		}
 	}
 </style>
+	{thumbnail && displayImage && (
+		<div class="w-[120px] md:w-1/3 flex-shrink-0">
+			<a href={postUrl}>
+				<Image width={300} height={200} src={displayImage} alt={post.data.title || ''} class="w-full h-[68px] md:h-40 object-cover rounded-box" />
+			</a>
+		</div>
+	)}
+	<div class="flex-1">
+		{title && post.data.title && (
+			<h3 class="text-xl md:text-2xl font-semibold mb-1 md:mb-2">
+				<a href={postUrl} class="no-underline hover:text-primary">{post.data.title}</a>
+			</h3>
+		)}
+		{author && post.data.author && (
+			<div class="mb-1 md:mb-2">
+				<a 
+					href={`/author/${post.data.author}/`} 
+					class="link link-primary text-sm"
+					onclick={(e: Event) => e.stopPropagation()}
+				>
+					{post.data.author}
+				</a>
+			</div>
+		)}
+		{excerpt && excerptText && (
+			<p class="text-sm text-base-content/70 mb-1 line-clamp-2">{excerptText}</p>
+		)}
+		<div class="flex items-center gap-2 text-xs text-base-content/60 mt-0 mb-0">
+			{date && post.data.pubDate && (
+				<span>
+					<FormattedDate date={post.data.pubDate} />
+				</span>
+			)}
+			{readingTime && (
+				<span>• {readingTimeMinutes} min read</span>
+			)}
+		</div>
+	</div>
+</div>
+
