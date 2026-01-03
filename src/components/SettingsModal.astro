@@ -1,0 +1,255 @@
+---
+const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracula', 'forest', 'halloween', 'abyss'];
+---
+
+<!-- Modal toggle button is in ViewControls -->
+
+<!-- The modal -->
+<dialog id="settings-modal" class="modal">
+	<div class="modal-box w-11/12 max-w-2xl">
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+		</form>
+		<h3 class="font-bold text-lg mb-4">Settings</h3>
+		
+		<!-- Tabs -->
+		<div role="tablist" class="tabs tabs-bordered mb-4">
+			<button role="tab" class="tab tab-active" data-tab="theme">Theme</button>
+			<button role="tab" class="tab" data-tab="font">Font</button>
+		</div>
+		
+		<!-- Theme Tab Content -->
+		<div role="tabpanel" class="tab-content p-4" id="theme-tab">
+			<h4 class="font-semibold mb-4">Choose Theme</h4>
+			<div class="rounded-box grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4" id="theme-grid">
+				{themes.map((theme) => (
+					<div
+						class="theme-card border-base-content/20 hover:border-base-content/40 overflow-hidden rounded-lg border outline-2 outline-offset-2 outline-transparent cursor-pointer"
+						data-theme-code={theme}
+						data-theme={theme}
+						data-act-class="outline-base-content"
+					>
+						<div data-theme={theme} class="bg-base-100 text-base-content w-full font-sans">
+							<div class="grid grid-cols-5 grid-rows-3">
+								<div class="bg-base-200 col-start-1 row-span-2 row-start-1"></div>
+								<div class="bg-base-300 col-start-1 row-start-3"></div>
+								<div class="bg-base-100 col-span-4 col-start-2 row-span-3 row-start-1 flex flex-col justify-start items-start p-2">
+									<div class="font-bold line-clamp-2">{theme}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+		
+		<!-- Font Tab Content -->
+		<div role="tabpanel" class="tab-content p-4 hidden" id="font-tab">
+			<h4 class="font-semibold mb-4">Choose Font</h4>
+			<div class="flex flex-col gap-3" id="font-options">
+				<div class="font-option card bg-base-100 shadow-md cursor-pointer" data-font-code="solaiman-lipi">
+					<div class="card-body p-4">
+						<h5 class="card-title text-lg solaiman-lipi">SolaimanLipi</h5>
+						<p class="text-sm text-base-content/70 solaiman-lipi">The quick brown fox jumps over the lazy dog</p>
+					</div>
+				</div>
+				<div class="font-option card bg-base-100 shadow-md cursor-pointer" data-font-code="hind-siliguri">
+					<div class="card-body p-4">
+						<h5 class="card-title text-lg hind-siliguri-regular">Hind Siliguri</h5>
+						<p class="text-sm text-base-content/70 hind-siliguri-regular">The quick brown fox jumps over the lazy dog</p>
+					</div>
+				</div>
+				<div class="font-option card bg-base-100 shadow-md cursor-pointer" data-font-code="atma">
+					<div class="card-body p-4">
+						<h5 class="card-title text-lg atma-regular">Atma</h5>
+						<p class="text-sm text-base-content/70 atma-regular">The quick brown fox jumps over the lazy dog</p>
+					</div>
+				</div>
+				<div class="font-option card bg-base-100 shadow-md cursor-pointer" data-font-code="bensen-handwriting">
+					<div class="card-body p-4">
+						<h5 class="card-title text-lg bensen-handwriting">BenSen Handwriting</h5>
+						<p class="text-sm text-base-content/70 bensen-handwriting">The quick brown fox jumps over the lazy dog</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<form method="dialog" class="modal-backdrop">
+		<button>close</button>
+	</form>
+</dialog>
+
+<style>
+	/* Ensure tab content is visible */
+	.tab-content {
+		display: block !important;
+	}
+	.tab-content.hidden {
+		display: none !important;
+	}
+	#theme-grid {
+		display: grid !important;
+	}
+	#font-options {
+		display: flex !important;
+	}
+	.theme-card,
+	.font-option {
+		display: block !important;
+		visibility: visible !important;
+	}
+	.line-clamp-2 {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+</style>
+
+<script is:inline>
+	(function() {
+		// Get current theme and font from localStorage
+		const currentTheme = localStorage.getItem('theme') || 'light';
+		const currentFont = localStorage.getItem('font') || 'solaiman-lipi';
+
+		// Wait for elements to be available
+		function waitForElements(callback) {
+			const themeGrid = document.getElementById('theme-grid');
+			const fontOptions = document.getElementById('font-options');
+			
+			if (themeGrid && fontOptions) {
+				callback();
+			} else {
+				setTimeout(() => waitForElements(callback), 50);
+			}
+		}
+
+		// Initialize active states
+		function initActiveStates() {
+			// Mark active theme
+			const themeCards = document.querySelectorAll('.theme-card');
+			themeCards.forEach(card => {
+				const themeCode = card.getAttribute('data-theme-code');
+				if (themeCode === currentTheme) {
+					card.classList.add('outline-base-content');
+				} else {
+					card.classList.remove('outline-base-content');
+				}
+			});
+
+			// Mark active font
+			const fontOptions = document.querySelectorAll('.font-option');
+			fontOptions.forEach(option => {
+				const fontCode = option.getAttribute('data-font-code');
+				if (fontCode === currentFont) {
+					option.classList.add('ring-2', 'ring-primary');
+				} else {
+					option.classList.remove('ring-2', 'ring-primary');
+				}
+			});
+		}
+
+		// Setup event handlers
+		function setupEventHandlers() {
+			// Theme card click handlers
+			document.querySelectorAll('.theme-card').forEach(card => {
+				card.addEventListener('click', () => {
+					const themeCode = card.getAttribute('data-theme-code');
+					if (!themeCode) return;
+
+					// Remove active state from all cards
+					document.querySelectorAll('.theme-card').forEach(c => {
+						c.classList.remove('outline-base-content');
+					});
+					// Add active state to clicked card
+					card.classList.add('outline-base-content');
+					
+					// Apply theme
+					if (document.documentElement) {
+						document.documentElement.setAttribute('data-theme', themeCode);
+						localStorage.setItem('theme', themeCode);
+					}
+				});
+			});
+
+			// Font option click handlers
+			document.querySelectorAll('.font-option').forEach(option => {
+				option.addEventListener('click', () => {
+					const fontCode = option.getAttribute('data-font-code');
+					if (!fontCode) return;
+
+					const fontClasses = {
+						'solaiman-lipi': 'solaiman-lipi',
+						'hind-siliguri': 'hind-siliguri-regular',
+						'atma': 'atma-regular',
+						'bensen-handwriting': 'bensen-handwriting',
+					};
+
+					const fontClass = fontClasses[fontCode];
+					if (!fontClass) return;
+
+					// Remove active state from all options
+					document.querySelectorAll('.font-option').forEach(o => {
+						o.classList.remove('ring-2', 'ring-primary');
+					});
+					// Add active state to clicked option
+					option.classList.add('ring-2', 'ring-primary');
+					
+					// Apply font
+					const fontClassRegex = /solaiman-lipi|hind-siliguri-\w+|atma-\w+|bensen-handwriting/g;
+					if (document.body) {
+						document.body.className = document.body.className.replace(fontClassRegex, '').trim();
+						document.body.classList.add(fontClass);
+					}
+					// Also apply to html for global font
+					if (document.documentElement) {
+						document.documentElement.className = document.documentElement.className.replace(fontClassRegex, '').trim();
+						document.documentElement.classList.add(fontClass);
+					}
+					localStorage.setItem('font', fontCode);
+				});
+			});
+
+			// Tab switching functionality
+			const themeTab = document.querySelector('[data-tab="theme"]');
+			const fontTab = document.querySelector('[data-tab="font"]');
+			const themeTabContent = document.getElementById('theme-tab');
+			const fontTabContent = document.getElementById('font-tab');
+
+			if (themeTab) {
+				themeTab.addEventListener('click', (e) => {
+					e.preventDefault();
+					themeTab.classList.add('tab-active');
+					if (fontTab) fontTab.classList.remove('tab-active');
+					if (themeTabContent) themeTabContent.classList.remove('hidden');
+					if (fontTabContent) fontTabContent.classList.add('hidden');
+				});
+			}
+
+			if (fontTab) {
+				fontTab.addEventListener('click', (e) => {
+					e.preventDefault();
+					fontTab.classList.add('tab-active');
+					if (themeTab) themeTab.classList.remove('tab-active');
+					if (fontTabContent) fontTabContent.classList.remove('hidden');
+					if (themeTabContent) themeTabContent.classList.add('hidden');
+				});
+			}
+		}
+
+		// Initialize when DOM is ready
+		function init() {
+			waitForElements(() => {
+				initActiveStates();
+				setupEventHandlers();
+			});
+		}
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', init);
+		} else {
+			init();
+		}
+	})();
+</script>
+

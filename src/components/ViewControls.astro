@@ -1,0 +1,175 @@
+---
+---
+
+<div class="view-controls">
+	<button 
+		title="Column 1 Layout" 
+		class="btn2 mr-2 hidden-sm list-view-btn" 
+		data-view="list"
+	>
+		<i class="col-link fas fa-1-25x fa-bars"></i>
+	</button>
+	<button 
+		title="Column 3 Layout" 
+		class="btn2 mr-2 hidden-sm grid-view-btn" 
+		data-view="grid"
+	>
+		<i class="col-link fas fa-1-25x fa-th"></i>
+	</button>
+	<button 
+		title="Full Screen" 
+		class="btn2 mr-2 fullscreen-btn"
+	>
+		<i class="fas fa-1-25x fa-expand"></i>
+	</button>
+	<button 
+		title="Settings" 
+		class="btn2 settings-btn"
+	>
+		<i class="fas fa-1-25x fa-cog"></i>
+	</button>
+</div>
+
+<style>
+	.view-controls {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		padding: 1rem 0;
+	}
+	.view-controls .btn2 {
+		padding: 0.5rem 0.75rem;
+		border: 1px solid rgb(var(--gray));
+		border-radius: 4px;
+		background-color: white;
+		color: rgb(var(--black));
+		cursor: pointer;
+		transition: 0.2s ease;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.view-controls .btn2:hover {
+		background-color: rgb(var(--gray-light));
+		border-color: var(--accent);
+	}
+	.view-controls .btn2.active {
+		background-color: var(--accent);
+		color: white;
+		border-color: var(--accent);
+	}
+	.view-controls .btn2 i {
+		font-size: 1.25em;
+	}
+	.mr-2 {
+		margin-right: 0.5rem;
+	}
+</style>
+
+<script>
+	// Initialize view from localStorage or default to grid
+	const savedView = localStorage.getItem('postView') || 'grid';
+	const postsList = document.querySelector('ul');
+	
+	function applyView(view: string) {
+		if (postsList) {
+			if (view === 'list') {
+				postsList.classList.add('list-view');
+				postsList.classList.remove('grid-view');
+			} else {
+				postsList.classList.add('grid-view');
+				postsList.classList.remove('list-view');
+			}
+		}
+	}
+	
+	if (postsList) {
+		// Apply saved view
+		applyView(savedView);
+		
+		// Update button visibility - show only the opposite of active view
+		const listBtn = document.querySelector('.list-view-btn') as HTMLElement;
+		const gridBtn = document.querySelector('.grid-view-btn') as HTMLElement;
+		
+		if (savedView === 'list') {
+			// List is active, show grid button
+			if (listBtn) listBtn.style.display = 'none';
+			if (gridBtn) gridBtn.style.display = 'inline-flex';
+		} else {
+			// Grid is active, show list button
+			if (gridBtn) gridBtn.style.display = 'none';
+			if (listBtn) listBtn.style.display = 'inline-flex';
+		}
+	}
+	
+	// List/Grid toggle
+	document.querySelector('.list-view-btn')?.addEventListener('click', () => {
+		const postsList = document.querySelector('ul');
+		const listBtn = document.querySelector('.list-view-btn') as HTMLElement;
+		const gridBtn = document.querySelector('.grid-view-btn') as HTMLElement;
+		
+		if (postsList) {
+			postsList.classList.add('list-view');
+			postsList.classList.remove('grid-view');
+			localStorage.setItem('postView', 'list');
+			
+			// Hide list button, show grid button
+			if (listBtn) listBtn.style.display = 'none';
+			if (gridBtn) gridBtn.style.display = 'inline-flex';
+		}
+	});
+	
+	document.querySelector('.grid-view-btn')?.addEventListener('click', () => {
+		const postsList = document.querySelector('ul');
+		const listBtn = document.querySelector('.list-view-btn') as HTMLElement;
+		const gridBtn = document.querySelector('.grid-view-btn') as HTMLElement;
+		
+		if (postsList) {
+			postsList.classList.add('grid-view');
+			postsList.classList.remove('list-view');
+			localStorage.setItem('postView', 'grid');
+			
+			// Hide grid button, show list button
+			if (gridBtn) gridBtn.style.display = 'none';
+			if (listBtn) listBtn.style.display = 'inline-flex';
+		}
+	});
+	
+	// Fullscreen toggle
+	document.querySelector('.fullscreen-btn')?.addEventListener('click', () => {
+		if (!document.fullscreenElement) {
+			document.documentElement.requestFullscreen().catch(err => {
+				console.error('Error attempting to enable fullscreen:', err);
+			});
+		} else {
+			document.exitFullscreen();
+		}
+	});
+	
+	// Update fullscreen icon based on state
+	document.addEventListener('fullscreenchange', () => {
+		const fullscreenBtn = document.querySelector('.fullscreen-btn i');
+		if (fullscreenBtn) {
+			if (document.fullscreenElement) {
+				fullscreenBtn.classList.remove('fa-expand');
+				fullscreenBtn.classList.add('fa-compress');
+			} else {
+				fullscreenBtn.classList.remove('fa-compress');
+				fullscreenBtn.classList.add('fa-expand');
+			}
+		}
+	});
+	
+	// Settings button - open modal
+	document.querySelector('.settings-btn')?.addEventListener('click', () => {
+		const modal = document.getElementById('settings-modal') as HTMLDialogElement;
+		if (modal) {
+			modal.showModal();
+			// Trigger custom event to populate modal content
+			window.dispatchEvent(new CustomEvent('settingsModalOpen'));
+		}
+	});
+</script>
+

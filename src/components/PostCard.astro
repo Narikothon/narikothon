@@ -1,0 +1,181 @@
+---
+import { Image } from 'astro:assets';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	post: {
+		id: string;
+		data: {
+			title?: string;
+			coverImage?: any;
+			heroImage?: any;
+			author?: string;
+			pubDate?: Date;
+			description?: string;
+			body?: string;
+		};
+	};
+	content?: string; // Optional raw content for reading time calculation
+	title?: boolean;
+	thumbnail?: boolean;
+	author?: boolean;
+	excerpt?: boolean;
+	date?: boolean;
+	readingTime?: boolean;
+}
+
+const {
+	post,
+	content,
+	title = true,
+	thumbnail = true,
+	author = true,
+	excerpt = true,
+	date = true,
+	readingTime = true,
+} = Astro.props;
+
+// Calculate reading time (average 200 words per minute)
+function calculateReadingTime(content: string | undefined): number {
+	if (!content) return 1;
+	const words = content.trim().split(/\s+/).length;
+	return Math.max(1, Math.ceil(words / 200));
+}
+
+// Get excerpt from description or use a default
+const excerptText = post.data.description || '';
+
+// Use provided content for reading time, fallback to description
+const readingTimeContent = content || excerptText;
+const readingTimeMinutes = calculateReadingTime(readingTimeContent);
+
+const displayImage = post.data.coverImage || post.data.heroImage;
+const postUrl = `/${post.id}/`;
+---
+
+<!-- Grid View: DaisyUI Card -->
+<div class="grid-view-card">
+	<div class="card bg-base-100 shadow-sm h-full flex flex-col">
+		{thumbnail && displayImage && (
+			<figure class="h-56 overflow-hidden flex-shrink-0">
+				<a href={postUrl}>
+					<Image width={400} height={225} src={displayImage} alt={post.data.title || ''} class="w-full h-full object-cover" />
+				</a>
+			</figure>
+		)}
+		{!thumbnail && displayImage && (
+			<figure class="h-56 bg-base-200 flex-shrink-0"></figure>
+		)}
+		<div class="card-body flex-1 flex flex-col">
+			{title && post.data.title && (
+				<h2 class="card-title line-clamp-2">
+					<a href={postUrl} class="no-underline">{post.data.title}</a>
+				</h2>
+			)}
+			{!title && <div class="h-12"></div>}
+			{author && post.data.author && (
+				<div>
+					<a 
+						href={`/author/${post.data.author}/`} 
+						class="link link-primary text-sm"
+						onclick={(e: Event) => e.stopPropagation()}
+					>
+						{post.data.author}
+					</a>
+				</div>
+			)}
+			{!author && <div class="h-6"></div>}
+			{excerpt && excerptText && (
+				<p class="text-sm text-base-content/70 line-clamp-3 flex-1">{excerptText}</p>
+			)}
+			{!excerpt && <div class="flex-1"></div>}
+			<div class="card-actions justify-start text-xs text-base-content/60 mt-auto">
+				{date && post.data.pubDate && (
+					<span>
+						<FormattedDate date={post.data.pubDate} />
+					</span>
+				)}
+				{readingTime && (
+					<span>{readingTimeMinutes} min read</span>
+				)}
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- List View: Simple layout with thumbnail on right -->
+<div class="list-view-card flex gap-4 items-start">
+	<div class="flex-1">
+		{title && post.data.title && (
+			<h3 class="text-lg font-semibold mb-2">
+				<a href={postUrl} class="no-underline hover:text-primary">{post.data.title}</a>
+			</h3>
+		)}
+		{author && post.data.author && (
+			<div class="mb-2">
+				<a 
+					href={`/author/${post.data.author}/`} 
+					class="link link-primary text-sm"
+					onclick={(e: Event) => e.stopPropagation()}
+				>
+					{post.data.author}
+				</a>
+			</div>
+		)}
+		{excerpt && excerptText && (
+			<p class="text-sm text-base-content/70 mb-2 line-clamp-2">{excerptText}</p>
+		)}
+		<div class="flex items-center gap-2 text-xs text-base-content/60">
+			{date && post.data.pubDate && (
+				<span>
+					<FormattedDate date={post.data.pubDate} />
+				</span>
+			)}
+			{readingTime && (
+				<span>• {readingTimeMinutes} min read</span>
+			)}
+		</div>
+	</div>
+	{thumbnail && displayImage && (
+		<div class="w-1/3 flex-shrink-0">
+			<a href={postUrl}>
+				<Image width={300} height={200} src={displayImage} alt={post.data.title || ''} class="w-full h-40 object-cover rounded-box" />
+			</a>
+		</div>
+	)}
+</div>
+
+<style is:global>
+	/* View switching */
+	.grid-view-card {
+		display: block;
+	}
+	.list-view-card {
+		display: none;
+	}
+	ul.list-view .grid-view-card {
+		display: none !important;
+	}
+	ul.list-view .list-view-card {
+		display: flex !important;
+	}
+	/* Ensure cards have consistent height */
+	.grid-view-card .card {
+		min-height: 500px;
+	}
+	.grid-view-card figure {
+		flex-shrink: 0;
+	}
+	.line-clamp-2 {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.line-clamp-3 {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+</style>
