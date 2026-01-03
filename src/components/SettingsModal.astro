@@ -13,14 +13,15 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 		<h3 class="font-bold text-lg mb-4">সেটিংস</h3>
 		
 		<!-- Preview Text -->
-		<div class="preview-text text-lg bg-base-200 rounded-box text-center">
-			<p class="text-lg">আল্লাহ ছাড়া কোনো ইলাহ নেই</p>
+		<div class="preview-text text-xl font-bold bg-base-200 rounded-box text-center p-4 mb-4 min-h-[60px] flex items-center justify-center">
+			<p class="text-lg m-0">আল্লাহ ছাড়া কোনো ইলাহ নেই</p>
 		</div>
 		
 		<!-- Tabs -->
 		<div role="tablist" class="tabs tabs-bordered mb-4">
 			<button role="tab" class="tab tab-active" data-tab="theme">Theme</button>
 			<button role="tab" class="tab" data-tab="font">Font</button>
+			<button role="tab" class="tab" data-tab="typography">Typography</button>
 		</div>
 		
 		<!-- Theme Tab Content -->
@@ -52,25 +53,76 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 		<div role="tabpanel" class="tab-content p-2 hidden" id="font-tab">
 			<h4 class="font-semibold mb-3 text-sm">Choose Font</h4>
 			<div class="flex flex-col gap-3 block" id="font-options">
-				<div class="font-option card bg-base-100 shadow-md cursor-pointer block" data-font-code="solaiman-lipi">
+				<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="solaiman-lipi">
 					<div class="card-body p-4">
-						<h5 class="card-title text-lg solaiman-lipi">SolaimanLipi</h5>
+						<h5 class="card-title text-lg" style="font-family: 'SolaimanLipi', system-ui, sans-serif !important;">
+							SolaimanLipi <span class="text-xs opacity-70 font-normal ml-2">(Local)</span>
+						</h5>
 					</div>
 				</div>
-				<div class="font-option card bg-base-100 shadow-md cursor-pointer block" data-font-code="hind-siliguri">
+				<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="hind-siliguri">
 					<div class="card-body p-4">
-						<h5 class="card-title text-lg hind-siliguri-regular">Hind Siliguri</h5>
+						<h5 class="card-title text-lg" style="font-family: 'Hind Siliguri', system-ui, sans-serif !important;">
+							Hind Siliguri <span class="text-xs opacity-70 font-normal ml-2">(Google)</span>
+						</h5>
 					</div>
 				</div>
-				<div class="font-option card bg-base-100 shadow-md cursor-pointer block" data-font-code="atma">
+				<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="atma">
 					<div class="card-body p-4">
-						<h5 class="card-title text-lg atma-regular">Atma</h5>
+						<h5 class="card-title text-lg" style="font-family: 'Atma', system-ui, sans-serif !important;">
+							Atma <span class="text-xs opacity-70 font-normal ml-2">(Google)</span>
+						</h5>
 					</div>
 				</div>
-				<div class="font-option card bg-base-100 shadow-md cursor-pointer block" data-font-code="bensen-handwriting">
+				<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="bensen-handwriting">
 					<div class="card-body p-4">
-						<h5 class="card-title text-lg bensen-handwriting">BenSen Handwriting</h5>
+						<h5 class="card-title text-lg" style="font-family: 'BenSenHandwriting', system-ui, sans-serif !important;">
+							BenSen Handwriting <span class="text-xs opacity-70 font-normal ml-2">(Local)</span>
+						</h5>
 					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Typography Tab Content -->
+		<div role="tabpanel" class="tab-content p-2 hidden" id="typography-tab">
+			<h4 class="font-semibold mb-3 text-sm">Font Size</h4>
+			<div class="mb-6">
+				<div class="join w-full max-w-xs">
+					<button type="button" class="btn join-item btn-primary" id="font-size-decrease">-</button>
+					<input 
+						type="number" 
+						min="12" 
+						max="24" 
+						value="16" 
+						class="input input-bordered join-item text-center flex-1" 
+						id="font-size-input"
+						step="1"
+					/>
+					<button type="button" class="btn join-item btn-primary" id="font-size-increase">+</button>
+				</div>
+				<div class="text-xs text-center mt-2 opacity-70">
+					<span>Range: 12px - 24px</span>
+				</div>
+			</div>
+			
+			<h4 class="font-semibold mb-3 text-sm">Line Spacing</h4>
+			<div class="mb-4">
+				<div class="join w-full max-w-xs">
+					<button type="button" class="btn join-item btn-primary" id="line-height-decrease">-</button>
+					<input 
+						type="number" 
+						min="1.0" 
+						max="2.5" 
+						value="1.5" 
+						class="input input-bordered join-item text-center flex-1" 
+						id="line-height-input"
+						step="0.1"
+					/>
+					<button type="button" class="btn join-item btn-primary" id="line-height-increase">+</button>
+				</div>
+				<div class="text-xs text-center mt-2 opacity-70">
+					<span>Range: 1.0 - 2.5</span>
 				</div>
 			</div>
 		</div>
@@ -114,6 +166,14 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 
 			// Mark active font
 			const fontOptions = document.querySelectorAll('.font-option');
+			const fontClasses = {
+				'solaiman-lipi': 'solaiman-lipi',
+				'hind-siliguri': 'hind-siliguri-regular',
+				'atma': 'atma-regular',
+				'bensen-handwriting': 'bensen-handwriting',
+			};
+			const currentFontClass = fontClasses[currentFont] || 'solaiman-lipi';
+			
 			fontOptions.forEach(option => {
 				const fontCode = option.getAttribute('data-font-code');
 				if (fontCode === currentFont) {
@@ -122,6 +182,14 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 					option.classList.remove('ring-2', 'ring-primary');
 				}
 			});
+			
+			// Apply current font to preview text
+			const previewText = document.querySelector('.preview-text');
+			if (previewText) {
+				const fontClassRegex = /solaiman-lipi|hind-siliguri-\w+|atma-\w+|bensen-handwriting/g;
+				previewText.className = previewText.className.replace(fontClassRegex, '').trim();
+				previewText.classList.add(currentFontClass);
+			}
 		}
 
 		// Setup event handlers
@@ -182,22 +250,42 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 						document.documentElement.classList.add(fontClass);
 					}
 					localStorage.setItem('font', fontCode);
+					
+					// Update preview text font
+					const previewText = document.querySelector('.preview-text');
+					if (previewText) {
+						previewText.className = previewText.className.replace(fontClassRegex, '').trim();
+						previewText.classList.add(fontClass);
+					}
 				});
 			});
 
 			// Tab switching functionality
 			const themeTab = document.querySelector('[data-tab="theme"]');
 			const fontTab = document.querySelector('[data-tab="font"]');
+			const typographyTab = document.querySelector('[data-tab="typography"]');
 			const themeTabContent = document.getElementById('theme-tab');
 			const fontTabContent = document.getElementById('font-tab');
+			const typographyTabContent = document.getElementById('typography-tab');
 
 			if (themeTab) {
 				themeTab.addEventListener('click', (e) => {
 					e.preventDefault();
 					themeTab.classList.add('tab-active');
 					if (fontTab) fontTab.classList.remove('tab-active');
-					if (themeTabContent) themeTabContent.classList.remove('hidden');
-					if (fontTabContent) fontTabContent.classList.add('hidden');
+					if (typographyTab) typographyTab.classList.remove('tab-active');
+					if (themeTabContent) {
+						themeTabContent.classList.remove('hidden');
+						themeTabContent.classList.add('block');
+					}
+					if (fontTabContent) {
+						fontTabContent.classList.add('hidden');
+						fontTabContent.classList.remove('block');
+					}
+					if (typographyTabContent) {
+						typographyTabContent.classList.add('hidden');
+						typographyTabContent.classList.remove('block');
+					}
 				});
 			}
 
@@ -206,8 +294,292 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 					e.preventDefault();
 					fontTab.classList.add('tab-active');
 					if (themeTab) themeTab.classList.remove('tab-active');
-					if (fontTabContent) fontTabContent.classList.remove('hidden');
-					if (themeTabContent) themeTabContent.classList.add('hidden');
+					if (typographyTab) typographyTab.classList.remove('tab-active');
+					if (fontTabContent) {
+						fontTabContent.classList.remove('hidden');
+						fontTabContent.classList.add('block');
+					}
+					if (themeTabContent) {
+						themeTabContent.classList.add('hidden');
+						themeTabContent.classList.remove('block');
+					}
+					if (typographyTabContent) {
+						typographyTabContent.classList.add('hidden');
+						typographyTabContent.classList.remove('block');
+					}
+				});
+			}
+
+			if (typographyTab) {
+				typographyTab.addEventListener('click', (e) => {
+					e.preventDefault();
+					typographyTab.classList.add('tab-active');
+					if (themeTab) themeTab.classList.remove('tab-active');
+					if (fontTab) fontTab.classList.remove('tab-active');
+					if (typographyTabContent) {
+						typographyTabContent.classList.remove('hidden');
+						typographyTabContent.classList.add('block');
+					}
+					if (themeTabContent) {
+						themeTabContent.classList.add('hidden');
+						themeTabContent.classList.remove('block');
+					}
+					if (fontTabContent) {
+						fontTabContent.classList.add('hidden');
+						fontTabContent.classList.remove('block');
+					}
+					// Ensure typography controls are initialized when tab opens
+					setupTypographyControls();
+					// Also set up handlers when tab opens
+					setTimeout(() => {
+						setupTypographyHandlers();
+					}, 50);
+				});
+			}
+			
+			// Setup typography controls function - called when tab opens
+			// This only initializes values, handlers are set up once below
+			function setupTypographyControls() {
+				const fontSizeInput = document.getElementById('font-size-input');
+				const lineHeightInput = document.getElementById('line-height-input');
+				
+				// Initialize values
+				if (fontSizeInput) {
+					fontSizeInput.value = currentFontSize;
+				}
+				if (lineHeightInput) {
+					lineHeightInput.value = currentLineHeight;
+				}
+			}
+			
+			// Typography controls - use event delegation on the modal (set up once)
+			function setupTypographyEventDelegation() {
+				const modal = document.getElementById('settings-modal');
+				if (modal && !modal.dataset.typographyHandlersSetup) {
+					modal.dataset.typographyHandlersSetup = 'true';
+					
+					// Use event delegation for all typography buttons
+					modal.addEventListener('click', function(e) {
+						const target = e.target;
+						
+						// Font size decrease
+						if (target && target.id === 'font-size-decrease') {
+							e.preventDefault();
+							e.stopPropagation();
+							const input = document.getElementById('font-size-input');
+							if (input) {
+								const current = parseFloat(input.value) || 16;
+								const newValue = Math.max(12, current - 1);
+								input.value = newValue;
+								input.dispatchEvent(new Event('input', { bubbles: true }));
+								updateTypography();
+							}
+							return false;
+						}
+						
+						// Font size increase
+						if (target && target.id === 'font-size-increase') {
+							e.preventDefault();
+							e.stopPropagation();
+							const input = document.getElementById('font-size-input');
+							if (input) {
+								const current = parseFloat(input.value) || 16;
+								const newValue = Math.min(24, current + 1);
+								input.value = newValue;
+								input.dispatchEvent(new Event('input', { bubbles: true }));
+								updateTypography();
+							}
+							return false;
+						}
+						
+						// Line height decrease
+						if (target && target.id === 'line-height-decrease') {
+							e.preventDefault();
+							e.stopPropagation();
+							const input = document.getElementById('line-height-input');
+							if (input) {
+								const current = parseFloat(input.value) || 1.5;
+								const newValue = Math.max(1.0, parseFloat((current - 0.1).toFixed(1)));
+								input.value = newValue.toFixed(1);
+								input.dispatchEvent(new Event('input', { bubbles: true }));
+								updateTypography();
+							}
+							return false;
+						}
+						
+						// Line height increase
+						if (target && target.id === 'line-height-increase') {
+							e.preventDefault();
+							e.stopPropagation();
+							const input = document.getElementById('line-height-input');
+							if (input) {
+								const current = parseFloat(input.value) || 1.5;
+								const newValue = Math.min(2.5, parseFloat((current + 0.1).toFixed(1)));
+								input.value = newValue.toFixed(1);
+								input.dispatchEvent(new Event('input', { bubbles: true }));
+								updateTypography();
+							}
+							return false;
+						}
+					}, true); // Use capture phase
+				}
+			}
+			
+			// Set up event delegation immediately
+			setupTypographyEventDelegation();
+			
+			function setupTypographyHandlers() {
+				// Initialize typography values
+				const fontSizeInput = document.getElementById('font-size-input');
+				const lineHeightInput = document.getElementById('line-height-input');
+				
+				if (fontSizeInput) {
+					fontSizeInput.value = currentFontSize;
+				}
+				if (lineHeightInput) {
+					lineHeightInput.value = currentLineHeight;
+				}
+				
+				if (fontSizeInput) {
+					fontSizeInput.addEventListener('change', () => {
+						updateTypography();
+					});
+					fontSizeInput.addEventListener('input', () => {
+						updateTypography();
+					});
+				}
+				
+				// Line height controls - use onclick to replace any existing handler
+				if (lineHeightDecrease) {
+					lineHeightDecrease.onclick = function(e) {
+						console.log('Line height decrease clicked');
+						e.preventDefault();
+						e.stopPropagation();
+						const input = document.getElementById('line-height-input');
+						if (input) {
+							const current = parseFloat(input.value) || 1.5;
+							const newValue = Math.max(1.0, parseFloat((current - 0.1).toFixed(1)));
+							console.log('Changing line height from', current, 'to', newValue);
+							input.value = newValue.toFixed(1);
+							updateTypography();
+						}
+					};
+				}
+				
+				if (lineHeightIncrease) {
+					lineHeightIncrease.onclick = function(e) {
+						console.log('Line height increase clicked');
+						e.preventDefault();
+						e.stopPropagation();
+						const input = document.getElementById('line-height-input');
+						if (input) {
+							const current = parseFloat(input.value) || 1.5;
+							const newValue = Math.min(2.5, parseFloat((current + 0.1).toFixed(1)));
+							console.log('Changing line height from', current, 'to', newValue);
+							input.value = newValue.toFixed(1);
+							updateTypography();
+						}
+					};
+				}
+				
+				if (lineHeightInput) {
+					lineHeightInput.addEventListener('change', () => {
+						updateTypography();
+					});
+					lineHeightInput.addEventListener('input', () => {
+						updateTypography();
+					});
+				}
+			}
+			
+			// Apply initial typography settings
+			function applyTypography(fontSize, lineHeight) {
+				// Create or update a style element for typography
+				let typographyStyle = document.getElementById('typography-settings');
+				if (!typographyStyle) {
+					typographyStyle = document.createElement('style');
+					typographyStyle.id = 'typography-settings';
+					document.head.appendChild(typographyStyle);
+				}
+				
+				// Set CSS with high specificity
+				typographyStyle.textContent = `
+					html, body {
+						font-size: ${fontSize}px !important;
+						line-height: ${lineHeight} !important;
+					}
+					main, article, section {
+						font-size: ${fontSize}px !important;
+						line-height: ${lineHeight} !important;
+					}
+					p, li, span, div, h1, h2, h3, h4, h5, h6 {
+						line-height: ${lineHeight} !important;
+					}
+				`;
+				
+				// Also set as inline styles for immediate effect
+				if (document.documentElement) {
+					document.documentElement.style.setProperty('--base-font-size', fontSize + 'px', 'important');
+					document.documentElement.style.setProperty('--base-line-height', lineHeight, 'important');
+					document.documentElement.style.fontSize = fontSize + 'px';
+					document.documentElement.style.lineHeight = lineHeight;
+				}
+				if (document.body) {
+					document.body.style.fontSize = fontSize + 'px';
+					document.body.style.lineHeight = lineHeight;
+				}
+			}
+			
+			// Apply initial settings immediately
+			applyTypography(currentFontSize, currentLineHeight);
+			
+			// Helper function to update typography
+			function updateTypography() {
+				const fontSizeInputEl = document.getElementById('font-size-input');
+				const lineHeightInputEl = document.getElementById('line-height-input');
+				const fontSize = fontSizeInputEl ? parseFloat(fontSizeInputEl.value) : parseFloat(currentFontSize);
+				const lineHeight = lineHeightInputEl ? parseFloat(lineHeightInputEl.value) : parseFloat(currentLineHeight);
+				
+				// Clamp values to min/max
+				const clampedFontSize = Math.max(12, Math.min(24, fontSize));
+				const clampedLineHeight = Math.max(1.0, Math.min(2.5, lineHeight));
+				
+				if (fontSizeInputEl) fontSizeInputEl.value = clampedFontSize;
+				if (lineHeightInputEl) lineHeightInputEl.value = clampedLineHeight.toFixed(1);
+				
+				localStorage.setItem('fontSize', clampedFontSize.toString());
+				localStorage.setItem('lineHeight', clampedLineHeight.toString());
+				
+				applyTypography(clampedFontSize.toString(), clampedLineHeight.toString());
+				
+				// Update preview text
+				const previewText = document.querySelector('.preview-text p');
+				if (previewText) {
+					previewText.style.fontSize = clampedFontSize + 'px';
+					previewText.style.lineHeight = clampedLineHeight.toString();
+				}
+			}
+			
+			// Set up handlers when DOM is ready - try multiple times to ensure elements exist
+			function trySetupHandlers() {
+				const fontSizeDecrease = document.getElementById('font-size-decrease');
+				if (fontSizeDecrease) {
+					setupTypographyHandlers();
+					console.log('Typography handlers set up successfully');
+				} else {
+					setTimeout(trySetupHandlers, 100);
+				}
+			}
+			trySetupHandlers();
+			
+			// Also set up handlers when modal is opened
+			const settingsModal = document.getElementById('settings-modal');
+			if (settingsModal) {
+				settingsModal.addEventListener('show', () => {
+					console.log('Modal shown, setting up typography handlers');
+					setTimeout(() => {
+						setupTypographyHandlers();
+					}, 50);
 				});
 			}
 		}

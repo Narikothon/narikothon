@@ -77,6 +77,8 @@ const { title, description, image = FallbackImage } = Astro.props;
 		function applyThemeAndFont() {
 			const currentTheme = localStorage.getItem('theme') || 'light';
 			const currentFont = localStorage.getItem('font') || 'solaiman-lipi';
+			const currentFontSize = localStorage.getItem('fontSize') || '16';
+			const currentLineHeight = localStorage.getItem('lineHeight') || '1.5';
 			
 			// Apply theme
 			if (document.documentElement) {
@@ -98,6 +100,48 @@ const { title, description, image = FallbackImage } = Astro.props;
 				document.body.className = document.body.className.replace(fontClassRegex, '').trim();
 				document.body.classList.add(fontClass);
 			}
+			
+			// Apply typography settings using a style element for persistence
+			function applyTypographySettings() {
+				const fontSize = localStorage.getItem('fontSize') || '16';
+				const lineHeight = localStorage.getItem('lineHeight') || '1.5';
+				
+				let typographyStyle = document.getElementById('typography-settings');
+				if (!typographyStyle) {
+					typographyStyle = document.createElement('style');
+					typographyStyle.id = 'typography-settings';
+					document.head.appendChild(typographyStyle);
+				}
+				
+				typographyStyle.textContent = `
+					html, body {
+						font-size: ${fontSize}px !important;
+						line-height: ${lineHeight} !important;
+					}
+					main, article, section {
+						font-size: ${fontSize}px !important;
+						line-height: ${lineHeight} !important;
+					}
+					p, li, span, div, h1, h2, h3, h4, h5, h6 {
+						line-height: ${lineHeight} !important;
+					}
+				`;
+				
+				// Also set as inline styles for immediate effect
+				if (document.documentElement) {
+					document.documentElement.style.setProperty('--base-font-size', fontSize + 'px', 'important');
+					document.documentElement.style.setProperty('--base-line-height', lineHeight, 'important');
+					document.documentElement.style.fontSize = fontSize + 'px';
+					document.documentElement.style.lineHeight = lineHeight;
+				}
+				if (document.body) {
+					document.body.style.fontSize = fontSize + 'px';
+					document.body.style.lineHeight = lineHeight;
+				}
+			}
+			
+			// Apply typography immediately
+			applyTypographySettings();
 		}
 		
 		// Try to apply immediately
