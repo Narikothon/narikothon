@@ -1,4 +1,6 @@
 ---
+import Search from './Search.astro';
+
 interface Props {
 	hideListGrid?: boolean;
 }
@@ -7,6 +9,7 @@ const { hideListGrid = false } = Astro.props;
 ---
 
 <div class="flex justify-end items-center gap-2">
+	<Search />
 	{!hideListGrid && (
 		<>
 			<button 

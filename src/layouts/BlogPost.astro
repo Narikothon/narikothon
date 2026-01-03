@@ -44,7 +44,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 	<body>
 		<Header />
 		<main class="w-[960px] max-w-[calc(100%-30px)] mx-auto py-6 md:py-12 px-2 md:px-[15px]">
-			<article class="bg-base-100 p-2 md:p-4 border border-base-content/20 rounded-box">
+			<article class="bg-base-100 p-2 md:p-4 border border-base-content/20 rounded-box" data-pagefind-body>
 				<div class="w-full mb-2">
 					{displayImage && (
 						<Image width={1020} height={510} src={displayImage} alt="" class="block mx-auto rounded-xl shadow-lg" />

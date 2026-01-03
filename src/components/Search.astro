@@ -1,0 +1,177 @@
+---
+import '@pagefind/default-ui/css/ui.css';
+---
+
+<site-search id="search">
+    <button
+        data-open-modal
+        disabled
+        class="btn btn-sm btn-ghost"
+        title="Search"
+    >
+        <i class="fas fa-search"></i>
+        <span class="sr-only">Search</span>
+    </button>
+    <dialog
+        aria-label="search"
+        class="modal backdrop:bg-base-content/50"
+    >
+        <div class="modal-box max-w-3xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-lg">Search</h3>
+                <button
+                    data-close-modal
+                    class="btn btn-sm btn-circle btn-ghost"
+                >
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        <div class="flex flex-col gap-4">
+            {
+                import.meta.env.DEV ? (
+                    <div class="mx-auto text-center">
+                        <p>
+                            Search is only available in production builds.{' '}
+                            <br />
+                            Try building and previewing the site to test it out
+                            locally.
+                        </p>
+                    </div>
+                ) : (
+                    <div class="search-container">
+                        <div id="blog__search" />
+                    </div>
+                )
+            }
+        </div>
+    </dialog>
+</site-search>
+
+<script>
+    class SiteSearch extends HTMLElement {
+        constructor() {
+            super();
+            const openBtn = this.querySelector<HTMLButtonElement>(
+                'button[data-open-modal]'
+            )!;
+            const closeBtn = this.querySelector<HTMLButtonElement>(
+                'button[data-close-modal]'
+            )!;
+            const dialog = this.querySelector('dialog')!;
+            const dialogFrame = this.querySelector('.modal-box')!;
+
+            const onWindowClick = (event: MouseEvent) => {
+                // check if it's a link
+                const isLink = 'href' in (event.target || {});
+                // make sure the click is either a link or outside of the dialog
+                const target = event.target as Node;
+                if (
+                    isLink ||
+                    (document.body.contains(target) &&
+                        !dialogFrame.contains(target))
+                )
+                    closeModal();
+            };
+
+            const openModal = (event?: MouseEvent) => {
+                dialog.showModal();
+                this.querySelector('input')?.focus();
+                event?.stopPropagation();
+                window.addEventListener('click', onWindowClick);
+            };
+
+            const closeModal = () => {
+                if (dialog.open) {
+                    dialog.close();
+                    window.removeEventListener('click', onWindowClick);
+                }
+            };
+
+            openBtn.addEventListener('click', openModal);
+            openBtn.disabled = false;
+            closeBtn.addEventListener('click', closeModal);
+
+            // Listen for `/` keyboard shortcut
+            window.addEventListener('keydown', (e) => {
+                if (e.key === '/' && !dialog.open) {
+                    openModal();
+                    e.preventDefault();
+                }
+            });
+
+            function createUI() {
+                if (import.meta.env.DEV) return;
+
+                const onIdle =
+                    window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+
+                onIdle(async () => {
+                    const { PagefindUI } = await import('@pagefind/default-ui');
+                    new PagefindUI({
+                        element: '#blog__search',
+                        baseUrl: import.meta.env.BASE_URL,
+                        bundlePath:
+                            import.meta.env.BASE_URL.replace(/\/$/, '') +
+                            '/pagefind/',
+                        showImages: false,
+                        showSubResults: true,
+                    });
+                });
+            }
+
+            if (document.readyState !== 'loading') {
+                createUI();
+            } else {
+                window.addEventListener('DOMContentLoaded', () => {
+                    createUI();
+                });
+            }
+
+            // close modal and clear input on view-transtion
+            document.addEventListener('astro:after-swap', () => {
+                // clear the search field
+                (
+                    document.querySelector(
+                        '.pagefind-ui__search-clear'
+                    ) as HTMLButtonElement
+                )?.click();
+                // close the modal & remove event listener on body
+                closeModal();
+            });
+        }
+    }
+
+    customElements.define('site-search', SiteSearch);
+</script>
+
+<style is:global>
+    #blog__search .pagefind-ui__search-input {
+        outline: none;
+    }
+
+    #blog__search .pagefind-ui__search-clear {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        background: hsl(var(--b1));
+        height: auto;
+        top: 8px;
+        right: 12px;
+        border-radius: var(--rounded-btn, 0.5rem);
+    }
+
+    #blog__search .pagefind-ui__result {
+        color: hsl(var(--bc));
+    }
+
+    #blog__search .pagefind-ui__result-link {
+        color: hsl(var(--p));
+    }
+
+    #blog__search {
+        --pagefind-ui-text: hsl(var(--bc));
+        --pagefind-ui-background: hsl(var(--b1));
+        --pagefind-ui-primary: hsl(var(--p));
+        --pagefind-ui-border: hsl(var(--bc) / 0.2);
+        --pagefind-ui-border-width: 1px;
+    }
+</style>
