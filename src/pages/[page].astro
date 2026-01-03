@@ -4,7 +4,6 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import PostCard from '../components/PostCard.astro';
-import ViewControls from '../components/ViewControls.astro';
 import SettingsModal from '../components/SettingsModal.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
@@ -83,144 +82,12 @@ const paginationNumbers = getPaginationNumbers(page.currentPage, page.lastPage);
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-		<style>
-			main {
-				display: block;
-				width: 960px;
-				max-width: calc(100% - 2em);
-				margin-left: auto;
-				margin-right: auto;
-				padding: 3em 1em;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			/* Grid view */
-			ul.grid-view li {
-				width: calc(33.333% - 1.334rem);
-			}
-			ul li {
-				width: calc(33.333% - 1.334rem);
-			}
-			/* List view */
-			ul.list-view {
-				flex-direction: column;
-			}
-			ul.list-view li {
-				width: 100%;
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			.pagination {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				gap: 1rem;
-				margin: 2rem 0;
-				padding: 1rem;
-			}
-			.pagination a {
-				padding: 0.5rem 1rem;
-				border: 1px solid rgb(var(--gray));
-				border-radius: 4px;
-				text-decoration: none;
-				color: rgb(var(--black));
-				background-color: white;
-				transition: 0.2s ease;
-			}
-			.pagination a:hover {
-				background-color: var(--accent);
-				color: white !important;
-				border-color: var(--accent);
-			}
-			.pagination .current {
-				padding: 0.5rem 1rem;
-				border: 1px solid var(--accent);
-				border-radius: 4px;
-				font-weight: bold;
-				background-color: var(--accent);
-				color: white !important;
-				pointer-events: none;
-				cursor: default;
-			}
-			.pagination .current:hover {
-				background-color: var(--accent);
-				color: white !important;
-			}
-			.pagination .disabled {
-				opacity: 0.5;
-				pointer-events: none;
-			}
-			.pagination .ellipsis {
-				padding: 0.5rem 0.5rem;
-				color: rgb(var(--gray));
-			}
-			/* Tablet: 2 columns */
-			@media (max-width: 1024px) and (min-width: 721px) {
-				ul.grid-view li,
-				ul li {
-					width: calc(50% - 1rem);
-				}
-			}
-			/* Mobile: 1 column */
-			@media (max-width: 720px) {
-				main {
-					padding: 1em 0.5em;
-				}
-				ul {
-					gap: 0.5em;
-				}
-				ul.grid-view li,
-				ul li {
-					width: 100%;
-				}
-				img {
-					display: block;
-					margin-left: auto;
-					margin-right: auto;
-				}
-				p {
-					text-align: justify;
-				}
-			}
-		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main class="block w-[960px] max-w-[calc(100%-30px)] mx-auto py-12 px-[15px] md:px-4">
 			<section>
-				<ViewControls />
-				<ul>
+				<ul class="grid-view flex flex-wrap gap-8 list-none m-0 p-0">
 					{
 						page.data.map((post: any) => (
 							<li>
@@ -237,23 +104,23 @@ const paginationNumbers = getPaginationNumbers(page.currentPage, page.lastPage);
 						))
 					}
 				</ul>
-				<nav class="pagination">
+				<nav class="flex justify-center items-center gap-2 my-8 p-4">
 					{
 						paginationNumbers.map((pageNum) => {
 							if (pageNum === 'ellipsis') {
-								return <span class="ellipsis">...</span>;
+								return <span class="px-2 py-1.5 text-base-content/60 text-sm">...</span>;
 							}
 							const isCurrent = pageNum === page.currentPage;
 							if (isCurrent) {
 								return (
-									<span class="current">
+									<span class="px-3 py-1.5 border border-primary rounded-md font-bold bg-primary text-primary-content pointer-events-none cursor-default text-sm">
 										{pageNum}
 									</span>
 								);
 							}
 							const href = pageNum === 1 ? '/' : `/${pageNum}`;
 							return (
-								<a href={href}>
+								<a href={href} class="px-3 py-1.5 border border-base-content/20 rounded-md no-underline text-base-content bg-base-100 transition-all text-sm hover:bg-primary hover:text-primary-content hover:border-primary">
 									{pageNum}
 								</a>
 							);

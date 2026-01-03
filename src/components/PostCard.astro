@@ -54,8 +54,8 @@ const postUrl = `/${post.id}/`;
 ---
 
 <!-- Grid View: DaisyUI Card -->
-<div class="grid-view-card">
-	<div class="card bg-base-100 shadow-sm h-full flex flex-col">
+<div class="grid-view-card block">
+	<div class="card bg-base-100 shadow-sm h-full flex flex-col min-h-[500px]">
 		{thumbnail && displayImage && (
 			<figure class="h-56 overflow-hidden flex-shrink-0">
 				<a href={postUrl}>
@@ -68,7 +68,7 @@ const postUrl = `/${post.id}/`;
 		)}
 		<div class="card-body flex-1 flex flex-col">
 			{title && post.data.title && (
-				<h2 class="card-title line-clamp-2">
+				<h2 class="card-title line-clamp-3 text-xs min-h-[3rem]">
 					<a href={postUrl} class="no-underline">{post.data.title}</a>
 				</h2>
 			)}
@@ -96,18 +96,25 @@ const postUrl = `/${post.id}/`;
 					</span>
 				)}
 				{readingTime && (
-					<span>{readingTimeMinutes} min read</span>
+					<span>• {readingTimeMinutes} min read</span>
 				)}
 			</div>
 		</div>
 	</div>
 </div>
 
-<!-- List View: Simple layout with thumbnail on right -->
-<div class="list-view-card flex gap-4 items-start">
+<!-- List View: Simple layout with thumbnail on left -->
+<div class="list-view-card hidden flex flex-row gap-4 items-stretch card bg-base-100 shadow-sm p-4 w-full">
+	{thumbnail && displayImage && (
+		<div class="w-1/3 flex-shrink-0">
+			<a href={postUrl}>
+				<Image width={300} height={200} src={displayImage} alt={post.data.title || ''} class="w-full h-40 object-cover rounded-box" />
+			</a>
+		</div>
+	)}
 	<div class="flex-1">
 		{title && post.data.title && (
-			<h3 class="text-lg font-semibold mb-2">
+			<h3 class="text-2xl font-semibold mb-2">
 				<a href={postUrl} class="no-underline hover:text-primary">{post.data.title}</a>
 			</h3>
 		)}
@@ -136,46 +143,53 @@ const postUrl = `/${post.id}/`;
 			)}
 		</div>
 	</div>
-	{thumbnail && displayImage && (
-		<div class="w-1/3 flex-shrink-0">
-			<a href={postUrl}>
-				<Image width={300} height={200} src={displayImage} alt={post.data.title || ''} class="w-full h-40 object-cover rounded-box" />
-			</a>
-		</div>
-	)}
 </div>
 
 <style is:global>
-	/* View switching */
-	.grid-view-card {
-		display: block;
-	}
-	.list-view-card {
-		display: none;
-	}
+	/* View switching - using Tailwind classes */
 	ul.list-view .grid-view-card {
 		display: none !important;
 	}
 	ul.list-view .list-view-card {
 		display: flex !important;
 	}
-	/* Ensure cards have consistent height */
-	.grid-view-card .card {
-		min-height: 500px;
+	/* Ensure list view items have equal width */
+	ul.list-view li {
+		width: 100%;
 	}
-	.grid-view-card figure {
-		flex-shrink: 0;
+	ul.list-view .list-view-card {
+		width: 100%;
+		min-height: 200px;
 	}
-	.line-clamp-2 {
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	/* Grid view responsive widths */
+	ul.grid-view li {
+		width: calc(33.333% - 1.334rem);
 	}
-	.line-clamp-3 {
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	@media (min-width: 721px) and (max-width: 1024px) {
+		ul.grid-view li {
+			width: calc(50% - 1rem);
+		}
+	}
+	@media (max-width: 720px) {
+		ul.grid-view li {
+			width: 100%;
+		}
+		ul {
+			gap: 0.5rem;
+		}
+		.list-view-card h3 {
+			font-size: 1.25rem !important;
+		}
+		main {
+			padding: 1em 0.5em;
+		}
+		img {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		p {
+			text-align: justify;
+		}
 	}
 </style>

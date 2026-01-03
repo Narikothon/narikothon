@@ -5,6 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import SettingsModal from '../components/SettingsModal.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
 	body?: string;
@@ -32,146 +33,60 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 	<head>
 		<BaseHead title={title} description={description || ''} />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-		<style>
-			.content-wrapper {
-				width: 960px;
-				max-width: 100%;
-				margin: 0;
-				padding: 0;
-			}
-			@media (min-width: 1024px) {
-				.content-wrapper {
-					margin-left: 0;
-					margin-right: auto;
-				}
-			}
-			.article-container {
-				background-color: hsl(var(--b1));
-				padding: 0.5em 0.75em;
-			}
-			.hero-image {
-				width: 100%;
-				margin-bottom: 0.5em;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 100%;
-				max-width: 100%;
-				margin: 0;
-				padding: 0;
-			}
-			.ct-intro {
-				margin-bottom: 1em;
-			}
-			.the-title {
-				margin: 0;
-				padding: 0.5rem 0.75rem;
-				font-size: 2rem;
-			}
-			.info {
-				list-style: none;
-				padding: 0;
-				margin: 0.5rem 0;
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.75rem;
-				align-items: center;
-			}
-			.info li {
-				display: flex;
-				align-items: center;
-				gap: 0.5rem;
-			}
-			.info i {
-				margin-right: 0.25rem;
-			}
-			.fab, .fas, .far {
-				display: inline-block !important;
-				font-style: normal !important;
-				font-variant: normal !important;
-				text-rendering: auto !important;
-				-webkit-font-smoothing: antialiased !important;
-			}
-			.fab.fa-slack-hash {
-				font-family: "Font Awesome 5 Brands" !important;
-				font-weight: 400 !important;
-			}
-			.link-author {
-				text-decoration: none;
-			}
-			.link-author:hover {
-				text-decoration: underline;
-			}
-			@media (max-width: 720px) {
-				.content-wrapper {
-					padding: 0 0.25em;
-				}
-				.article-container {
-					padding: 1em 0.8em;
-				}
-				.info {
-					flex-direction: column;
-					align-items: flex-start;
-					gap: 0.5rem;
-				}
-			}
-		</style>
 	</head>
 
 	<body>
 		<Header />
-		<main class="content-wrapper">
-			<article class="article-container border border-base-content/20 rounded-box">
-				<div class="hero-image">
+		<main class="w-[960px] max-w-[calc(100%-30px)] mx-auto py-12 px-[15px] md:px-4">
+			<article class="bg-base-100 p-2 md:p-4 border border-base-content/20 rounded-box">
+				<div class="w-full mb-2">
 					{displayImage && (
-						<Image width={1020} height={510} src={displayImage} alt="" />
+						<Image width={1020} height={510} src={displayImage} alt="" class="block mx-auto rounded-xl shadow-lg" />
 					)}
 				</div>
-				<div class="prose">
-					<div class="ct-intro mt-3 mb-3">
-						<h2 class="pt-0 pl-3 pr-3 pb-3 the-title">{title}</h2>
-						<ul class="info pl-0 mt-3 mb-4">
+				<div class="w-full max-w-full m-0 p-0">
+					<div class="mb-4 mt-3">
+						<h2 class="m-0 py-2 px-3 text-2xl text-center">{title}</h2>
+						<ul class="list-none p-0 my-2 flex flex-wrap justify-center items-center gap-3">
 							{author && (
-								<li>
-									<a href={`/author/${author}`} class="link-author" title={`Author - ${author}`}>
-										<i class="fas fa-feather-alt"></i>
+								<li class="flex items-center gap-2">
+									<a href={`/author/${author}`} class="no-underline hover:underline" title={`Author - ${author}`}>
+										<i class="fas fa-feather-alt mr-1"></i>
 										{author}
 									</a>
 								</li>
 							)}
+							{categories && categories.length > 0 && (
+								<>
+									{categories.map((category) => (
+										<li class="flex items-center gap-2">
+											<a href={`/category/${encodeURIComponent(category)}`} class="no-underline hover:underline pl-2" title={`Category - ${category}`}>
+												<i class="fa-solid fa-hashtag mr-1"></i>
+												{category}
+											</a>
+										</li>
+									))}
+								</>
+							)}
+						</ul>
+						<ul class="list-none p-0 my-2 flex flex-wrap justify-center items-center gap-3">
 							{pubDate && (
-								<li>
-									<i class="far fa-calendar-alt"></i>
+								<li class="flex items-center gap-2">
+									<i class="far fa-calendar-alt mr-1"></i>
 									<FormattedDate date={pubDate} />
 								</li>
 							)}
-							<li>
-								<i class="far fa-clock"></i>
+							<li class="flex items-center gap-2">
+								<i class="far fa-clock mr-1"></i>
 								{readingTime} MIN READ
 							</li>
 						</ul>
-						{categories && categories.length > 0 && (
-							<ul class="info pl-0 mt-3 mb-4">
-								{categories.map((category) => (
-									<li>
-										<a href={`/category/${encodeURIComponent(category)}`} class="link-author link-category pl-2" title={`Category - ${category}`}>
-											<i class="fab fa-slack-hash"></i>
-											{category}
-										</a>
-									</li>
-								))}
-							</ul>
-						)}
 					</div>
 					<slot />
 				</div>
 			</article>
 		</main>
 		<Footer />
+		<SettingsModal />
 	</body>
 </html>

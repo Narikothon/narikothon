@@ -1,141 +1,278 @@
 ---
+interface Props {
+	hideListGrid?: boolean;
+}
+
+const { hideListGrid = false } = Astro.props;
 ---
 
-<div class="view-controls">
-	<button 
-		title="Column 1 Layout" 
-		class="btn2 mr-2 hidden-sm list-view-btn" 
-		data-view="list"
-	>
-		<i class="col-link fas fa-1-25x fa-bars"></i>
-	</button>
-	<button 
-		title="Column 3 Layout" 
-		class="btn2 mr-2 hidden-sm grid-view-btn" 
-		data-view="grid"
-	>
-		<i class="col-link fas fa-1-25x fa-th"></i>
-	</button>
+<div class="flex justify-end items-center gap-2">
+	{!hideListGrid && (
+		<>
+			<button 
+				title="Column 1 Layout" 
+				class="btn btn-sm btn-ghost list-view-btn" 
+				data-view="list"
+			>
+				<i class="fas fa-bars"></i>
+			</button>
+			<button 
+				title="Column 3 Layout" 
+				class="btn btn-sm btn-ghost grid-view-btn" 
+				data-view="grid"
+				style="display: none;"
+			>
+				<i class="fas fa-th"></i>
+			</button>
+		</>
+	)}
 	<button 
 		title="Full Screen" 
-		class="btn2 mr-2 fullscreen-btn"
+		class="btn btn-sm btn-ghost fullscreen-btn"
 	>
-		<i class="fas fa-1-25x fa-expand"></i>
+		<i class="fas fa-expand"></i>
 	</button>
 	<button 
 		title="Settings" 
-		class="btn2 settings-btn"
+		class="btn btn-sm btn-ghost settings-btn"
 	>
-		<i class="fas fa-1-25x fa-cog"></i>
+		<i class="fas fa-cog"></i>
 	</button>
 </div>
 
-<style>
-	.view-controls {
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		gap: 0.5rem;
-		margin-bottom: 2rem;
-		padding: 1rem 0;
-	}
-	.view-controls .btn2 {
-		padding: 0.5rem 0.75rem;
-		border: 1px solid rgb(var(--gray));
-		border-radius: 4px;
-		background-color: white;
-		color: rgb(var(--black));
-		cursor: pointer;
-		transition: 0.2s ease;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.view-controls .btn2:hover {
-		background-color: rgb(var(--gray-light));
-		border-color: var(--accent);
-	}
-	.view-controls .btn2.active {
-		background-color: var(--accent);
-		color: white;
-		border-color: var(--accent);
-	}
-	.view-controls .btn2 i {
-		font-size: 1.25em;
-	}
-	.mr-2 {
-		margin-right: 0.5rem;
-	}
-</style>
 
-<script>
-	// Initialize view from localStorage or default to grid
-	const savedView = localStorage.getItem('postView') || 'grid';
-	const postsList = document.querySelector('ul');
-	
-	function applyView(view: string) {
-		if (postsList) {
-			if (view === 'list') {
-				postsList.classList.add('list-view');
-				postsList.classList.remove('grid-view');
-			} else {
-				postsList.classList.add('grid-view');
-				postsList.classList.remove('list-view');
+<script is:inline>
+	// Apply view immediately to prevent flash
+	(function() {
+		const savedView = localStorage.getItem('postView') || 'grid';
+		
+		// Set button visibility immediately - always show opposite of current view
+		function setButtonVisibility() {
+			const listBtn = document.querySelector('.list-view-btn');
+			const gridBtn = document.querySelector('.grid-view-btn');
+			if (listBtn && gridBtn) {
+				// Always show the opposite button
+				if (savedView === 'list') {
+					// List is active, show grid button (hide list button)
+					listBtn.style.display = 'none';
+					gridBtn.style.display = '';
+				} else {
+					// Grid is active, show list button (hide grid button)
+					gridBtn.style.display = 'none';
+					listBtn.style.display = '';
+				}
 			}
 		}
-	}
-	
-	if (postsList) {
-		// Apply saved view
-		applyView(savedView);
 		
-		// Update button visibility - show only the opposite of active view
-		const listBtn = document.querySelector('.list-view-btn') as HTMLElement;
-		const gridBtn = document.querySelector('.grid-view-btn') as HTMLElement;
+		// Find and apply view class immediately
+		function applyViewClass() {
+			const ul = document.querySelector('main ul, section ul');
+			if (ul) {
+				if (savedView === 'list') {
+					ul.classList.add('list-view');
+					ul.classList.remove('grid-view');
+				} else {
+					ul.classList.add('grid-view');
+					ul.classList.remove('list-view');
+				}
+			}
+			// Set button visibility
+			setButtonVisibility();
+		}
 		
-		if (savedView === 'list') {
-			// List is active, show grid button
-			if (listBtn) listBtn.style.display = 'none';
-			if (gridBtn) gridBtn.style.display = 'inline-flex';
+		// Apply view class and set button visibility immediately
+		applyViewClass();
+		setButtonVisibility();
+		
+		// Use requestAnimationFrame to run as early as possible
+		if (typeof requestAnimationFrame !== 'undefined') {
+			requestAnimationFrame(() => {
+				applyViewClass();
+				setButtonVisibility();
+			});
+		}
+		
+		// Apply when DOM is ready
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', () => {
+				applyViewClass();
+				setButtonVisibility();
+			});
 		} else {
-			// Grid is active, show list button
-			if (gridBtn) gridBtn.style.display = 'none';
-			if (listBtn) listBtn.style.display = 'inline-flex';
+			// DOM already ready, apply immediately
+			applyViewClass();
+			setButtonVisibility();
+		}
+		
+		// Also set button visibility after short delays to catch any late-rendered buttons
+		setTimeout(() => {
+			applyViewClass();
+			setButtonVisibility();
+		}, 0);
+		setTimeout(() => {
+			applyViewClass();
+			setButtonVisibility();
+		}, 10);
+		setTimeout(() => {
+			applyViewClass();
+			setButtonVisibility();
+		}, 50);
+		setTimeout(() => {
+			applyViewClass();
+			setButtonVisibility();
+		}, 100);
+	})();
+</script>
+
+<script>
+	// Wait for DOM to be ready
+	function initViewControls() {
+		// Find the posts list - look for ul that comes after ViewControls
+		function findPostsList() {
+			const viewControls = document.querySelector('.view-controls');
+			if (!viewControls) return null;
+			
+			// Find the next ul sibling after view-controls
+			let nextSibling = viewControls.nextElementSibling;
+			while (nextSibling) {
+				if (nextSibling.tagName === 'UL') {
+					return nextSibling as HTMLElement;
+				}
+				nextSibling = nextSibling.nextElementSibling;
+			}
+			
+			// Fallback: find ul in main > section
+			const section = viewControls.closest('section');
+			if (section) {
+				const ul = section.querySelector('ul');
+				if (ul) return ul as HTMLElement;
+			}
+			
+			// Last fallback: any ul that's not pagination
+			const allUls = document.querySelectorAll('ul');
+			for (const ul of allUls) {
+				if (!ul.closest('.pagination')) {
+					return ul as HTMLElement;
+				}
+			}
+			
+			return null;
+		}
+		
+		// Initialize view from localStorage or default to grid
+		const savedView = localStorage.getItem('postView') || 'grid';
+		const postsList = findPostsList();
+		
+		function applyView(view: string) {
+			if (postsList) {
+				if (view === 'list') {
+					postsList.classList.add('list-view');
+					postsList.classList.remove('grid-view');
+				} else {
+					postsList.classList.add('grid-view');
+					postsList.classList.remove('list-view');
+				}
+			}
+		}
+		
+		// Update button visibility - always show opposite of active view
+		const listBtnEl = document.querySelector('.list-view-btn');
+		const gridBtnEl = document.querySelector('.grid-view-btn');
+		
+		if (postsList) {
+			// Apply saved view
+			applyView(savedView);
+			
+			// Always show the opposite button
+			if (listBtnEl && gridBtnEl) {
+				if (savedView === 'list') {
+					// List is active, show grid button (hide list button)
+					listBtnEl.style.display = 'none';
+					gridBtnEl.style.display = '';
+				} else {
+					// Grid is active, show list button (hide grid button)
+					gridBtnEl.style.display = 'none';
+					listBtnEl.style.display = '';
+				}
+			}
+		} else {
+			// No posts list found (e.g., blog post page), hide list/grid buttons
+			if (listBtnEl) listBtnEl.style.display = 'none';
+			if (gridBtnEl) gridBtnEl.style.display = 'none';
+		}
+		
+		// Also check if we're on a blog post page by URL pattern
+		// Blog post pages are like /some-slug/ but not /, /2, /about, etc.
+		const pathname = window.location.pathname;
+		const isBlogPostPage = pathname !== '/' && 
+			!pathname.match(/^\/(\d+|about)\/?$/) && 
+			!pathname.match(/^\/category\//) && 
+			!pathname.match(/^\/author\//);
+		
+		if (isBlogPostPage && listBtnEl && gridBtnEl) {
+			listBtnEl.style.display = 'none';
+			gridBtnEl.style.display = 'none';
+		}
+		
+		// List/Grid toggle
+		const listBtn = document.querySelector('.list-view-btn');
+		const gridBtn = document.querySelector('.grid-view-btn');
+		
+		if (listBtn) {
+			listBtn.addEventListener('click', (e) => {
+				e.preventDefault();
+				const postsList = findPostsList();
+				const listBtnEl = document.querySelector('.list-view-btn');
+				const gridBtnEl = document.querySelector('.grid-view-btn');
+				
+				if (postsList) {
+					postsList.classList.add('list-view');
+					postsList.classList.remove('grid-view');
+					localStorage.setItem('postView', 'list');
+					
+					// Hide list button, show grid button (opposite)
+					if (listBtnEl) {
+						listBtnEl.style.display = 'none';
+					}
+					if (gridBtnEl) {
+						gridBtnEl.style.display = '';
+					}
+				}
+			});
+		}
+		
+		if (gridBtn) {
+			gridBtn.addEventListener('click', (e) => {
+				e.preventDefault();
+				const postsList = findPostsList();
+				const listBtnEl = document.querySelector('.list-view-btn');
+				const gridBtnEl = document.querySelector('.grid-view-btn');
+				
+				if (postsList) {
+					postsList.classList.add('grid-view');
+					postsList.classList.remove('list-view');
+					localStorage.setItem('postView', 'grid');
+					
+					// Hide grid button, show list button (opposite)
+					if (gridBtnEl) {
+						gridBtnEl.style.display = 'none';
+					}
+					if (listBtnEl) {
+						listBtnEl.style.display = '';
+					}
+				}
+			});
 		}
 	}
 	
-	// List/Grid toggle
-	document.querySelector('.list-view-btn')?.addEventListener('click', () => {
-		const postsList = document.querySelector('ul');
-		const listBtn = document.querySelector('.list-view-btn') as HTMLElement;
-		const gridBtn = document.querySelector('.grid-view-btn') as HTMLElement;
-		
-		if (postsList) {
-			postsList.classList.add('list-view');
-			postsList.classList.remove('grid-view');
-			localStorage.setItem('postView', 'list');
-			
-			// Hide list button, show grid button
-			if (listBtn) listBtn.style.display = 'none';
-			if (gridBtn) gridBtn.style.display = 'inline-flex';
+	// Run when DOM is ready - use setTimeout to ensure everything is loaded
+	setTimeout(() => {
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initViewControls);
+		} else {
+			initViewControls();
 		}
-	});
-	
-	document.querySelector('.grid-view-btn')?.addEventListener('click', () => {
-		const postsList = document.querySelector('ul');
-		const listBtn = document.querySelector('.list-view-btn') as HTMLElement;
-		const gridBtn = document.querySelector('.grid-view-btn') as HTMLElement;
-		
-		if (postsList) {
-			postsList.classList.add('grid-view');
-			postsList.classList.remove('list-view');
-			localStorage.setItem('postView', 'grid');
-			
-			// Hide grid button, show list button
-			if (gridBtn) gridBtn.style.display = 'none';
-			if (listBtn) listBtn.style.display = 'inline-flex';
-		}
-	});
+	}, 100);
 	
 	// Fullscreen toggle
 	document.querySelector('.fullscreen-btn')?.addEventListener('click', () => {
