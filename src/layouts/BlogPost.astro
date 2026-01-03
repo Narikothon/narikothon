@@ -37,7 +37,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description || ''} />
+		<BaseHead title={title} description={description || ''} image={displayImage} />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 	</head>
 
@@ -221,7 +221,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 									<a 
 										target="_blank" 
 										rel="noopener noreferrer"
-										href={`https://twitter.com/share?url=${encodeURIComponent(shareUrl)}`}
+										href={`https://x.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
 										class="text-2xl hover:opacity-80 transition-opacity text-primary"
 										aria-label="Share on Twitter"
 									>
