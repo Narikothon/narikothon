@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 	// Get all unique categories
 	const categories = new Set<string>();
 	allPosts.forEach((post) => {
-		if (post.data.categories) {
+		if (post.data.categories && post.data.categories.length > 0) {
 			post.data.categories.forEach((category) => {
 				categories.add(category);
 			});
@@ -73,6 +73,13 @@ interface Page {
 
 const { page, category } = Astro.props as { page: Page; category: string };
 const categorySlug = encodeURIComponent(category);
+
+// Get total post count for this category
+const allPosts = await getCollection('blog');
+const categoryPosts = allPosts.filter((post) => 
+	post.data.categories && post.data.categories.includes(category)
+);
+const totalPostCount = categoryPosts.length;
 ---
 
 <BaseLayout title={`${category} - ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
@@ -80,7 +87,7 @@ const categorySlug = encodeURIComponent(category);
 		<section>
 			<h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">
 				<i class="fa-solid fa-hashtag mr-2"></i>
-				{category}
+				{category} ({totalPostCount})
 			</h1>
 			<PostGrid posts={page.data} />
 			<Pagination 

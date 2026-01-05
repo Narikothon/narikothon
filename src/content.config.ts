@@ -30,14 +30,22 @@ const blog = defineCollection({
 			heroImage: image().optional(),
 			}).transform((data) => {
 				// If 'date' is provided but 'pubDate' is not, use date as pubDate
+				let transformed = data;
 				if (data.date && !data.pubDate) {
-					return {
+					transformed = {
 						...data,
 						pubDate: data.date,
 						date: undefined,
 					};
 				}
-				return data;
+				// If no categories or empty categories array, assign "uncategorized"
+				if (!transformed.categories || transformed.categories.length === 0) {
+					transformed = {
+						...transformed,
+						categories: ['uncategorized'],
+					};
+				}
+				return transformed;
 			})
 		),
 });

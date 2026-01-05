@@ -130,6 +130,21 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 								margin-top: 1rem;
 								margin-bottom: 1rem;
 							}
+							/* Drop cap for first paragraph */
+							:global(article p:first-of-type::first-letter) {
+								float: left;
+								font-size: 4.5rem;
+								line-height: 0.8;
+								padding-right: 0.5rem;
+								padding-top: 0.1rem;
+								font-weight: bold;
+								font-family: serif;
+							}
+							@media (max-width: 768px) {
+								:global(article p:first-of-type::first-letter) {
+									font-size: 3.5rem;
+								}
+							}
 						</style>
 						<slot />
 					</div>

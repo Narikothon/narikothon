@@ -67,6 +67,11 @@ interface Page {
 }
 
 const { page, author } = Astro.props as { page: Page; author: string };
+
+// Get total post count for this author
+const allPosts = await getCollection('blog');
+const authorPosts = allPosts.filter((post) => post.data.author === author);
+const totalPostCount = authorPosts.length;
 ---
 
 <BaseLayout title={`${author} - ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
@@ -74,7 +79,7 @@ const { page, author } = Astro.props as { page: Page; author: string };
 		<section>
 			<h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">
 				<i class="fas fa-feather-alt mr-2"></i>
-				{author}
+				{author} ({totalPostCount})
 			</h1>
 			<PostGrid posts={page.data} />
 			<Pagination 
