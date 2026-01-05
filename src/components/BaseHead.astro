@@ -15,6 +15,11 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = FallbackImage } = Astro.props;
+
+// Get image dimensions for og:image meta tags
+// Ensure dimensions are always numbers (required for og:image meta tags)
+const imageWidth = typeof image.width === 'number' ? image.width : 1200;
+const imageHeight = typeof image.height === 'number' ? image.height : 630;
 ---
 
 <!-- Global Metadata -->
@@ -53,8 +58,9 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image.src, Astro.site || Astro.url)} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+<meta property="og:image:width" content={imageWidth.toString()} />
+<meta property="og:image:height" content={imageHeight.toString()} />
+<meta property="og:image:type" content="image/jpeg" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
