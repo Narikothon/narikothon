@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://narikothon.github.io',
+  site: 'https://narikothon.zubairiz.com',
   integrations: [mdx(), sitemap()],
 
   vite: {
