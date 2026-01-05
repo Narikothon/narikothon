@@ -3,6 +3,7 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
 import FallbackImage from '../assets/cover.jpg';
 import { SITE_TITLE } from '../consts';
 
@@ -16,10 +17,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = FallbackImage } = Astro.props;
 
-// Get image dimensions for og:image meta tags
+// Get processed image using getImage() to ensure correct URL
+// This gives us the optimized image URL that Astro generates
+const processedImage = await getImage({ src: image });
+
+// Get image dimensions for og:image meta tags from original image
 // Ensure dimensions are always numbers (required for og:image meta tags)
+// Minimum 600px width required, recommended 1080px+
 const imageWidth = typeof image.width === 'number' ? image.width : 1200;
 const imageHeight = typeof image.height === 'number' ? image.height : 630;
+
+// Create absolute URL for og:image using the processed image URL
+// processedImage.src is the processed image path, make it absolute
+const ogImageUrl = new URL(processedImage.src, Astro.site || Astro.url);
 ---
 
 <!-- Global Metadata -->
@@ -57,17 +67,18 @@ const imageHeight = typeof image.height === 'number' ? image.height : 630;
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.site || Astro.url)} />
+<meta property="og:image" content={ogImageUrl.toString()} />
 <meta property="og:image:width" content={imageWidth.toString()} />
 <meta property="og:image:height" content={imageHeight.toString()} />
 <meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:alt" content={title} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image.src, Astro.site || Astro.url)} />
+<meta property="twitter:image" content={ogImageUrl.toString()} />
 
 <!-- Theme and Font Initialization -->
 <script is:inline>
