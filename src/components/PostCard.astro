@@ -59,7 +59,7 @@ const postUrl = `/${post.id}/`;
 		{thumbnail && displayImage && (
 			<figure class="aspect-video overflow-hidden flex-shrink-0 m-0 p-0 rounded-t-box">
 				<a href={postUrl} class="block h-full w-full">
-					<Image width={400} height={225} src={displayImage} alt={post.data.title || ''} class="w-full h-full object-cover object-center rounded-t-box" />
+					<Image width={800} height={450} src={displayImage} alt={post.data.title || ''} class="w-full h-full object-cover object-center rounded-t-box" />
 				</a>
 			</figure>
 		)}
@@ -154,7 +154,7 @@ const postUrl = `/${post.id}/`;
 	{thumbnail && displayImage && (
 		<div class="w-[120px] md:w-1/3 flex-shrink-0">
 			<a href={postUrl}>
-				<Image width={300} height={200} src={displayImage} alt={post.data.title || ''} class="w-full h-[68px] md:h-40 object-cover rounded-box" />
+				<Image width={600} height={400} src={displayImage} alt={post.data.title || ''} class="w-full h-[68px] md:h-40 object-cover rounded-box" />
 			</a>
 		</div>
 	)}
