@@ -8,11 +8,8 @@ const blog = defineCollection({
 	schema: ({ image }) =>
 		z.preprocess(
 			(data: any) => {
-				// Preprocess: if coverImage is just a filename, convert to relative path
-				// Path is relative to the content file location
-				// For posts in 2output/posts/, images are in ./images/ subfolder
 				if (data?.coverImage && typeof data.coverImage === 'string' && !data.coverImage.includes('/')) {
-					data.coverImage = `./images/${data.coverImage}`;
+					data.coverImage = `./${data.coverImage}`;
 				}
 				return data;
 			},

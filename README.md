@@ -1,4 +1,4 @@
-# Astro Starter Kit: Blog
+# Narikothon with Astro Starter Kit: Blog
 
 ```sh
 pnpm create astro@latest -- --template blog
