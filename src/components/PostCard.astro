@@ -35,7 +35,7 @@ const {
 	readingTime = true,
 } = Astro.props;
 
-// Calculate reading time (average 200 words per minute)
+// Calculate reading time (average 200 words per minute) 
 function calculateReadingTime(content: string | undefined): number {
 	if (!content) return 1;
 	const words = content.trim().split(/\s+/).length;
