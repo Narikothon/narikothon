@@ -55,7 +55,7 @@ const postUrl = `/${post.id}/`;
 
 <!-- Grid View: DaisyUI Card -->
 <div class="grid-view-card block">
-	<div class="card bg-base-100 shadow-sm h-full flex flex-col">
+	<div class="card bg-base-100 shadow-sm border border-base-content/20 h-full flex flex-col">
 		{thumbnail && displayImage && (
 			<figure class="aspect-video overflow-hidden flex-shrink-0 m-0 p-0 rounded-t-box">
 				<a href={postUrl} class="block h-full w-full">
@@ -107,7 +107,7 @@ const postUrl = `/${post.id}/`;
 </div>
 
 <!-- List View: Simple layout with thumbnail on left -->
-<div class="list-view-card hidden flex flex-row gap-2 items-start card bg-base-100 shadow-sm p-2 w-full">
+<div class="list-view-card hidden flex flex-row gap-2 items-start card bg-base-100 shadow-sm border border-base-content/20 p-2 w-full">
 <style is:global>
 	/* View switching */
 	.grid-view-card {
