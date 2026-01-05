@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, valentine, lemonade, caramellatte, dracula, forest, halloween, abyss;
+  themes: light --default, dark --prefersdark, valentine, lemonade, caramellatte, retro, cyberpunk, aqua, abyss;
 }
 @font-face {
 	font-family: "Atkinson";
@@ -18,14 +18,14 @@
 }
 @font-face {
 	font-family: "SolaimanLipi";
-	src: url("/SolaimanLipiNormal.woff2") format("woff2");
+	src: url("/fonts/SolaimanLipiNormal.woff2") format("woff2");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
 @font-face {
 	font-family: "BenSenHandwriting";
-	src: url("/BenSenHandwriting.ttf") format("truetype");
+	src: url("/fonts/BenSenHandwriting.ttf") format("truetype");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;

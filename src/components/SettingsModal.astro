@@ -1,5 +1,18 @@
 ---
-const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracula', 'forest', 'halloween', 'abyss'];
+const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'retro', 'cyberpunk', 'aqua', 'abyss', ];
+
+// Custom theme display names - change these to customize how themes appear
+const themeNames: Record<string, string> = {
+	'light': 'Light',
+	'dark': 'Dark',
+	'valentine': 'Pink',
+	'lemonade': 'Lemonade',
+	'caramellatte': 'Caramel Latte',
+	'retro': 'Retro',
+	'cyberpunk': 'Cyberpunk',
+	'aqua': 'Aqua',
+	'abyss': 'Abyss',
+};
 ---
 
 <!-- Modal toggle button is in ViewControls -->
@@ -12,6 +25,30 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 		</form>
 		<h3 class="font-bold text-lg mb-4">সেটিংস</h3>
 		
+		<style>
+			.tabs input[type="radio"] {
+				position: absolute;
+				opacity: 0;
+				pointer-events: none;
+			}
+			.tabs input[type="radio"]:checked + label.tab {
+				font-weight: 700 !important;
+				color: hsl(var(--p)) !important;
+				border-bottom-width: 2px !important;
+				border-bottom-color: hsl(var(--p)) !important;
+			}
+			.tabs input[type="radio"]:not(:checked) + label.tab {
+				color: hsl(var(--bc) / 0.6);
+			}
+			.tabs input[type="radio"]:not(:checked) + label.tab:hover {
+				color: hsl(var(--bc) / 0.8);
+			}
+			/* Hide all tab content by default, JavaScript will show the active one */
+			.tabs .tab-content {
+				display: none;
+			}
+		</style>
+		
 		<!-- Preview Text -->
 		<div class="preview-text text-xl font-bold bg-base-200 rounded-box text-center p-4 mb-4 min-h-[60px] flex items-center justify-center">
 			<p class="text-lg m-0">আল্লাহ ছাড়া কোনো ইলাহ নেই</p>
@@ -19,114 +56,115 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 		
 		<!-- Tabs -->
 		<div role="tablist" class="tabs tabs-bordered mb-4">
-			<button role="tab" class="tab tab-active" data-tab="theme">Theme</button>
-			<button role="tab" class="tab" data-tab="font">Font</button>
-			<button role="tab" class="tab" data-tab="typography">Typography</button>
-		</div>
-		
-		<!-- Theme Tab Content -->
-		<div role="tabpanel" class="tab-content p-2 block" id="theme-tab">
-			<h4 class="font-semibold mb-3 text-sm">Choose Theme</h4>
-			<div class="rounded-box grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-3 block" id="theme-grid">
-				{themes.map((theme) => (
-					<div
-						class="theme-card border-base-content/20 hover:border-base-content/40 overflow-hidden rounded-lg border outline-2 outline-offset-2 outline-transparent cursor-pointer w-full block"
-						data-theme-code={theme}
-						data-theme={theme}
-						data-act-class="outline-base-content"
-					>
-						<div data-theme={theme} class="bg-base-100 text-base-content w-full font-sans">
-							<div class="grid grid-cols-5 grid-rows-3">
-								<div class="bg-base-200 col-start-1 row-span-2 row-start-1"></div>
-								<div class="bg-base-300 col-start-1 row-start-3"></div>
-								<div class="bg-base-100 col-span-4 col-start-2 row-span-3 row-start-1 flex flex-col justify-start items-start p-2">
-									<div class="font-bold line-clamp-2">{theme}</div>
+			<input type="radio" name="settings-tabs" role="tab" aria-label="Theme" checked="checked" id="settings-tabs-theme" />
+			<label role="tab" class="tab font-semibold" for="settings-tabs-theme">Theme</label>
+			<div role="tabpanel" class="tab-content p-2">
+				<h4 class="font-semibold mb-3 text-sm">Choose Theme</h4>
+				<div class="rounded-box grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-3 block" id="theme-grid">
+					{themes.map((theme) => {
+						const themeDisplayName = themeNames[theme] || theme;
+						return (
+							<div
+								class="theme-card border-base-content/20 hover:border-base-content/40 overflow-hidden rounded-lg border outline-2 outline-offset-2 outline-transparent cursor-pointer w-full block"
+								data-theme-code={theme}
+								data-theme={theme}
+								data-act-class="outline-base-content"
+							>
+								<div data-theme={theme} class="bg-base-100 text-base-content w-full font-sans">
+									<div class="grid grid-cols-5 grid-rows-3">
+										<div class="bg-base-200 col-start-1 row-span-2 row-start-1"></div>
+										<div class="bg-base-300 col-start-1 row-start-3"></div>
+										<div class="bg-base-100 col-span-4 col-start-2 row-span-3 row-start-1 flex flex-col justify-start items-start p-2">
+											<div class="font-bold line-clamp-2">{themeDisplayName}</div>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-		
-		<!-- Font Tab Content -->
-		<div role="tabpanel" class="tab-content p-2 hidden" id="font-tab">
-			<h4 class="font-semibold mb-3 text-sm">Choose Font</h4>
-			<div class="flex flex-col gap-3 block" id="font-options">
-				<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="solaiman-lipi">
-					<div class="card-body p-4">
-						<h5 class="card-title text-lg" style="font-family: 'SolaimanLipi', system-ui, sans-serif !important;">
-							SolaimanLipi <span class="text-xs opacity-70 font-normal ml-2">(Local)</span>
-						</h5>
-					</div>
-				</div>
-				<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="hind-siliguri">
-					<div class="card-body p-4">
-						<h5 class="card-title text-lg" style="font-family: 'Hind Siliguri', system-ui, sans-serif !important;">
-							Hind Siliguri <span class="text-xs opacity-70 font-normal ml-2">(Google)</span>
-						</h5>
-					</div>
-				</div>
-				<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="atma">
-					<div class="card-body p-4">
-						<h5 class="card-title text-lg" style="font-family: 'Atma', system-ui, sans-serif !important;">
-							Atma <span class="text-xs opacity-70 font-normal ml-2">(Google)</span>
-						</h5>
-					</div>
-				</div>
-				<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="bensen-handwriting">
-					<div class="card-body p-4">
-						<h5 class="card-title text-lg" style="font-family: 'BenSenHandwriting', system-ui, sans-serif !important;">
-							BenSen Handwriting <span class="text-xs opacity-70 font-normal ml-2">(Local)</span>
-						</h5>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<!-- Typography Tab Content -->
-		<div role="tabpanel" class="tab-content p-2 hidden" id="typography-tab">
-			<h4 class="font-semibold mb-3 text-sm">Font Size</h4>
-			<div class="mb-6">
-				<div class="join w-full max-w-xs">
-					<button type="button" class="btn join-item btn-primary" id="font-size-decrease">-</button>
-					<input 
-						type="number" 
-						min="12" 
-						max="24" 
-						value="16" 
-						class="input input-bordered join-item text-center flex-1" 
-						id="font-size-input"
-						step="1"
-					/>
-					<button type="button" class="btn join-item btn-primary" id="font-size-increase">+</button>
-				</div>
-				<div class="text-xs text-center mt-2 opacity-70">
-					<span>Range: 12px - 24px</span>
+						);
+					})}
 				</div>
 			</div>
 			
-			<h4 class="font-semibold mb-3 text-sm">Line Spacing</h4>
-			<div class="mb-4">
-				<div class="join w-full max-w-xs">
-					<button type="button" class="btn join-item btn-primary" id="line-height-decrease">-</button>
-					<input 
-						type="number" 
-						min="1.0" 
-						max="2.5" 
-						value="1.5" 
-						class="input input-bordered join-item text-center flex-1" 
-						id="line-height-input"
-						step="0.1"
-					/>
-					<button type="button" class="btn join-item btn-primary" id="line-height-increase">+</button>
+			<input type="radio" name="settings-tabs" role="tab" aria-label="Font" id="settings-tabs-font" />
+			<label role="tab" class="tab font-semibold" for="settings-tabs-font">Font</label>
+			<div role="tabpanel" class="tab-content p-2">
+				<h4 class="font-semibold mb-3 text-sm">Choose Font</h4>
+				<div class="flex flex-col gap-3 block" id="font-options">
+					<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="solaiman-lipi">
+						<div class="card-body p-4">
+							<h5 class="card-title text-lg" style="font-family: 'SolaimanLipi', system-ui, sans-serif !important;">
+								SolaimanLipi <span class="text-xs opacity-70 font-normal ml-2">(Local)</span>
+							</h5>
+						</div>
+					</div>
+					<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="bensen-handwriting">
+						<div class="card-body p-4">
+							<h5 class="card-title text-lg" style="font-family: 'BenSenHandwriting', system-ui, sans-serif !important;">
+								BenSen Handwriting <span class="text-xs opacity-70 font-normal ml-2">(Local)</span>
+							</h5>
+						</div>
+					</div>
+					<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="hind-siliguri">
+						<div class="card-body p-4">
+							<h5 class="card-title text-lg" style="font-family: 'Hind Siliguri', system-ui, sans-serif !important;">
+								Hind Siliguri <span class="text-xs opacity-70 font-normal ml-2">(Google)</span>
+							</h5>
+						</div>
+					</div>
+					<div class="font-option card bg-base-100 shadow-md cursor-pointer block hover:shadow-lg transition-shadow" data-font-code="atma">
+						<div class="card-body p-4">
+							<h5 class="card-title text-lg" style="font-family: 'Atma', system-ui, sans-serif !important;">
+								Atma <span class="text-xs opacity-70 font-normal ml-2">(Google)</span>
+							</h5>
+						</div>
+					</div>
 				</div>
-				<div class="text-xs text-center mt-2 opacity-70">
-					<span>Range: 1.0 - 2.5</span>
+			</div>
+			
+			<input type="radio" name="settings-tabs" role="tab" aria-label="Typography" id="settings-tabs-typography" />
+			<label role="tab" class="tab font-semibold" for="settings-tabs-typography">Typography</label>
+			<div role="tabpanel" class="tab-content p-2">
+				<h4 class="font-semibold mb-3 text-sm">Font Size</h4>
+				<div class="mb-6">
+					<div class="join w-full max-w-xs">
+						<button type="button" class="btn join-item btn-primary" id="font-size-decrease">-</button>
+						<input 
+							type="number" 
+							min="12" 
+							max="24" 
+							value="16" 
+							class="input input-bordered join-item text-center flex-1" 
+							id="font-size-input"
+							step="1"
+						/>
+						<button type="button" class="btn join-item btn-primary" id="font-size-increase">+</button>
+					</div>
+					<div class="text-xs text-center mt-2 opacity-70">
+						<span>Range: 12px - 24px</span>
+					</div>
+				</div>
+				
+				<h4 class="font-semibold mb-3 text-sm">Line Spacing</h4>
+				<div class="mb-4">
+					<div class="join w-full max-w-xs">
+						<button type="button" class="btn join-item btn-primary" id="line-height-decrease">-</button>
+						<input 
+							type="number" 
+							min="1.0" 
+							max="2.5" 
+							value="1.5" 
+							class="input input-bordered join-item text-center flex-1" 
+							id="line-height-input"
+							step="0.1"
+						/>
+						<button type="button" class="btn join-item btn-primary" id="line-height-increase">+</button>
+					</div>
+					<div class="text-xs text-center mt-2 opacity-70">
+						<span>Range: 1.0 - 2.5</span>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	<form method="dialog" class="modal-backdrop">
 		<button>close</button>
 	</form>
@@ -138,6 +176,8 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 		// Get current theme and font from localStorage
 		const currentTheme = localStorage.getItem('theme') || 'light';
 		const currentFont = localStorage.getItem('font') || 'solaiman-lipi';
+		const currentFontSize = localStorage.getItem('fontSize') || '16';
+		const currentLineHeight = localStorage.getItem('lineHeight') || '1.5';
 
 		// Wait for elements to be available
 		function waitForElements(callback) {
@@ -149,6 +189,141 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 			} else {
 				setTimeout(() => waitForElements(callback), 50);
 			}
+		}
+		
+		// Setup event handlers immediately (using event delegation)
+		function setupEventHandlersImmediate() {
+			const modal = document.getElementById('settings-modal');
+			if (!modal) {
+				setTimeout(setupEventHandlersImmediate, 100);
+				return;
+			}
+			
+			// Prevent duplicate listeners
+			if (modal.dataset.handlersSetup === 'true') {
+				return;
+			}
+			modal.dataset.handlersSetup = 'true';
+
+			// Use event delegation for theme cards
+			modal.addEventListener('click', (e) => {
+				const card = e.target.closest('.theme-card');
+				if (card) {
+					const themeCode = card.getAttribute('data-theme-code');
+					if (!themeCode) return;
+
+					// Remove active state from all cards
+					document.querySelectorAll('.theme-card').forEach(c => {
+						c.classList.remove('outline-base-content');
+					});
+					// Add active state to clicked card
+					card.classList.add('outline-base-content');
+					
+					// Apply theme
+					if (document.documentElement) {
+						document.documentElement.setAttribute('data-theme', themeCode);
+						localStorage.setItem('theme', themeCode);
+					}
+					return;
+				}
+
+				// Use event delegation for font options
+				const fontOption = e.target.closest('.font-option');
+				if (fontOption) {
+					const fontCode = fontOption.getAttribute('data-font-code');
+					if (!fontCode) return;
+
+					const fontClasses = {
+						'solaiman-lipi': 'solaiman-lipi',
+						'hind-siliguri': 'hind-siliguri-regular',
+						'atma': 'atma-regular',
+						'bensen-handwriting': 'bensen-handwriting',
+					};
+
+					const fontClass = fontClasses[fontCode];
+					if (!fontClass) return;
+
+					// Remove active state from all options
+					document.querySelectorAll('.font-option').forEach(o => {
+						o.classList.remove('ring-2', 'ring-primary');
+					});
+					// Add active state to clicked option
+					fontOption.classList.add('ring-2', 'ring-primary');
+					
+					// Apply font
+					const fontClassRegex = /solaiman-lipi|hind-siliguri-\w+|atma-\w+|bensen-handwriting/g;
+					if (document.body) {
+						document.body.className = document.body.className.replace(fontClassRegex, '').trim();
+						document.body.classList.add(fontClass);
+					}
+					// Also apply to html for global font
+					if (document.documentElement) {
+						document.documentElement.className = document.documentElement.className.replace(fontClassRegex, '').trim();
+						document.documentElement.classList.add(fontClass);
+					}
+					localStorage.setItem('font', fontCode);
+					
+					// Update preview text font
+					const previewText = document.querySelector('.preview-text');
+					if (previewText) {
+						previewText.className = previewText.className.replace(fontClassRegex, '').trim();
+						previewText.classList.add(fontClass);
+					}
+				}
+			});
+		}
+		
+		// Set up handlers immediately
+		setupEventHandlersImmediate();
+		
+		// Handle tab switching
+		function setupTabSwitching() {
+			const tabRadios = document.querySelectorAll('input[name="settings-tabs"]');
+			const tabContents = document.querySelectorAll('.tab-content');
+			
+			function showTab(tabId) {
+				// Hide all tab contents
+				tabContents.forEach(content => {
+					content.style.display = 'none';
+				});
+				
+				// Show the selected tab content
+				const selectedRadio = document.getElementById(tabId);
+				if (selectedRadio) {
+					const label = document.querySelector(`label[for="${tabId}"]`);
+					if (label && label.nextElementSibling && label.nextElementSibling.classList.contains('tab-content')) {
+						label.nextElementSibling.style.display = 'block';
+					}
+				}
+			}
+			
+			// Set up event listeners for tab switching
+			tabRadios.forEach(radio => {
+				radio.addEventListener('change', () => {
+					if (radio.checked) {
+						showTab(radio.id);
+					}
+				});
+			});
+			
+			// Show initial tab (Theme is checked by default)
+			const checkedTab = document.querySelector('input[name="settings-tabs"]:checked');
+			if (checkedTab) {
+				showTab(checkedTab.id);
+			}
+		}
+		
+		// Set up tab switching
+		setupTabSwitching();
+		
+		// Also set up when modal opens
+		const settingsModalForTabs = document.getElementById('settings-modal');
+		if (settingsModalForTabs) {
+			settingsModalForTabs.addEventListener('show', () => {
+				setTimeout(() => {
+					setupTabSwitching();
+				}, 50);
+			});
 		}
 
 		// Initialize active states
@@ -192,411 +367,258 @@ const themes = ['light', 'dark', 'valentine', 'lemonade', 'caramellatte', 'dracu
 			}
 		}
 
-		// Setup event handlers
-		function setupEventHandlers() {
-			// Theme card click handlers
-			document.querySelectorAll('.theme-card').forEach(card => {
-				card.addEventListener('click', () => {
-					const themeCode = card.getAttribute('data-theme-code');
-					if (!themeCode) return;
 
-					// Remove active state from all cards
-					document.querySelectorAll('.theme-card').forEach(c => {
-						c.classList.remove('outline-base-content');
-					});
-					// Add active state to clicked card
-					card.classList.add('outline-base-content');
-					
-					// Apply theme
-					if (document.documentElement) {
-						document.documentElement.setAttribute('data-theme', themeCode);
-						localStorage.setItem('theme', themeCode);
-					}
-				});
+		// Initialize when DOM is ready
+		function init() {
+			waitForElements(() => {
+				initActiveStates();
 			});
+		}
 
-			// Font option click handlers
-			document.querySelectorAll('.font-option').forEach(option => {
-				option.addEventListener('click', () => {
-					const fontCode = option.getAttribute('data-font-code');
-					if (!fontCode) return;
-
-					const fontClasses = {
-						'solaiman-lipi': 'solaiman-lipi',
-						'hind-siliguri': 'hind-siliguri-regular',
-						'atma': 'atma-regular',
-						'bensen-handwriting': 'bensen-handwriting',
-					};
-
-					const fontClass = fontClasses[fontCode];
-					if (!fontClass) return;
-
-					// Remove active state from all options
-					document.querySelectorAll('.font-option').forEach(o => {
-						o.classList.remove('ring-2', 'ring-primary');
-					});
-					// Add active state to clicked option
-					option.classList.add('ring-2', 'ring-primary');
-					
-					// Apply font
-					const fontClassRegex = /solaiman-lipi|hind-siliguri-\w+|atma-\w+|bensen-handwriting/g;
-					if (document.body) {
-						document.body.className = document.body.className.replace(fontClassRegex, '').trim();
-						document.body.classList.add(fontClass);
-					}
-					// Also apply to html for global font
-					if (document.documentElement) {
-						document.documentElement.className = document.documentElement.className.replace(fontClassRegex, '').trim();
-						document.documentElement.classList.add(fontClass);
-					}
-					localStorage.setItem('font', fontCode);
-					
-					// Update preview text font
-					const previewText = document.querySelector('.preview-text');
-					if (previewText) {
-						previewText.className = previewText.className.replace(fontClassRegex, '').trim();
-						previewText.classList.add(fontClass);
-					}
-				});
-			});
-
-			// Tab switching functionality
-			const themeTab = document.querySelector('[data-tab="theme"]');
-			const fontTab = document.querySelector('[data-tab="font"]');
-			const typographyTab = document.querySelector('[data-tab="typography"]');
-			const themeTabContent = document.getElementById('theme-tab');
-			const fontTabContent = document.getElementById('font-tab');
-			const typographyTabContent = document.getElementById('typography-tab');
-
-			if (themeTab) {
-				themeTab.addEventListener('click', (e) => {
-					e.preventDefault();
-					themeTab.classList.add('tab-active');
-					if (fontTab) fontTab.classList.remove('tab-active');
-					if (typographyTab) typographyTab.classList.remove('tab-active');
-					if (themeTabContent) {
-						themeTabContent.classList.remove('hidden');
-						themeTabContent.classList.add('block');
-					}
-					if (fontTabContent) {
-						fontTabContent.classList.add('hidden');
-						fontTabContent.classList.remove('block');
-					}
-					if (typographyTabContent) {
-						typographyTabContent.classList.add('hidden');
-						typographyTabContent.classList.remove('block');
-					}
-				});
-			}
-
-			if (fontTab) {
-				fontTab.addEventListener('click', (e) => {
-					e.preventDefault();
-					fontTab.classList.add('tab-active');
-					if (themeTab) themeTab.classList.remove('tab-active');
-					if (typographyTab) typographyTab.classList.remove('tab-active');
-					if (fontTabContent) {
-						fontTabContent.classList.remove('hidden');
-						fontTabContent.classList.add('block');
-					}
-					if (themeTabContent) {
-						themeTabContent.classList.add('hidden');
-						themeTabContent.classList.remove('block');
-					}
-					if (typographyTabContent) {
-						typographyTabContent.classList.add('hidden');
-						typographyTabContent.classList.remove('block');
-					}
-				});
-			}
-
-			if (typographyTab) {
-				typographyTab.addEventListener('click', (e) => {
-					e.preventDefault();
-					typographyTab.classList.add('tab-active');
-					if (themeTab) themeTab.classList.remove('tab-active');
-					if (fontTab) fontTab.classList.remove('tab-active');
-					if (typographyTabContent) {
-						typographyTabContent.classList.remove('hidden');
-						typographyTabContent.classList.add('block');
-					}
-					if (themeTabContent) {
-						themeTabContent.classList.add('hidden');
-						themeTabContent.classList.remove('block');
-					}
-					if (fontTabContent) {
-						fontTabContent.classList.add('hidden');
-						fontTabContent.classList.remove('block');
-					}
-					// Ensure typography controls are initialized when tab opens
-					setupTypographyControls();
-					// Also set up handlers when tab opens
+		// Also set up when modal opens
+		function setupOnModalOpen() {
+			const settingsModal = document.getElementById('settings-modal');
+			if (settingsModal) {
+				// Use both 'show' event and MutationObserver
+				settingsModal.addEventListener('show', () => {
 					setTimeout(() => {
-						setupTypographyHandlers();
-					}, 50);
+						initActiveStates();
+					}, 100);
+				});
+				
+				// Also observe when modal becomes visible
+				const observer = new MutationObserver(() => {
+					if (settingsModal.hasAttribute('open')) {
+						setTimeout(() => {
+							initActiveStates();
+						}, 100);
+					}
+				});
+				observer.observe(settingsModal, { attributes: true, attributeFilter: ['open'] });
+				
+				// Also check on click (when settings button is clicked)
+				document.addEventListener('click', (e) => {
+					if (e.target.closest('.settings-btn') || e.target.closest('[title="Settings"]')) {
+						setTimeout(() => {
+							initActiveStates();
+						}, 200);
+					}
 				});
 			}
-			
-			// Setup typography controls function - called when tab opens
-			// This only initializes values, handlers are set up once below
-			function setupTypographyControls() {
-				const fontSizeInput = document.getElementById('font-size-input');
-				const lineHeightInput = document.getElementById('line-height-input');
+		}
+
+		// Typography functions
+		function setupTypographyEventDelegation() {
+			const modal = document.getElementById('settings-modal');
+			if (modal && !modal.dataset.typographyHandlersSetup) {
+				modal.dataset.typographyHandlersSetup = 'true';
 				
-				// Initialize values
-				if (fontSizeInput) {
-					fontSizeInput.value = currentFontSize;
-				}
-				if (lineHeightInput) {
-					lineHeightInput.value = currentLineHeight;
-				}
-			}
-			
-			// Typography controls - use event delegation on the modal (set up once)
-			function setupTypographyEventDelegation() {
-				const modal = document.getElementById('settings-modal');
-				if (modal && !modal.dataset.typographyHandlersSetup) {
-					modal.dataset.typographyHandlersSetup = 'true';
+				// Use event delegation for all typography buttons
+				modal.addEventListener('click', function(e) {
+					const target = e.target;
 					
-					// Use event delegation for all typography buttons
-					modal.addEventListener('click', function(e) {
-						const target = e.target;
-						
-						// Font size decrease
-						if (target && target.id === 'font-size-decrease') {
-							e.preventDefault();
-							e.stopPropagation();
-							const input = document.getElementById('font-size-input');
-							if (input) {
-								const current = parseFloat(input.value) || 16;
-								const newValue = Math.max(12, current - 1);
-								input.value = newValue;
-								input.dispatchEvent(new Event('input', { bubbles: true }));
-								updateTypography();
-							}
-							return false;
+					// Font size decrease
+					if (target && target.id === 'font-size-decrease') {
+						e.preventDefault();
+						e.stopPropagation();
+						const input = document.getElementById('font-size-input');
+						if (input) {
+							const current = parseFloat(input.value) || 16;
+							const newValue = Math.max(12, current - 1);
+							input.value = newValue;
+							input.dispatchEvent(new Event('input', { bubbles: true }));
+							updateTypography();
 						}
-						
-						// Font size increase
-						if (target && target.id === 'font-size-increase') {
-							e.preventDefault();
-							e.stopPropagation();
-							const input = document.getElementById('font-size-input');
-							if (input) {
-								const current = parseFloat(input.value) || 16;
-								const newValue = Math.min(24, current + 1);
-								input.value = newValue;
-								input.dispatchEvent(new Event('input', { bubbles: true }));
-								updateTypography();
-							}
-							return false;
+						return false;
+					}
+					
+					// Font size increase
+					if (target && target.id === 'font-size-increase') {
+						e.preventDefault();
+						e.stopPropagation();
+						const input = document.getElementById('font-size-input');
+						if (input) {
+							const current = parseFloat(input.value) || 16;
+							const newValue = Math.min(24, current + 1);
+							input.value = newValue;
+							input.dispatchEvent(new Event('input', { bubbles: true }));
+							updateTypography();
 						}
-						
-						// Line height decrease
-						if (target && target.id === 'line-height-decrease') {
-							e.preventDefault();
-							e.stopPropagation();
-							const input = document.getElementById('line-height-input');
-							if (input) {
-								const current = parseFloat(input.value) || 1.5;
-								const newValue = Math.max(1.0, parseFloat((current - 0.1).toFixed(1)));
-								input.value = newValue.toFixed(1);
-								input.dispatchEvent(new Event('input', { bubbles: true }));
-								updateTypography();
-							}
-							return false;
-						}
-						
-						// Line height increase
-						if (target && target.id === 'line-height-increase') {
-							e.preventDefault();
-							e.stopPropagation();
-							const input = document.getElementById('line-height-input');
-							if (input) {
-								const current = parseFloat(input.value) || 1.5;
-								const newValue = Math.min(2.5, parseFloat((current + 0.1).toFixed(1)));
-								input.value = newValue.toFixed(1);
-								input.dispatchEvent(new Event('input', { bubbles: true }));
-								updateTypography();
-							}
-							return false;
-						}
-					}, true); // Use capture phase
-				}
-			}
-			
-			// Set up event delegation immediately
-			setupTypographyEventDelegation();
-			
-			function setupTypographyHandlers() {
-				// Initialize typography values
-				const fontSizeInput = document.getElementById('font-size-input');
-				const lineHeightInput = document.getElementById('line-height-input');
-				
-				if (fontSizeInput) {
-					fontSizeInput.value = currentFontSize;
-				}
-				if (lineHeightInput) {
-					lineHeightInput.value = currentLineHeight;
-				}
-				
-				if (fontSizeInput) {
-					fontSizeInput.addEventListener('change', () => {
-						updateTypography();
-					});
-					fontSizeInput.addEventListener('input', () => {
-						updateTypography();
-					});
-				}
-				
-				// Line height controls - use onclick to replace any existing handler
-				if (lineHeightDecrease) {
-					lineHeightDecrease.onclick = function(e) {
-						console.log('Line height decrease clicked');
+						return false;
+					}
+					
+					// Line height decrease
+					if (target && target.id === 'line-height-decrease') {
 						e.preventDefault();
 						e.stopPropagation();
 						const input = document.getElementById('line-height-input');
 						if (input) {
 							const current = parseFloat(input.value) || 1.5;
 							const newValue = Math.max(1.0, parseFloat((current - 0.1).toFixed(1)));
-							console.log('Changing line height from', current, 'to', newValue);
 							input.value = newValue.toFixed(1);
+							input.dispatchEvent(new Event('input', { bubbles: true }));
 							updateTypography();
 						}
-					};
-				}
-				
-				if (lineHeightIncrease) {
-					lineHeightIncrease.onclick = function(e) {
-						console.log('Line height increase clicked');
+						return false;
+					}
+					
+					// Line height increase
+					if (target && target.id === 'line-height-increase') {
 						e.preventDefault();
 						e.stopPropagation();
 						const input = document.getElementById('line-height-input');
 						if (input) {
 							const current = parseFloat(input.value) || 1.5;
 							const newValue = Math.min(2.5, parseFloat((current + 0.1).toFixed(1)));
-							console.log('Changing line height from', current, 'to', newValue);
 							input.value = newValue.toFixed(1);
+							input.dispatchEvent(new Event('input', { bubbles: true }));
 							updateTypography();
 						}
-					};
-				}
-				
-				if (lineHeightInput) {
-					lineHeightInput.addEventListener('change', () => {
-						updateTypography();
-					});
-					lineHeightInput.addEventListener('input', () => {
-						updateTypography();
-					});
-				}
-			}
-			
-			// Apply initial typography settings
-			function applyTypography(fontSize, lineHeight) {
-				// Create or update a style element for typography
-				let typographyStyle = document.getElementById('typography-settings');
-				if (!typographyStyle) {
-					typographyStyle = document.createElement('style');
-					typographyStyle.id = 'typography-settings';
-					document.head.appendChild(typographyStyle);
-				}
-				
-				// Set CSS with high specificity
-				typographyStyle.textContent = `
-					html, body {
-						font-size: ${fontSize}px !important;
-						line-height: ${lineHeight} !important;
+						return false;
 					}
-					main, article, section {
-						font-size: ${fontSize}px !important;
-						line-height: ${lineHeight} !important;
-					}
-					p, li, span, div, h1, h2, h3, h4, h5, h6 {
-						line-height: ${lineHeight} !important;
-					}
-				`;
-				
-				// Also set as inline styles for immediate effect
-				if (document.documentElement) {
-					document.documentElement.style.setProperty('--base-font-size', fontSize + 'px', 'important');
-					document.documentElement.style.setProperty('--base-line-height', lineHeight, 'important');
-					document.documentElement.style.fontSize = fontSize + 'px';
-					document.documentElement.style.lineHeight = lineHeight;
-				}
-				if (document.body) {
-					document.body.style.fontSize = fontSize + 'px';
-					document.body.style.lineHeight = lineHeight;
-				}
+				}, true); // Use capture phase
+			}
+		}
+		
+		// Set up typography event delegation immediately
+		setupTypographyEventDelegation();
+		
+		function setupTypographyHandlers() {
+			// Initialize typography values
+			const fontSizeInput = document.getElementById('font-size-input');
+			const lineHeightInput = document.getElementById('line-height-input');
+			
+			if (fontSizeInput) {
+				fontSizeInput.value = currentFontSize;
+			}
+			if (lineHeightInput) {
+				lineHeightInput.value = currentLineHeight;
 			}
 			
-			// Apply initial settings immediately
-			applyTypography(currentFontSize, currentLineHeight);
-			
-			// Helper function to update typography
-			function updateTypography() {
-				const fontSizeInputEl = document.getElementById('font-size-input');
-				const lineHeightInputEl = document.getElementById('line-height-input');
-				const fontSize = fontSizeInputEl ? parseFloat(fontSizeInputEl.value) : parseFloat(currentFontSize);
-				const lineHeight = lineHeightInputEl ? parseFloat(lineHeightInputEl.value) : parseFloat(currentLineHeight);
-				
-				// Clamp values to min/max
-				const clampedFontSize = Math.max(12, Math.min(24, fontSize));
-				const clampedLineHeight = Math.max(1.0, Math.min(2.5, lineHeight));
-				
-				if (fontSizeInputEl) fontSizeInputEl.value = clampedFontSize;
-				if (lineHeightInputEl) lineHeightInputEl.value = clampedLineHeight.toFixed(1);
-				
-				localStorage.setItem('fontSize', clampedFontSize.toString());
-				localStorage.setItem('lineHeight', clampedLineHeight.toString());
-				
-				applyTypography(clampedFontSize.toString(), clampedLineHeight.toString());
-				
-				// Update preview text
-				const previewText = document.querySelector('.preview-text p');
-				if (previewText) {
-					previewText.style.fontSize = clampedFontSize + 'px';
-					previewText.style.lineHeight = clampedLineHeight.toString();
-				}
+			if (fontSizeInput) {
+				fontSizeInput.addEventListener('change', () => {
+					updateTypography();
+				});
+				fontSizeInput.addEventListener('input', () => {
+					updateTypography();
+				});
 			}
 			
-			// Set up handlers when DOM is ready - try multiple times to ensure elements exist
-			function trySetupHandlers() {
-				const fontSizeDecrease = document.getElementById('font-size-decrease');
-				if (fontSizeDecrease) {
-					setupTypographyHandlers();
-					console.log('Typography handlers set up successfully');
-				} else {
-					setTimeout(trySetupHandlers, 100);
-				}
-			}
-			trySetupHandlers();
-			
-			// Also set up handlers when modal is opened
-			const settingsModal = document.getElementById('settings-modal');
-			if (settingsModal) {
-				settingsModal.addEventListener('show', () => {
-					console.log('Modal shown, setting up typography handlers');
-					setTimeout(() => {
-						setupTypographyHandlers();
-					}, 50);
+			if (lineHeightInput) {
+				lineHeightInput.addEventListener('change', () => {
+					updateTypography();
+				});
+				lineHeightInput.addEventListener('input', () => {
+					updateTypography();
 				});
 			}
 		}
-
-		// Initialize when DOM is ready
-		function init() {
-			waitForElements(() => {
-				initActiveStates();
-				setupEventHandlers();
+		
+		// Apply initial typography settings
+		function applyTypography(fontSize, lineHeight) {
+			// Create or update a style element for typography
+			let typographyStyle = document.getElementById('typography-settings');
+			if (!typographyStyle) {
+				typographyStyle = document.createElement('style');
+				typographyStyle.id = 'typography-settings';
+				document.head.appendChild(typographyStyle);
+			}
+			
+			// Set CSS with high specificity
+			typographyStyle.textContent = `
+				html, body {
+					font-size: ${fontSize}px !important;
+					line-height: ${lineHeight} !important;
+				}
+				main, article, section {
+					font-size: ${fontSize}px !important;
+					line-height: ${lineHeight} !important;
+				}
+				p, li, span, div, h1, h2, h3, h4, h5, h6 {
+					line-height: ${lineHeight} !important;
+				}
+			`;
+			
+			// Also set as inline styles for immediate effect
+			if (document.documentElement) {
+				document.documentElement.style.setProperty('--base-font-size', fontSize + 'px', 'important');
+				document.documentElement.style.setProperty('--base-line-height', lineHeight, 'important');
+				document.documentElement.style.fontSize = fontSize + 'px';
+				document.documentElement.style.lineHeight = lineHeight;
+			}
+			if (document.body) {
+				document.body.style.fontSize = fontSize + 'px';
+				document.body.style.lineHeight = lineHeight;
+			}
+		}
+		
+		// Apply initial settings immediately
+		applyTypography(currentFontSize, currentLineHeight);
+		
+		// Helper function to update typography
+		function updateTypography() {
+			const fontSizeInputEl = document.getElementById('font-size-input');
+			const lineHeightInputEl = document.getElementById('line-height-input');
+			const fontSize = fontSizeInputEl ? parseFloat(fontSizeInputEl.value) : parseFloat(currentFontSize);
+			const lineHeight = lineHeightInputEl ? parseFloat(lineHeightInputEl.value) : parseFloat(currentLineHeight);
+			
+			// Clamp values to min/max
+			const clampedFontSize = Math.max(12, Math.min(24, fontSize));
+			const clampedLineHeight = Math.max(1.0, Math.min(2.5, lineHeight));
+			
+			if (fontSizeInputEl) fontSizeInputEl.value = clampedFontSize;
+			if (lineHeightInputEl) lineHeightInputEl.value = clampedLineHeight.toFixed(1);
+			
+			localStorage.setItem('fontSize', clampedFontSize.toString());
+			localStorage.setItem('lineHeight', clampedLineHeight.toString());
+			
+			applyTypography(clampedFontSize.toString(), clampedLineHeight.toString());
+			
+			// Update preview text
+			const previewText = document.querySelector('.preview-text p');
+			if (previewText) {
+				previewText.style.fontSize = clampedFontSize + 'px';
+				previewText.style.lineHeight = clampedLineHeight.toString();
+			}
+		}
+		
+		// Set up handlers when DOM is ready - try multiple times to ensure elements exist
+		function trySetupHandlers() {
+			const fontSizeDecrease = document.getElementById('font-size-decrease');
+			if (fontSizeDecrease) {
+				setupTypographyHandlers();
+			} else {
+				setTimeout(trySetupHandlers, 100);
+			}
+		}
+		trySetupHandlers();
+		
+		// Also set up handlers when modal is opened
+		const settingsModal = document.getElementById('settings-modal');
+		if (settingsModal) {
+			settingsModal.addEventListener('show', () => {
+				setTimeout(() => {
+					setupTypographyHandlers();
+				}, 50);
 			});
 		}
 
-		if (document.readyState === 'loading') {
-			document.addEventListener('DOMContentLoaded', init);
-		} else {
+		// Initialize on page load
+		function initializeAll() {
 			init();
+			setupOnModalOpen();
+			// Show initial tab
+			setTimeout(() => {
+				setupTabSwitching();
+			}, 100);
+		}
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initializeAll);
+		} else {
+			initializeAll();
 		}
 	})();
 </script>
+
 
