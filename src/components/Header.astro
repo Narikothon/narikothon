@@ -1,7 +1,24 @@
 ---
+import { getCollection } from 'astro:content';
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 import ViewControls from './ViewControls.astro';
+
+// Get all categories
+const allPosts = await getCollection('blog');
+const categoryCounts = new Map<string, number>();
+allPosts.forEach((post) => {
+	if (post.data.categories && post.data.categories.length > 0) {
+		post.data.categories.forEach((category) => {
+			const count = categoryCounts.get(category) || 0;
+			categoryCounts.set(category, count + 1);
+		});
+	}
+});
+
+// Convert to array, sort alphabetically
+const categories = Array.from(categoryCounts.keys())
+	.sort((a, b) => a.localeCompare(b));
 ---
 
 <div class="drawer">
@@ -18,6 +35,24 @@ import ViewControls from './ViewControls.astro';
 				<ul class="menu menu-horizontal px-1">
 					<li><a href="/">Home</a></li>
 					<li><a href="/about">About</a></li>
+					<li>
+						<details>
+							<summary>Categories</summary>
+							<ul class="bg-base-100 rounded-box z-50 p-2 shadow-lg max-h-[60vh] overflow-y-auto">
+								{categories.map((category) => {
+									const categorySlug = encodeURIComponent(category);
+									return (
+										<li>
+											<a href={`/category/${categorySlug}/`} class="whitespace-nowrap">
+												<i class="fa-solid fa-hashtag text-xs"></i>
+												{category}
+											</a>
+										</li>
+									);
+								})}
+							</ul>
+						</details>
+					</li>
 				</ul>
 			</div>
 			<div class="navbar-end">
@@ -36,6 +71,20 @@ import ViewControls from './ViewControls.astro';
 			<ul class="menu p-4">
 				<li><a href="/">Home</a></li>
 				<li><a href="/about">About</a></li>
+				<li class="menu-title mt-4">
+					<span>Categories</span>
+				</li>
+				{categories.map((category) => {
+					const categorySlug = encodeURIComponent(category);
+					return (
+						<li>
+							<a href={`/category/${categorySlug}/`}>
+								<i class="fa-solid fa-hashtag text-xs"></i>
+								{category}
+							</a>
+						</li>
+					);
+				})}
 			</ul>
 		</div>
 	</div>
