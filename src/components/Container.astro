@@ -1,0 +1,12 @@
+---
+interface Props {
+	class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<main class={`w-[64rem] max-w-[calc(100%-2rem)] mx-auto py-6 md:py-12 px-2 md:px-4 ${className}`}>
+	<slot />
+</main>
+

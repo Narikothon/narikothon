@@ -1,0 +1,39 @@
+---
+import { getPaginationNumbers } from '../utils/pagination';
+
+interface Props {
+	currentPage: number;
+	totalPages: number;
+	getPageUrl: (pageNum: number) => string;
+}
+
+const { currentPage, totalPages, getPageUrl } = Astro.props;
+const paginationNumbers = getPaginationNumbers(currentPage, totalPages);
+---
+
+{totalPages > 1 && (
+	<nav class="flex justify-center items-center gap-2 my-8 p-4">
+		{
+			paginationNumbers.map((pageNum) => {
+				if (pageNum === 'ellipsis') {
+					return <span class="px-2 py-1.5 text-base-content/60 text-sm">...</span>;
+				}
+				const isCurrent = pageNum === currentPage;
+				if (isCurrent) {
+					return (
+						<span class="px-3 py-1.5 border border-primary rounded-md font-bold bg-primary text-primary-content pointer-events-none cursor-default text-sm">
+							{pageNum}
+						</span>
+					);
+				}
+				const href = getPageUrl(pageNum);
+				return (
+					<a href={href} class="px-3 py-1.5 border border-base-content/20 rounded-md no-underline text-base-content bg-base-100 transition-all text-sm hover:bg-primary hover:text-primary-content hover:border-primary">
+						{pageNum}
+					</a>
+				);
+			})
+		}
+	</nav>
+)}
+

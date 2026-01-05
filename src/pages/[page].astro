@@ -1,10 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import PostCard from '../components/PostCard.astro';
-import SettingsModal from '../components/SettingsModal.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import PostGrid from '../components/PostGrid.astro';
+import Pagination from '../components/Pagination.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 export async function getStaticPaths({ paginate }: { paginate: any }) {
@@ -30,107 +29,18 @@ interface Page {
 }
 
 const { page }: { page: Page } = Astro.props;
-
-// Generate pagination numbers with ellipsis
-function getPaginationNumbers(current: number, total: number): (number | 'ellipsis')[] {
-	const pages: (number | 'ellipsis')[] = [];
-	
-	if (total <= 5) {
-		// If 5 or fewer pages, show all
-		for (let i = 1; i <= total; i++) {
-			pages.push(i);
-		}
-	} else {
-		// Always show first page
-		pages.push(1);
-		
-		if (current <= 3) {
-			// Near the beginning: 1, 2, 3, 4, ..., last
-			// Show consecutive pages from 1 up to current + 1
-			for (let i = 2; i <= Math.min(current + 1, total - 1); i++) {
-				pages.push(i);
-			}
-			if (current + 1 < total - 1) {
-				pages.push('ellipsis');
-			}
-			pages.push(total);
-		} else if (current >= total - 2) {
-			// Near the end: 1, ..., last-3, last-2, last-1, last
-			pages.push('ellipsis');
-			for (let i = Math.max(2, current - 1); i <= total; i++) {
-				pages.push(i);
-			}
-		} else {
-			// In the middle: 1, ..., prev, current, next, ..., last
-			pages.push('ellipsis');
-			pages.push(current - 1);
-			pages.push(current);
-			pages.push(current + 1);
-			pages.push('ellipsis');
-			pages.push(total);
-		}
-	}
-	
-	return pages;
-}
-
-const paginationNumbers = getPaginationNumbers(page.currentPage, page.lastPage);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-	</head>
-	<body>
-		<Header />
-		<main class="block w-[960px] max-w-[calc(100%-30px)] mx-auto py-6 md:py-12 px-2 md:px-[15px]">
-			<section>
-				<ul class="grid-view flex flex-wrap gap-x-8 gap-y-[30px] md:gap-y-8 list-none m-0 p-0">
-					{
-						page.data.map((post: any) => (
-							<li>
-								<PostCard 
-									post={post}
-									title={true}
-									thumbnail={true}
-									author={true}
-									excerpt={true}
-									date={true}
-									readingTime={true}
-								/>
-							</li>
-						))
-					}
-				</ul>
-				<nav class="flex justify-center items-center gap-2 my-8 p-4">
-					{
-						paginationNumbers.map((pageNum) => {
-							if (pageNum === 'ellipsis') {
-								return <span class="px-2 py-1.5 text-base-content/60 text-sm">...</span>;
-							}
-							const isCurrent = pageNum === page.currentPage;
-							if (isCurrent) {
-								return (
-									<span class="px-3 py-1.5 border border-primary rounded-md font-bold bg-primary text-primary-content pointer-events-none cursor-default text-sm">
-										{pageNum}
-									</span>
-								);
-							}
-							const href = pageNum === 1 ? '/' : `/${pageNum}`;
-							return (
-								<a href={href} class="px-3 py-1.5 border border-base-content/20 rounded-md no-underline text-base-content bg-base-100 transition-all text-sm hover:bg-primary hover:text-primary-content hover:border-primary">
-									{pageNum}
-								</a>
-							);
-						})
-					}
-				</nav>
-			</section>
-		</main>
-		<Footer />
-		<SettingsModal />
-	</body>
-</html>
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<Container>
+		<section>
+			<PostGrid posts={page.data} />
+			<Pagination 
+				currentPage={page.currentPage} 
+				totalPages={page.lastPage}
+				getPageUrl={(pageNum) => pageNum === 1 ? '/' : `/${pageNum}`}
+			/>
+		</section>
+	</Container>
+</BaseLayout>
 

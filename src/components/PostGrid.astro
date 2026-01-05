@@ -1,0 +1,41 @@
+---
+import PostCard from './PostCard.astro';
+
+interface Props {
+	posts: any[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="grid-view flex flex-wrap gap-x-8 gap-y-[30px] md:gap-y-8 list-none m-0 p-0">
+	<style is:global>
+		ul.list-view .grid-view-card { display: none !important; }
+		ul.list-view .list-view-card { display: flex !important; }
+		ul.list-view li { width: 100%; }
+		ul.grid-view li { width: calc(33.333% - 1.334rem); }
+		@media (min-width: 721px) and (max-width: 1024px) {
+			ul.grid-view li { width: calc(50% - 1rem); }
+		}
+		@media (max-width: 720px) {
+			ul.grid-view li { width: 100%; }
+			ul { gap: 0.5rem; }
+		}
+	</style>
+	{
+		posts.map((post: any) => (
+			<li>
+				<PostCard 
+					post={post}
+					title={true}
+					thumbnail={true}
+					author={true}
+					excerpt={true}
+					date={true}
+					readingTime={true}
+				/>
+			</li>
+		))
+	}
+</ul>
+
