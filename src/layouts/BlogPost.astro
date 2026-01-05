@@ -145,6 +145,15 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 									font-size: 3.5rem;
 								}
 							}
+							/* Disable drop cap for next/prev post titles */
+							:global(#next-prev-box p::first-letter) {
+								float: none;
+								font-size: inherit;
+								line-height: inherit;
+								padding: 0;
+								font-weight: inherit;
+								font-family: inherit;
+							}
 						</style>
 						<slot />
 					</div>
