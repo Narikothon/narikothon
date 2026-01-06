@@ -14,9 +14,9 @@ import '@pagefind/default-ui/css/ui.css';
     </button>
     <dialog
         aria-label="search"
-        class="modal backdrop:bg-base-content/50"
+        class="modal backdrop:bg-base-content/50 search-modal"
     >
-        <div class="modal-box max-w-3xl">
+        <div class="modal-box max-w-3xl search-modal-box">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-bold text-lg">Search</h3>
                 <button
@@ -199,5 +199,23 @@ import '@pagefind/default-ui/css/ui.css';
 
     #blog__search .pagefind-ui__results-list {
         gap: 0.5rem !important;
+    }
+
+    /* Position search modal at top on mobile */
+    @media (max-width: 768px) {
+        site-search dialog.search-modal {
+            align-items: flex-start !important;
+            padding-top: 10vh;
+            justify-content: center;
+        }
+
+        site-search dialog.search-modal .search-modal-box {
+            margin-top: 0 !important;
+            margin-bottom: auto !important;
+            max-height: calc(90vh - 10vh);
+            overflow-y: auto;
+            width: calc(100% - 2rem);
+            max-width: calc(100% - 2rem);
+        }
     }
 </style>
