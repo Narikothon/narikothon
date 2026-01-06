@@ -152,7 +152,7 @@ import '@pagefind/default-ui/css/ui.css';
         background: hsl(var(--b1));
         height: auto;
         top: 8px;
-        right: 12px;
+        right: 48px;
         border-radius: var(--rounded-btn, 0.5rem);
     }
 
@@ -220,6 +220,30 @@ import '@pagefind/default-ui/css/ui.css';
             max-width: calc(100% - 2rem);
             padding: 0.75rem !important;
         }
+
+        /* Reduce search input padding on mobile */
+        #blog__search .pagefind-ui__search-input {
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
+        }
+
+        /* Move clear button closer to close button on mobile */
+        #blog__search .pagefind-ui__search-clear {
+            right: 48px !important;
+        }
+
+        /* Keep search input width consistent on mobile */
+        #blog__search .pagefind-ui__search-input-wrapper {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 100% !important;
+        }
+
+        #blog__search .pagefind-ui__search-form {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 100% !important;
+        }
     }
 
     /* Reduce padding in search container */
@@ -231,5 +255,21 @@ import '@pagefind/default-ui/css/ui.css';
     /* Adjust search input positioning */
     #blog__search .pagefind-ui__search-input-wrapper {
         margin-bottom: 0.5rem;
+        width: 278px !important;
+        max-width: 278px !important;
+        min-width: 278px !important;
+    }
+
+    /* Keep search input width consistent */
+    #blog__search .pagefind-ui__search-input {
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* Ensure search form doesn't change width */
+    #blog__search .pagefind-ui__search-form {
+        width: 278px !important;
+        max-width: 278px !important;
+        min-width: 278px !important;
     }
 </style>
