@@ -232,17 +232,25 @@ import '@pagefind/default-ui/css/ui.css';
             right: 48px !important;
         }
 
-        /* Keep search input width consistent on mobile */
+        /* Keep search input width consistent on mobile - prevent size changes */
         #blog__search .pagefind-ui__search-input-wrapper {
             width: 100% !important;
             max-width: 100% !important;
             min-width: 100% !important;
+            flex-shrink: 0 !important;
         }
 
         #blog__search .pagefind-ui__search-form {
             width: 100% !important;
             max-width: 100% !important;
             min-width: 100% !important;
+            flex-shrink: 0 !important;
+        }
+
+        #blog__search .pagefind-ui__search-input {
+            width: 100% !important;
+            min-width: 0 !important;
+            flex: 1 1 0% !important;
         }
     }
 
@@ -255,12 +263,9 @@ import '@pagefind/default-ui/css/ui.css';
     /* Adjust search input positioning */
     #blog__search .pagefind-ui__search-input-wrapper {
         margin-bottom: 0.5rem;
-        width: 278px !important;
-        max-width: 278px !important;
-        min-width: 278px !important;
     }
 
-    /* Keep search input width consistent */
+    /* Keep search input width consistent - prevent width changes */
     #blog__search .pagefind-ui__search-input {
         width: 100% !important;
         box-sizing: border-box;
@@ -268,8 +273,7 @@ import '@pagefind/default-ui/css/ui.css';
 
     /* Ensure search form doesn't change width */
     #blog__search .pagefind-ui__search-form {
-        width: 278px !important;
-        max-width: 278px !important;
-        min-width: 278px !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
 </style>
