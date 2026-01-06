@@ -16,16 +16,13 @@ import '@pagefind/default-ui/css/ui.css';
         aria-label="search"
         class="modal backdrop:bg-base-content/50 search-modal"
     >
-        <div class="modal-box max-w-3xl search-modal-box">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-lg">Search</h3>
-                <button
-                    data-close-modal
-                    class="btn btn-sm btn-circle btn-ghost"
-                >
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+        <div class="modal-box max-w-3xl search-modal-box relative">
+            <button
+                data-close-modal
+                class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 z-10"
+            >
+                <i class="fas fa-times"></i>
+            </button>
         <div class="flex flex-col gap-4">
             {
                 import.meta.env.DEV ? (
@@ -201,6 +198,11 @@ import '@pagefind/default-ui/css/ui.css';
         gap: 0.5rem !important;
     }
 
+    /* Reduce padding in modal box */
+    site-search .search-modal-box {
+        padding: 1rem !important;
+    }
+
     /* Position search modal at top on mobile */
     @media (max-width: 768px) {
         site-search dialog.search-modal {
@@ -216,6 +218,18 @@ import '@pagefind/default-ui/css/ui.css';
             overflow-y: auto;
             width: calc(100% - 2rem);
             max-width: calc(100% - 2rem);
+            padding: 0.75rem !important;
         }
+    }
+
+    /* Reduce padding in search container */
+    site-search .search-container {
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Adjust search input positioning */
+    #blog__search .pagefind-ui__search-input-wrapper {
+        margin-bottom: 0.5rem;
     }
 </style>
