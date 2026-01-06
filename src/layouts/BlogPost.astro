@@ -43,15 +43,15 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 
 	<body>
 		<Header />
-		<main class="w-[960px] max-w-[calc(100%-30px)] mx-auto py-6 md:py-12 px-2 md:px-[15px]">
-			<article class="bg-base-100 p-2 md:p-4 border border-base-content/20 rounded-box" data-pagefind-body>
+		<main class="max-w-[48rem] mx-auto py-6 md:py-12 px-4">
+			<article class="bg-base-100 border-2 border-base-content/30 rounded-box shadow-lg" data-pagefind-body>
 				<div class="w-full mb-2">
 					{displayImage && (
-						<Image width={1020} height={510} src={displayImage} alt="" class="block mx-auto rounded-xl shadow-lg" />
+						<Image width={1020} height={510} src={displayImage} alt="" class="block mx-auto rounded-t-xl shadow-lg" />
 					)}
 				</div>
 				<div class="w-full max-w-full m-0 p-0">
-					<div class="mb-3 md:mb-4 mt-2 md:mt-3">
+					<div class="mb-3 md:mb-4 mt-2 md:mt-3 px-4">
 						<h2 class="m-0 py-1 md:py-2 px-2 md:px-3 text-xl md:text-2xl font-bold text-center">{title}</h2>
 						<ul class="list-none p-0 my-1 md:my-2 flex flex-wrap justify-center items-center gap-2 md:gap-3">
 							{author && (
@@ -88,7 +88,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 							</li>
 						</ul>
 					</div>
-					<div class="max-w-[48rem] mx-auto">
+					<div class="max-w-[40rem] mx-auto px-4 md:px-[4rem] post-content">
 						<style>
 							:global(article p) {
 								margin-bottom: 1rem;
@@ -159,7 +159,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 					</div>
 					
 					<!-- Post Details Section -->
-					<div id="post-details" class="mt-8 max-w-[48rem] mx-auto">
+					<div id="post-details" class="mt-8 max-w-[40rem] mx-auto px-4 md:px-[4rem]">
 						<!-- Author Box -->
 						{author && (
 							<div id="author-box" class="bg-base-200 rounded-box p-6 mb-4">
@@ -297,6 +297,64 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 					}, 2000);
 				});
 			}
+
+			// Apply typography settings only to blog post content
+			function applyPostTypography() {
+				// Default to 18px if no setting exists, otherwise use localStorage value
+				const savedFontSize = localStorage.getItem('fontSize');
+				const fontSize = savedFontSize ? savedFontSize : '18';
+				const lineHeight = localStorage.getItem('lineHeight') || '1.5';
+				
+				// Find the article element (blog post content)
+				const article = document.querySelector('article[data-pagefind-body]');
+				if (!article) return;
+				
+				// Create or update style element for post typography
+				let postTypographyStyle = document.getElementById('post-typography-settings');
+				if (!postTypographyStyle) {
+					postTypographyStyle = document.createElement('style');
+					postTypographyStyle.id = 'post-typography-settings';
+					document.head.appendChild(postTypographyStyle);
+				}
+				
+				// Apply typography only to article content (not headers, metadata, etc.)
+				postTypographyStyle.textContent = `
+					.post-content p,
+					.post-content li,
+					.post-content span,
+					.post-content div,
+					.post-content h1,
+					.post-content h2,
+					.post-content h3,
+					.post-content h4,
+					.post-content h5,
+					.post-content h6,
+					.post-content blockquote {
+						font-size: ${fontSize}px !important;
+						line-height: ${lineHeight} !important;
+					}
+				`;
+			}
+			
+			// Apply typography immediately
+			applyPostTypography();
+			
+			// Re-apply on DOM ready
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', applyPostTypography);
+			} else {
+				setTimeout(applyPostTypography, 0);
+			}
+			
+			// Listen for typography changes from settings modal
+			window.addEventListener('storage', (e) => {
+				if (e.key === 'fontSize' || e.key === 'lineHeight') {
+					applyPostTypography();
+				}
+			});
+			
+			// Also listen for custom event from settings modal
+			window.addEventListener('typographyUpdated', applyPostTypography);
 		</script>
 	</body>
 </html>
