@@ -100,26 +100,26 @@ const postUrl = `/${post.id}/`;
 <!-- Grid View: DaisyUI Card -->
 <div class="grid-view-card block">
 	<div class="card bg-base-100 shadow-sm border border-base-content/20 h-full flex flex-col relative">
-		<a href={postUrl} class="absolute inset-0 z-0" aria-label={`Read ${post.data.title || 'post'}`}></a>
+		<a href={postUrl} class="absolute inset-0 z-[1]" aria-label={`Read ${post.data.title || 'post'}`}></a>
 		{thumbnail && displayImage && (
-			<figure class="aspect-video overflow-hidden flex-shrink-0 m-0 p-0 rounded-t-box relative z-0">
-				<Image width={800} height={450} src={displayImage} alt={post.data.title || ''} class="w-full h-full object-cover object-center rounded-t-box" />
+			<figure class="aspect-video overflow-hidden flex-shrink-0 m-0 p-0 rounded-t-box relative z-[2] pointer-events-none">
+				<Image width={800} height={450} src={displayImage} alt={post.data.title || ''} class="w-full h-full object-cover object-center rounded-t-box pointer-events-none" />
 			</figure>
 		)}
 		{!thumbnail && displayImage && (
-			<figure class="h-56 bg-base-200 flex-shrink-0 m-0 rounded-t-box"></figure>
+			<figure class="h-56 bg-base-200 flex-shrink-0 m-0 rounded-t-box pointer-events-none"></figure>
 		)}
-		<div class="card-body flex-1 flex flex-col gap-0 p-3 pb-2 pt-2 relative z-0">
+		<div class="card-body flex-1 flex flex-col gap-0 p-3 pb-2 pt-2 relative z-[2] pointer-events-none">
 			{title && post.data.title && (
 				<h2 class="card-title line-clamp-1 text-base mb-6 leading-snug">
 					{post.data.title}
 				</h2>
 			)}
 			{author && post.data.author && (
-				<div class="mb-1 -mt-5 relative z-10" data-author-wrapper>
+				<div class="mb-1 -mt-5 relative z-[3] pointer-events-none" data-author-wrapper>
 					<a 
 						href={`/author/${post.data.author}/`} 
-						class="link text-sm flex items-center gap-1 pointer-events-auto relative z-10 author-link"
+						class="link text-sm flex items-center gap-1 pointer-events-auto relative z-[3] author-link inline-block"
 						data-author-url={`/author/${post.data.author}/`}
 					>
 						<i class="fas fa-feather-alt text-xs"></i>
@@ -151,24 +151,24 @@ const postUrl = `/${post.id}/`;
 </div>
 
 <!-- List View: Simple layout with thumbnail on left -->
-<div class="list-view-card hidden flex flex-row gap-2 items-start card bg-base-100 shadow-sm border border-base-content/20 p-2 w-full relative">
-	<a href={postUrl} class="absolute inset-0 z-0" aria-label={`Read ${post.data.title || 'post'}`}></a>
+<div class="list-view-card hidden flex flex-row gap-0 items-start card bg-base-100 shadow-sm border border-base-content/20 p-0 w-full relative">
+	<a href={postUrl} class="absolute inset-0 z-[1]" aria-label={`Read ${post.data.title || 'post'}`}></a>
 	{thumbnail && displayImage && (
-		<div class="w-[120px] md:w-1/3 flex-shrink-0 relative z-0">
-			<Image width={600} height={400} src={displayImage} alt={post.data.title || ''} class="w-full h-[68px] md:h-40 object-cover rounded-box" />
+		<div class="w-[120px] md:w-1/3 flex-shrink-0 relative z-[2] pointer-events-none">
+			<Image width={600} height={400} src={displayImage} alt={post.data.title || ''} class="w-full h-[68px] md:h-40 object-cover rounded-l-box pointer-events-none" />
 		</div>
 	)}
-	<div class="flex-1 relative z-0">
+	<div class="flex-1 relative z-[2] pointer-events-none p-2">
 		{title && post.data.title && (
-			<h3 class="text-xl md:text-2xl font-semibold mb-1 md:mb-2 hover:text-primary">
+			<h3 class="text-base md:text-lg font-semibold mb-1 md:mb-2 hover:text-primary">
 				{post.data.title}
 			</h3>
 		)}
 		{author && post.data.author && (
-			<div class="mb-1 md:mb-2 relative z-10" data-author-wrapper>
+			<div class="mb-1 md:mb-2 relative z-10 pointer-events-none" data-author-wrapper>
 				<a 
 					href={`/author/${post.data.author}/`} 
-					class="link text-sm flex items-center gap-1 pointer-events-auto relative z-10 author-link"
+					class="link text-sm flex items-center gap-1 pointer-events-auto relative z-10 author-link inline-block"
 					data-author-url={`/author/${post.data.author}/`}
 				>
 					<i class="fas fa-feather-alt text-xs"></i>
