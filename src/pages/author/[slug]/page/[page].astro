@@ -1,10 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Container from '../../../components/Container.astro';
-import PostGrid from '../../../components/PostGrid.astro';
-import Pagination from '../../../components/Pagination.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Container from '../../../../components/Container.astro';
+import PostGrid from '../../../../components/PostGrid.astro';
+import Pagination from '../../../../components/Pagination.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../../../consts';
 
 export async function getStaticPaths() {
 	const allPosts = await getCollection('blog');
@@ -39,11 +39,11 @@ export async function getStaticPaths() {
 						currentPage: page,
 						lastPage: totalPages,
 						url: {
-							current: `/author/${author}/${page}/`,
-							prev: page === 2 ? `/author/${author}/` : `/author/${author}/${page - 1}/`,
-							next: page < totalPages ? `/author/${author}/${page + 1}/` : undefined,
+							current: `/author/${author}/page/${page}/`,
+							prev: page === 2 ? `/author/${author}/` : `/author/${author}/page/${page - 1}/`,
+							next: page < totalPages ? `/author/${author}/page/${page + 1}/` : undefined,
 							first: `/author/${author}/`,
-							last: totalPages > 1 ? `/author/${author}/${totalPages}/` : `/author/${author}/`,
+							last: totalPages > 1 ? `/author/${author}/page/${totalPages}/` : `/author/${author}/`,
 						}
 					}, 
 					author 
@@ -87,7 +87,7 @@ const totalPostCount = authorPosts.length;
 			<Pagination 
 				currentPage={page.currentPage} 
 				totalPages={page.lastPage}
-				getPageUrl={(pageNum) => pageNum === 1 ? `/author/${author}/` : `/author/${author}/${pageNum}/`}
+				getPageUrl={(pageNum) => pageNum === 1 ? `/author/${author}/` : `/author/${author}/page/${pageNum}/`}
 			/>
 		</section>
 	</Container>

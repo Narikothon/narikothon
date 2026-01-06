@@ -1,10 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Container from '../components/Container.astro';
-import PostGrid from '../components/PostGrid.astro';
-import Pagination from '../components/Pagination.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import PostGrid from '../../components/PostGrid.astro';
+import Pagination from '../../components/Pagination.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 export async function getStaticPaths({ paginate }: { paginate: any }) {
 	const allPosts = (await getCollection('blog')).sort(
@@ -38,7 +38,7 @@ const { page }: { page: Page } = Astro.props;
 			<Pagination 
 				currentPage={page.currentPage} 
 				totalPages={page.lastPage}
-				getPageUrl={(pageNum) => pageNum === 1 ? '/' : `/${pageNum}`}
+				getPageUrl={(pageNum) => pageNum === 1 ? '/' : `/page/${pageNum}`}
 			/>
 		</section>
 	</Container>

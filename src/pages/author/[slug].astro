@@ -40,9 +40,9 @@ export async function getStaticPaths() {
 					url: {
 						current: `/author/${author}/`,
 						prev: undefined,
-						next: totalPages > 1 ? `/author/${author}/2/` : undefined,
+						next: totalPages > 1 ? `/author/${author}/page/2/` : undefined,
 						first: `/author/${author}/`,
-						last: totalPages > 1 ? `/author/${author}/${totalPages}/` : `/author/${author}/`,
+						last: totalPages > 1 ? `/author/${author}/page/${totalPages}/` : `/author/${author}/`,
 					}
 				}, 
 				author 
@@ -85,7 +85,7 @@ const totalPostCount = authorPosts.length;
 			<Pagination 
 				currentPage={page.currentPage} 
 				totalPages={page.lastPage}
-				getPageUrl={(pageNum) => pageNum === 1 ? `/author/${author}/` : `/author/${author}/${pageNum}/`}
+				getPageUrl={(pageNum) => pageNum === 1 ? `/author/${author}/` : `/author/${author}/page/${pageNum}/`}
 			/>
 		</section>
 	</Container>

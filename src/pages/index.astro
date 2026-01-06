@@ -25,7 +25,7 @@ const posts = allPosts.slice(startIndex, endIndex);
 			<Pagination 
 				currentPage={currentPage} 
 				totalPages={totalPages}
-				getPageUrl={(pageNum) => pageNum === 1 ? '/' : `/${pageNum}`}
+				getPageUrl={(pageNum) => pageNum === 1 ? '/' : `/page/${pageNum}`}
 			/>
 		</section>
 	</Container>

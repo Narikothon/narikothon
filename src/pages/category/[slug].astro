@@ -45,9 +45,9 @@ export async function getStaticPaths() {
 					url: {
 						current: `/category/${categorySlug}/`,
 						prev: undefined,
-						next: totalPages > 1 ? `/category/${categorySlug}/2/` : undefined,
+						next: totalPages > 1 ? `/category/${categorySlug}/page/2/` : undefined,
 						first: `/category/${categorySlug}/`,
-						last: totalPages > 1 ? `/category/${categorySlug}/${totalPages}/` : `/category/${categorySlug}/`,
+						last: totalPages > 1 ? `/category/${categorySlug}/page/${totalPages}/` : `/category/${categorySlug}/`,
 					}
 				}, 
 				category 
@@ -93,7 +93,7 @@ const totalPostCount = categoryPosts.length;
 			<Pagination 
 				currentPage={page.currentPage} 
 				totalPages={page.lastPage}
-				getPageUrl={(pageNum) => pageNum === 1 ? `/category/${categorySlug}/` : `/category/${categorySlug}/${pageNum}/`}
+				getPageUrl={(pageNum) => pageNum === 1 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${pageNum}/`}
 			/>
 		</section>
 	</Container>

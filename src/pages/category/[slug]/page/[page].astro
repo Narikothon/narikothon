@@ -1,10 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Container from '../../../components/Container.astro';
-import PostGrid from '../../../components/PostGrid.astro';
-import Pagination from '../../../components/Pagination.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Container from '../../../../components/Container.astro';
+import PostGrid from '../../../../components/PostGrid.astro';
+import Pagination from '../../../../components/Pagination.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../../../consts';
 
 export async function getStaticPaths() {
 	const allPosts = await getCollection('blog');
@@ -44,11 +44,11 @@ export async function getStaticPaths() {
 						currentPage: page,
 						lastPage: totalPages,
 						url: {
-							current: `/category/${categorySlug}/${page}/`,
-							prev: page === 2 ? `/category/${categorySlug}/` : `/category/${categorySlug}/${page - 1}/`,
-							next: page < totalPages ? `/category/${categorySlug}/${page + 1}/` : undefined,
+							current: `/category/${categorySlug}/page/${page}/`,
+							prev: page === 2 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${page - 1}/`,
+							next: page < totalPages ? `/category/${categorySlug}/page/${page + 1}/` : undefined,
 							first: `/category/${categorySlug}/`,
-							last: totalPages > 1 ? `/category/${categorySlug}/${totalPages}/` : `/category/${categorySlug}/`,
+							last: totalPages > 1 ? `/category/${categorySlug}/page/${totalPages}/` : `/category/${categorySlug}/`,
 						}
 					}, 
 					category 
@@ -95,7 +95,7 @@ const totalPostCount = categoryPosts.length;
 			<Pagination 
 				currentPage={page.currentPage} 
 				totalPages={page.lastPage}
-				getPageUrl={(pageNum) => pageNum === 1 ? `/category/${categorySlug}/` : `/category/${categorySlug}/${pageNum}/`}
+				getPageUrl={(pageNum) => pageNum === 1 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${pageNum}/`}
 			/>
 		</section>
 	</Container>
