@@ -5,28 +5,84 @@ import Container from '../components/Container.astro';
 import PostGrid from '../components/PostGrid.astro';
 import Pagination from '../components/Pagination.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { categorySlug } from '../lib/slug';
 
 const allPosts = (await getCollection('blog')).sort(
 	(a, b) => (b.data.pubDate?.valueOf() || 0) - (a.data.pubDate?.valueOf() || 0),
 );
 
-const pageSize = 9;
-const currentPage = 1;
-const totalPages = Math.ceil(allPosts.length / pageSize);
-const startIndex = (currentPage - 1) * pageSize;
-const endIndex = startIndex + pageSize;
-const posts = allPosts.slice(startIndex, endIndex);
+// Get latest 3 posts
+const latestPosts = allPosts.slice(0, 3);
+
+// Get posts by category
+const postsByCategory = new Map<string, typeof allPosts>();
+const uncategorizedPosts: typeof allPosts = [];
+
+allPosts.forEach((post) => {
+	if (post.data.categories && post.data.categories.length > 0) {
+		post.data.categories.forEach((category) => {
+			if (!postsByCategory.has(category)) {
+				postsByCategory.set(category, []);
+			}
+			postsByCategory.get(category)!.push(post);
+		});
+	} else {
+		uncategorizedPosts.push(post);
+	}
+});
+
+// Get categories with their posts (3 posts each), excluding uncategorized
+const UNCATEGORIZED = 'ক্যাটাগরিহীন';
+const categories = Array.from(postsByCategory.entries())
+	.map(([category, posts]) => ({
+		category,
+		posts: posts.slice(0, 3),
+		count: posts.length,
+	}))
+	.sort((a, b) => {
+		// Put uncategorized last
+		if (a.category === UNCATEGORIZED) return 1;
+		if (b.category === UNCATEGORIZED) return -1;
+		return b.count - a.count;
+	});
+
+// Add uncategorized at the end if it exists
+if (uncategorizedPosts.length > 0 || postsByCategory.has(UNCATEGORIZED)) {
+	const uncatPosts = postsByCategory.get(UNCATEGORIZED) || uncategorizedPosts;
+	categories.push({
+		category: UNCATEGORIZED,
+		posts: uncatPosts.slice(0, 3),
+		count: uncatPosts.length,
+	});
+}
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
 	<Container>
+		<section class="mb-12">
+			<h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">Latest Posts</h2>
+			<PostGrid posts={latestPosts} />
+		</section>
+		
 		<section>
-			<PostGrid posts={posts} />
-			<Pagination 
-				currentPage={currentPage} 
-				totalPages={totalPages}
-				getPageUrl={(pageNum) => pageNum === 1 ? '/' : `/page/${pageNum}`}
-			/>
+			<h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">All Categories</h1>
+			<div class="flex flex-col gap-8">
+				{categories.map(({ category, posts, count }) => (
+					<div class="bg-base-100 border border-base-content/20 rounded-box shadow-sm p-6">
+						<div class="mb-4">
+							<a 
+								href={`/category/${categorySlug(category)}/`} 
+								class="inline-flex items-center gap-2 text-xl md:text-2xl font-bold hover:text-primary transition-colors no-underline group"
+							>
+								<i class="fa-regular fa-folder text-primary"></i>
+								<span>{category}</span>
+								<span class="text-sm font-normal opacity-70">({count} {count === 1 ? 'post' : 'posts'})</span>
+							</a>
+						</div>
+						<PostGrid posts={posts} />
+					</div>
+				))}
+			</div>
 		</section>
 	</Container>
 </BaseLayout>
