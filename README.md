@@ -78,8 +78,8 @@ coverImage: "110.jpg"
 
 - `title` (required): The post title
 - `date` (required): Publication date in `YYYY-MM-DD` format
-- `author` (required): Author name in Bengali (must exist in `taxonomy.ts`)
-- `categories` (optional): Array of category names in Bengali (must exist in `taxonomy.ts`)
+- `author` (required): Author name in Bengali (must exist in [taxonomy.ts](src/lib/taxonomy.ts))
+- `categories` (optional): Array of category names in Bengali (must exist in [taxonomy.ts](src/lib/taxonomy.ts))
 - `coverImage` (optional): Image filename (should match a file in `content/`)
 
 ### Step 3: Write Content
@@ -115,7 +115,7 @@ The project uses a taxonomy system to map Bengali author and category names to E
 - Consistent slug management
 - Easy URL maintenance
 
-### Taxonomy File: `src/lib/taxonomy.ts`
+### Taxonomy File: [src/lib/taxonomy.ts](src/lib/taxonomy.ts) 
 
 The taxonomy file contains mappings for all authors and categories:
 
@@ -253,7 +253,7 @@ npm run validate-taxonomy
 ## 💡 Tips
 
 1. **Always check taxonomy** before adding a post with a new author/category
-2. **Use descriptive slugs** in taxonomy.ts (e.g., `education-career` not `cat1`)
+2. **Use descriptive slugs** in [taxonomy.ts](src/lib/taxonomy.ts) (e.g., `education-career` not `cat1`)
 3. **Keep image sizes reasonable** for better performance
 4. **Test locally** before pushing to main branch
 5. **Run validate-taxonomy** before committing if you've added new posts
@@ -261,7 +261,7 @@ npm run validate-taxonomy
 ## 🐛 Troubleshooting
 
 **Post not showing up?**
-- Check if author/category exists in `taxonomy.ts`
+- Check if author/category exists in [taxonomy.ts](src/lib/taxonomy.ts)
 - Verify frontmatter syntax is correct
 - Check file is in `content/`
 
