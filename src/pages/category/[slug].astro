@@ -25,9 +25,11 @@ export async function getStaticPaths() {
 	// Generate paths for each category (page 1 only)
 	const paths: any[] = [];
 	for (const category of categories) {
-		const categoryPosts = allPosts.filter((post) => 
-			post.data.categories && post.data.categories.includes(category)
-		);
+		const categoryPosts = allPosts
+			.filter((post) => 
+				post.data.categories && post.data.categories.includes(category)
+			)
+			.sort((a, b) => (b.data.pubDate?.valueOf() || 0) - (a.data.pubDate?.valueOf() || 0));
 		const totalPages = Math.ceil(categoryPosts.length / pageSize);
 		
 		// Only generate page 1 for this route
@@ -80,9 +82,11 @@ const slug = categorySlug(categoryName);
 
 // Get total post count for this category
 const allPosts = await getCollection('blog');
-const categoryPosts = allPosts.filter((post) => 
-	post.data.categories && post.data.categories.includes(categoryName)
-);
+const categoryPosts = allPosts
+	.filter((post) => 
+		post.data.categories && post.data.categories.includes(categoryName)
+	)
+	.sort((a, b) => (b.data.pubDate?.valueOf() || 0) - (a.data.pubDate?.valueOf() || 0));
 const totalPostCount = categoryPosts.length;
 ---
 

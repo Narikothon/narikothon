@@ -23,7 +23,9 @@ export async function getStaticPaths() {
 	// Generate paths for each author (pages 2+)
 	const paths: any[] = [];
 	for (const author of authors) {
-		const authorPosts = allPosts.filter((post) => post.data.author === author);
+		const authorPosts = allPosts
+			.filter((post) => post.data.author === author)
+			.sort((a, b) => (b.data.pubDate?.valueOf() || 0) - (a.data.pubDate?.valueOf() || 0));
 		const totalPages = Math.ceil(authorPosts.length / pageSize);
 		
 		// Generate paginated pages for this author (starting from page 2)
@@ -78,7 +80,9 @@ const slug = authorSlug(authorName);
 
 // Get total post count for this author
 const allPosts = await getCollection('blog');
-const authorPosts = allPosts.filter((post) => post.data.author === authorName);
+const authorPosts = allPosts
+	.filter((post) => post.data.author === authorName)
+	.sort((a, b) => (b.data.pubDate?.valueOf() || 0) - (a.data.pubDate?.valueOf() || 0));
 const totalPostCount = authorPosts.length;
 ---
 
