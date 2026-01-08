@@ -38,7 +38,7 @@ const authors = Array.from(authorCounts.entries())
 					{authors.map(({ author, count }) => (
 						<li>
 							<a 
-								href={`/author/${author}/`} 
+								href={`/author/${encodeURIComponent(author)}/`} 
 								class="flex items-center justify-between p-4 bg-base-100 border border-base-content/20 rounded-box shadow-sm hover:shadow-md transition-all no-underline"
 							>
 								<div class="flex items-center gap-3">

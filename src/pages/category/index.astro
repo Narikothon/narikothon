@@ -40,7 +40,7 @@ const categories = Array.from(categoryCounts.entries())
 					{categories.map(({ category, count }) => (
 						<li>
 							<a 
-								href={`/category/${category}/`} 
+								href={`/category/${encodeURIComponent(category)}/`} 
 								class="flex items-center justify-between p-4 bg-base-100 border border-base-content/20 rounded-box shadow-sm hover:shadow-md transition-all no-underline"
 							>
 								<div class="flex items-center gap-3">

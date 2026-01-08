@@ -35,19 +35,20 @@ export async function getStaticPaths() {
 			const end = start + pageSize;
 			const pageData = categoryPosts.slice(start, end);
 			
+			const categorySlug = encodeURIComponent(category);
 			paths.push({
-				params: { slug: category, page: page.toString() },
+				params: { slug: categorySlug, page: page.toString() },
 				props: { 
 					page: {
 						data: pageData,
 						currentPage: page,
 						lastPage: totalPages,
 						url: {
-							current: `/category/${category}/page/${page}/`,
-							prev: page === 2 ? `/category/${category}/` : `/category/${category}/page/${page - 1}/`,
-							next: page < totalPages ? `/category/${category}/page/${page + 1}/` : undefined,
-							first: `/category/${category}/`,
-							last: totalPages > 1 ? `/category/${category}/page/${totalPages}/` : `/category/${category}/`,
+							current: `/category/${categorySlug}/page/${page}/`,
+							prev: page === 2 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${page - 1}/`,
+							next: page < totalPages ? `/category/${categorySlug}/page/${page + 1}/` : undefined,
+							first: `/category/${categorySlug}/`,
+							last: totalPages > 1 ? `/category/${categorySlug}/page/${totalPages}/` : `/category/${categorySlug}/`,
 						}
 					}, 
 					category 
@@ -73,6 +74,8 @@ interface Page {
 }
 
 const { page, category } = Astro.props as { page: Page; category: string };
+// Encode the category name for URLs
+const categorySlug = encodeURIComponent(category);
 
 // Get total post count for this category
 const allPosts = await getCollection('blog');
@@ -93,7 +96,7 @@ const totalPostCount = categoryPosts.length;
 			<Pagination 
 				currentPage={page.currentPage} 
 				totalPages={page.lastPage}
-				getPageUrl={(pageNum) => pageNum === 1 ? `/category/${category}/` : `/category/${category}/page/${pageNum}/`}
+				getPageUrl={(pageNum) => pageNum === 1 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${pageNum}/`}
 			/>
 		</section>
 	</Container>

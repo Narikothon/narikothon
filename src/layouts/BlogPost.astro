@@ -56,7 +56,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 						<ul class="list-none p-0 my-1 md:my-2 flex flex-wrap justify-center items-center gap-2 md:gap-3">
 							{author && (
 								<li class="flex items-center gap-2">
-									<a href={`/author/${author}`} class="badge badge-outline hover:badge-primary transition-colors cursor-pointer" title={`Author - ${author}`}>
+									<a href={`/author/${encodeURIComponent(author)}/`} class="badge badge-outline hover:badge-primary transition-colors cursor-pointer" title={`Author - ${author}`}>
 										<i class="fas fa-feather-alt mr-1"></i>
 										{author}
 									</a>
@@ -66,7 +66,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 								<>
 									{categories.map((category) => (
 										<li class="flex items-center gap-2">
-											<a href={`/category/${category}/`} class="badge badge-outline hover:badge-primary transition-colors cursor-pointer" title={`Category - ${category}`}>
+											<a href={`/category/${encodeURIComponent(category)}/`} class="badge badge-outline hover:badge-primary transition-colors cursor-pointer" title={`Category - ${category}`}>
 												<i class="fa-regular fa-folder mr-1"></i>
 												{category}
 											</a>
@@ -170,7 +170,7 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 										BY
 									</h6>
 									<h4 class="text-xl font-bold mb-3">
-										<a href={`/author/${author}`} class="hover:underline">
+										<a href={`/author/${encodeURIComponent(author)}/`} class="hover:underline">
 											{author}
 										</a>
 									</h4>

@@ -42,7 +42,7 @@ const categories = Array.from(categoryCounts.keys())
 							<ul class="bg-base-100 rounded-box z-50 p-2 shadow-lg max-h-[60vh] overflow-y-auto">
 								{categories.map((category) => (
 									<li>
-										<a href={`/category/${category}/`} class="whitespace-nowrap">
+										<a href={`/category/${encodeURIComponent(category)}/`} class="whitespace-nowrap">
 											<i class="fa-regular fa-folder text-xs"></i>
 											{category}
 										</a>
@@ -75,7 +75,7 @@ const categories = Array.from(categoryCounts.keys())
 				</li>
 				{categories.map((category) => (
 					<li>
-						<a href={`/category/${category}/`}>
+						<a href={`/category/${encodeURIComponent(category)}/`}>
 							<i class="fa-regular fa-folder text-xs"></i>
 							{category}
 						</a>

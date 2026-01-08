@@ -31,19 +31,20 @@ export async function getStaticPaths() {
 			const end = start + pageSize;
 			const pageData = authorPosts.slice(start, end);
 			
+			const authorSlug = encodeURIComponent(author);
 			paths.push({
-				params: { slug: author, page: page.toString() },
+				params: { slug: authorSlug, page: page.toString() },
 				props: { 
 					page: {
 						data: pageData,
 						currentPage: page,
 						lastPage: totalPages,
 						url: {
-							current: `/author/${author}/page/${page}/`,
-							prev: page === 2 ? `/author/${author}/` : `/author/${author}/page/${page - 1}/`,
-							next: page < totalPages ? `/author/${author}/page/${page + 1}/` : undefined,
-							first: `/author/${author}/`,
-							last: totalPages > 1 ? `/author/${author}/page/${totalPages}/` : `/author/${author}/`,
+							current: `/author/${authorSlug}/page/${page}/`,
+							prev: page === 2 ? `/author/${authorSlug}/` : `/author/${authorSlug}/page/${page - 1}/`,
+							next: page < totalPages ? `/author/${authorSlug}/page/${page + 1}/` : undefined,
+							first: `/author/${authorSlug}/`,
+							last: totalPages > 1 ? `/author/${authorSlug}/page/${totalPages}/` : `/author/${authorSlug}/`,
 						}
 					}, 
 					author 
@@ -69,6 +70,8 @@ interface Page {
 }
 
 const { page, author } = Astro.props as { page: Page; author: string };
+// Encode the author name for URLs
+const authorSlug = encodeURIComponent(author);
 
 // Get total post count for this author
 const allPosts = await getCollection('blog');
@@ -87,7 +90,7 @@ const totalPostCount = authorPosts.length;
 			<Pagination 
 				currentPage={page.currentPage} 
 				totalPages={page.lastPage}
-				getPageUrl={(pageNum) => pageNum === 1 ? `/author/${author}/` : `/author/${author}/page/${pageNum}/`}
+				getPageUrl={(pageNum) => pageNum === 1 ? `/author/${authorSlug}/` : `/author/${authorSlug}/page/${pageNum}/`}
 			/>
 		</section>
 	</Container>
