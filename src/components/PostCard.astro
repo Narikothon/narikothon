@@ -120,7 +120,7 @@ const postUrl = `/${post.id}/`;
 				<div class="mb-1 -mt-5 relative z-[3] pointer-events-none" data-author-wrapper>
 					<a 
 						href={`/author/${authorSlug(post.data.author)}/`} 
-						class="link text-sm flex items-center gap-1 pointer-events-auto relative z-[3] author-link inline-block"
+						class="text-sm flex items-center gap-1 pointer-events-auto relative z-[3] author-link inline-block hover:text-primary transition-colors no-underline"
 						data-author-url={`/author/${authorSlug(post.data.author)}/`}
 					>
 						<i class="fas fa-feather-alt text-xs"></i>
@@ -169,7 +169,7 @@ const postUrl = `/${post.id}/`;
 			<div class="mb-1 md:mb-2 relative z-10 pointer-events-none" data-author-wrapper>
 				<a 
 					href={`/author/${authorSlug(post.data.author)}/`} 
-					class="link text-sm flex items-center gap-1 pointer-events-auto relative z-10 author-link inline-block"
+					class="text-sm flex items-center gap-1 pointer-events-auto relative z-10 author-link inline-block hover:text-primary transition-colors no-underline"
 					data-author-url={`/author/${authorSlug(post.data.author)}/`}
 				>
 					<i class="fas fa-feather-alt text-xs"></i>
