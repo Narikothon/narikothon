@@ -66,8 +66,8 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 								<>
 									{categories.map((category) => (
 										<li class="flex items-center gap-2">
-											<a href={`/category/${encodeURIComponent(category)}`} class="badge badge-outline hover:badge-primary transition-colors cursor-pointer" title={`Category - ${category}`}>
-												<i class="fa-solid fa-hashtag mr-1"></i>
+											<a href={`/category/${category}/`} class="badge badge-outline hover:badge-primary transition-colors cursor-pointer" title={`Category - ${category}`}>
+												<i class="fa-regular fa-folder mr-1"></i>
 												{category}
 											</a>
 										</li>

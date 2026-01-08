@@ -40,17 +40,14 @@ const categories = Array.from(categoryCounts.keys())
 						<details>
 							<summary>Categories</summary>
 							<ul class="bg-base-100 rounded-box z-50 p-2 shadow-lg max-h-[60vh] overflow-y-auto">
-								{categories.map((category) => {
-									const categorySlug = encodeURIComponent(category);
-									return (
-										<li>
-											<a href={`/category/${categorySlug}/`} class="whitespace-nowrap">
-												<i class="fa-solid fa-hashtag text-xs"></i>
-												{category}
-											</a>
-										</li>
-									);
-								})}
+								{categories.map((category) => (
+									<li>
+										<a href={`/category/${category}/`} class="whitespace-nowrap">
+											<i class="fa-regular fa-folder text-xs"></i>
+											{category}
+										</a>
+									</li>
+								))}
 							</ul>
 						</details>
 					</li>
@@ -76,17 +73,14 @@ const categories = Array.from(categoryCounts.keys())
 				<li class="menu-title mt-4">
 					<span>Categories</span>
 				</li>
-				{categories.map((category) => {
-					const categorySlug = encodeURIComponent(category);
-					return (
-						<li>
-							<a href={`/category/${categorySlug}/`}>
-								<i class="fa-solid fa-hashtag text-xs"></i>
-								{category}
-							</a>
-						</li>
-					);
-				})}
+				{categories.map((category) => (
+					<li>
+						<a href={`/category/${category}/`}>
+							<i class="fa-regular fa-folder text-xs"></i>
+							{category}
+						</a>
+					</li>
+				))}
 			</ul>
 		</div>
 	</div>
