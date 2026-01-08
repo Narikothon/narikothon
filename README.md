@@ -90,7 +90,7 @@ After the frontmatter, write your post content in Markdown:
 ---
 title: "My Post Title"
 date: 2025-01-15
-author: "রানিয়া কবির"
+author: "আনিকা তুবা"
 categories: 
   - "শিক্ষা ও ক্যারিয়ার"
 coverImage: "110.jpg"
@@ -111,7 +111,7 @@ Your post content goes here. You can use **Markdown** syntax.
 ### Understanding Taxonomy
 
 The project uses a taxonomy system to map Bengali author and category names to English URL slugs. This ensures:
-- Clean, SEO-friendly URLs (e.g., `/author/rania-kabir/` instead of `/author/রানিয়া%20কবির/`)
+- Clean, SEO-friendly URLs (e.g., `/author/anina-tuba/` instead of `/author/আনিকা%20তুবা/`)
 - Consistent slug management
 - Easy URL maintenance
 
@@ -121,8 +121,8 @@ The taxonomy file contains mappings for all authors and categories:
 
 ```typescript
 export const authors: Record<string, string> = {
-	"রানিয়া কবির": "rania-kabir",
-	"বিনতে আব্দুল্লাহ": "binte-abdullah",
+	"আনিকা তুবা": "anika-tuba",
+	"সানজিদা শারমিন": "sanjida-sharmin",
 	// ... more authors
 };
 
