@@ -49,20 +49,33 @@ const { hideListGrid = false } = Astro.props;
 	(function() {
 		const savedView = localStorage.getItem('postView') || 'grid';
 		
+		// Check if we're on a page that should show list/grid buttons
+		const pathname = window.location.pathname;
+		const shouldShowButtons = pathname === '/' || 
+			pathname.match(/^\/page\//) || 
+			pathname.match(/^\/author\//) || 
+			pathname.match(/^\/category\//);
+		
 		// Set button visibility immediately - always show opposite of current view
 		function setButtonVisibility() {
 			const listBtn = document.querySelector('.list-view-btn');
 			const gridBtn = document.querySelector('.grid-view-btn');
 			if (listBtn && gridBtn) {
-				// Always show the opposite button
-				if (savedView === 'list') {
-					// List is active, show grid button (hide list button)
+				if (!shouldShowButtons) {
+					// Hide buttons on blog post pages
 					listBtn.style.display = 'none';
-					gridBtn.style.display = '';
-				} else {
-					// Grid is active, show list button (hide grid button)
 					gridBtn.style.display = 'none';
-					listBtn.style.display = '';
+				} else {
+					// Always show the opposite button
+					if (savedView === 'list') {
+						// List is active, show grid button (hide list button)
+						listBtn.style.display = 'none';
+						gridBtn.style.display = '';
+					} else {
+						// Grid is active, show list button (hide grid button)
+						gridBtn.style.display = 'none';
+						listBtn.style.display = '';
+					}
 				}
 			}
 		}
@@ -166,11 +179,24 @@ const { hideListGrid = false } = Astro.props;
 			}
 		}
 		
-		// Update button visibility - always show opposite of active view
-		const listBtnEl = document.querySelector('.list-view-btn');
-		const gridBtnEl = document.querySelector('.grid-view-btn');
+		// Check if we're on a page that should show list/grid buttons
+		// Show buttons on: homepage (/), pagination (/page/*), author pages (/author/*), category pages (/category/*)
+		// Hide buttons on: blog post pages (everything else)
+		const pathname = window.location.pathname;
+		const shouldShowButtons = pathname === '/' || 
+			pathname.match(/^\/page\//) || 
+			pathname.match(/^\/author\//) || 
+			pathname.match(/^\/category\//);
 		
-		if (postsList) {
+		// Update button visibility - always show opposite of active view
+		const listBtnEl = document.querySelector('.list-view-btn') as HTMLElement | null;
+		const gridBtnEl = document.querySelector('.grid-view-btn') as HTMLElement | null;
+		
+		if (!shouldShowButtons) {
+			// Hide buttons on blog post pages and other pages
+			if (listBtnEl) listBtnEl.style.display = 'none';
+			if (gridBtnEl) gridBtnEl.style.display = 'none';
+		} else if (postsList) {
 			// Apply saved view
 			applyView(savedView);
 			
@@ -187,35 +213,21 @@ const { hideListGrid = false } = Astro.props;
 				}
 			}
 		} else {
-			// No posts list found (e.g., blog post page), hide list/grid buttons
+			// Should show buttons but no posts list found, hide them
 			if (listBtnEl) listBtnEl.style.display = 'none';
 			if (gridBtnEl) gridBtnEl.style.display = 'none';
 		}
 		
-		// Also check if we're on a blog post page by URL pattern
-		// Blog post pages are like /some-slug/ but not /, /2, /about, etc.
-		const pathname = window.location.pathname;
-		const isBlogPostPage = pathname !== '/' && 
-			!pathname.match(/^\/(\d+|about)\/?$/) && 
-			!pathname.match(/^\/category\//) && 
-			!pathname.match(/^\/author\//);
-		
-		// Only hide buttons if we're on a blog post page AND no posts list was found
-		if (isBlogPostPage && !postsList && listBtnEl && gridBtnEl) {
-			listBtnEl.style.display = 'none';
-			gridBtnEl.style.display = 'none';
-		}
-		
 		// List/Grid toggle
-		const listBtn = document.querySelector('.list-view-btn');
-		const gridBtn = document.querySelector('.grid-view-btn');
+		const listBtn = document.querySelector('.list-view-btn') as HTMLElement | null;
+		const gridBtn = document.querySelector('.grid-view-btn') as HTMLElement | null;
 		
 		if (listBtn) {
 			listBtn.addEventListener('click', (e) => {
 				e.preventDefault();
 				const postsList = findPostsList();
-				const listBtnEl = document.querySelector('.list-view-btn');
-				const gridBtnEl = document.querySelector('.grid-view-btn');
+				const listBtnEl = document.querySelector('.list-view-btn') as HTMLElement | null;
+				const gridBtnEl = document.querySelector('.grid-view-btn') as HTMLElement | null;
 				
 				if (postsList) {
 					postsList.classList.add('list-view');
@@ -237,8 +249,8 @@ const { hideListGrid = false } = Astro.props;
 			gridBtn.addEventListener('click', (e) => {
 				e.preventDefault();
 				const postsList = findPostsList();
-				const listBtnEl = document.querySelector('.list-view-btn');
-				const gridBtnEl = document.querySelector('.grid-view-btn');
+				const listBtnEl = document.querySelector('.list-view-btn') as HTMLElement | null;
+				const gridBtnEl = document.querySelector('.grid-view-btn') as HTMLElement | null;
 				
 				if (postsList) {
 					postsList.classList.add('grid-view');
