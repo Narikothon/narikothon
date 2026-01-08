@@ -43,13 +43,13 @@ A modern, SEO-friendly blog built with Astro, featuring Bengali content support,
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
-| `pnpm install`            | Installs dependencies                            |
-| `pnpm dev`                | Starts local dev server at `localhost:4321`      |
-| `pnpm build`              | Build your production site to `./dist/`          |
-| `pnpm preview`            | Preview your build locally, before deploying     |
-| `pnpm generate-taxonomy`  | Auto-generate taxonomy entries from all posts   |
-| `pnpm validate-taxonomy`  | Validate taxonomy and create GitHub issues       |
-| `pnpm astro ...`          | Run CLI commands like `astro add`, `astro check` |
+| `npm install`              | Installs dependencies                            |
+| `npm run dev`              | Starts local dev server at `localhost:4321`      |
+| `npm run build`            | Build your production site to `./dist/`          |
+| `npm run preview`          | Preview your build locally, before deploying     |
+| `npm run generate-taxonomy` | Auto-generate taxonomy entries from all posts   |
+| `npm run validate-taxonomy` | Validate taxonomy and create GitHub issues       |
+| `npm run astro ...`        | Run CLI commands like `astro add`, `astro check` |
 
 ## 📝 Adding a New Blog Post
 
@@ -152,13 +152,13 @@ export const categories: Record<string, string> = {
 };
 ```
 
-3. **Auto-generate taxonomy**: Alternatively, run `pnpm run generate-taxonomy` to automatically scan all posts and add missing entries (you'll need to update the generated slugs manually)
+3. **Auto-generate taxonomy**: Alternatively, run `npm run generate-taxonomy` to automatically scan all posts and add missing entries (you'll need to update the generated slugs manually)
 
 ### Validation
 
 The project automatically validates taxonomy during CI/CD:
 - Missing authors/categories will trigger a GitHub issue
-- Run `pnpm run validate-taxonomy` locally to check before committing
+- Run `npm run validate-taxonomy` locally to check before committing
 
 ## 📂 Content Folder Structure
 
@@ -222,26 +222,26 @@ The project is configured to deploy to GitHub Pages automatically via GitHub Act
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Start dev server
-pnpm dev
+npm run dev
 
 # Build for production
-pnpm build
+npm run build
 
 # Preview production build
-pnpm preview
+npm run preview
 ```
 
 ### Taxonomy Management
 
 ```bash
 # Generate taxonomy from all posts
-pnpm run generate-taxonomy
+npm run generate-taxonomy
 
 # Validate taxonomy (check for missing entries)
-pnpm run validate-taxonomy
+npm run validate-taxonomy
 ```
 
 ## 📚 Learn More
@@ -266,11 +266,11 @@ pnpm run validate-taxonomy
 - Check file is in `src/content/blog/`
 
 **Build failing?**
-- Run `pnpm run validate-taxonomy` to check for missing taxonomy entries
+- Run `npm run validate-taxonomy` to check for missing taxonomy entries
 - Check all required frontmatter fields are present
 
 **Search not working?**
-- Ensure `pnpm build` completed successfully (Pagefind runs in postbuild)
+- Ensure `npm run build` completed successfully (Pagefind runs in postbuild)
 - Check browser console for errors
 
 ---
