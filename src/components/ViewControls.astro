@@ -51,10 +51,14 @@ const { hideListGrid = false } = Astro.props;
 		
 		// Check if we're on a page that should show list/grid buttons
 		const pathname = window.location.pathname;
-		const shouldShowButtons = pathname === '/' || 
+		// Hide buttons on author/category index pages (they only show lists)
+		const isAuthorIndex = pathname === '/author' || pathname === '/author/';
+		const isCategoryIndex = pathname === '/category' || pathname === '/category/';
+		const shouldShowButtons = (pathname === '/' || 
 			pathname.match(/^\/page\//) || 
-			pathname.match(/^\/author\//) || 
-			pathname.match(/^\/category\//);
+			pathname.match(/^\/author\/[^/]+\//) || // Individual author pages
+			pathname.match(/^\/category\/[^/]+\//)) && // Individual category pages
+			!isAuthorIndex && !isCategoryIndex;
 		
 		// Set button visibility immediately - always show opposite of current view
 		function setButtonVisibility() {
@@ -179,13 +183,16 @@ const { hideListGrid = false } = Astro.props;
 		}
 		
 		// Check if we're on a page that should show list/grid buttons
-		// Show buttons on: homepage (/), pagination (/page/*), author pages (/author/*), category pages (/category/*)
-		// Hide buttons on: blog post pages (everything else)
+		// Show buttons on: homepage (/), pagination (/page/*), individual author pages (/author/[slug]/*), individual category pages (/category/[slug]/*)
+		// Hide buttons on: author/category index pages (/author/, /category/), blog post pages (everything else)
 		const pathname = window.location.pathname;
-		const shouldShowButtons = pathname === '/' || 
+		const isAuthorIndex = pathname === '/author' || pathname === '/author/';
+		const isCategoryIndex = pathname === '/category' || pathname === '/category/';
+		const shouldShowButtons = (pathname === '/' || 
 			pathname.match(/^\/page\//) || 
-			pathname.match(/^\/author\//) || 
-			pathname.match(/^\/category\//);
+			pathname.match(/^\/author\/[^/]+\//) || // Individual author pages (not index)
+			pathname.match(/^\/category\/[^/]+\//)) && // Individual category pages (not index)
+			!isAuthorIndex && !isCategoryIndex;
 		
 		// Update button visibility - always show opposite of active view
 		const listBtnEl = document.querySelector('.list-view-btn') as HTMLElement | null;
