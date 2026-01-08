@@ -7,7 +7,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "postbuild": "pagefind"
+    "postbuild": "pagefind",
+    "validate-taxonomy": "tsx scripts/validate-taxonomy.ts",
+    "generate-taxonomy": "tsx scripts/generate-taxonomy.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@pagefind/default-ui": "^1.4.0",
-    "pagefind": "^1.4.0"
+    "pagefind": "^1.4.0",
+    "tsx": "^4.19.2"
   }
 }

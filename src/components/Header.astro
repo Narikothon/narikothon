@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 import ViewControls from './ViewControls.astro';
+import { categorySlug } from '../lib/slug';
 
 // Get all categories
 const allPosts = await getCollection('blog');
@@ -42,7 +43,7 @@ const categories = Array.from(categoryCounts.keys())
 							<ul class="bg-base-100 rounded-box z-50 p-2 shadow-lg max-h-[60vh] overflow-y-auto">
 								{categories.map((category) => (
 									<li>
-										<a href={`/category/${encodeURIComponent(category)}/`} class="whitespace-nowrap">
+										<a href={`/category/${categorySlug(category)}/`} class="whitespace-nowrap">
 											<i class="fa-regular fa-folder text-xs"></i>
 											{category}
 										</a>
@@ -75,7 +76,7 @@ const categories = Array.from(categoryCounts.keys())
 				</li>
 				{categories.map((category) => (
 					<li>
-						<a href={`/category/${encodeURIComponent(category)}/`}>
+						<a href={`/category/${categorySlug(category)}/`}>
 							<i class="fa-regular fa-folder text-xs"></i>
 							{category}
 						</a>

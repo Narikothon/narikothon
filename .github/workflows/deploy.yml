@@ -13,6 +13,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  issues: write
 
 jobs:
   build:
@@ -20,6 +21,12 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v5
+      - name: Validate taxonomy
+        run: |
+          pnpm install
+          pnpm run validate-taxonomy || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Install, build, and upload your site
         uses: withastro/action@v5
         # with:

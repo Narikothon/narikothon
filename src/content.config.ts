@@ -35,13 +35,6 @@ const blog = defineCollection({
 						date: undefined,
 					};
 				}
-				// If no categories or empty categories array, assign "ক্যাটাগরিহীন"
-				if (!transformed.categories || transformed.categories.length === 0) {
-					transformed = {
-						...transformed,
-						categories: ['ক্যাটাগরিহীন'],
-					};
-				}
 				return transformed;
 			})
 		),

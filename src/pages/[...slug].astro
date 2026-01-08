@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 		const nextPost = index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null;
 		
 		return {
-			params: { slug: post.id },
+		params: { slug: post.id },
 			props: {
 				post,
 				prevPost: prevPost ? {

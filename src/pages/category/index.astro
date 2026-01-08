@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import SettingsModal from '../../components/SettingsModal.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { categorySlug } from '../../lib/slug';
 
 const allPosts = await getCollection('blog');
 
@@ -40,7 +41,7 @@ const categories = Array.from(categoryCounts.entries())
 					{categories.map(({ category, count }) => (
 						<li>
 							<a 
-								href={`/category/${encodeURIComponent(category)}/`} 
+								href={`/category/${categorySlug(category)}/`} 
 								class="flex items-center justify-between p-4 bg-base-100 border border-base-content/20 rounded-box shadow-sm hover:shadow-md transition-all no-underline"
 							>
 								<div class="flex items-center gap-3">

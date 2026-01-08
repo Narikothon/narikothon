@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import FormattedDate from './FormattedDate.astro';
+import { authorSlug } from '../lib/slug';
 
 interface Props {
 	post: {
@@ -118,9 +119,9 @@ const postUrl = `/${post.id}/`;
 			{author && post.data.author && (
 				<div class="mb-1 -mt-5 relative z-[3] pointer-events-none" data-author-wrapper>
 					<a 
-						href={`/author/${encodeURIComponent(post.data.author)}/`} 
+						href={`/author/${authorSlug(post.data.author)}/`} 
 						class="link text-sm flex items-center gap-1 pointer-events-auto relative z-[3] author-link inline-block"
-						data-author-url={`/author/${encodeURIComponent(post.data.author)}/`}
+						data-author-url={`/author/${authorSlug(post.data.author)}/`}
 					>
 						<i class="fas fa-feather-alt text-xs"></i>
 						{post.data.author}
@@ -167,9 +168,9 @@ const postUrl = `/${post.id}/`;
 		{author && post.data.author && (
 			<div class="mb-1 md:mb-2 relative z-10 pointer-events-none" data-author-wrapper>
 				<a 
-					href={`/author/${encodeURIComponent(post.data.author)}/`} 
+					href={`/author/${authorSlug(post.data.author)}/`} 
 					class="link text-sm flex items-center gap-1 pointer-events-auto relative z-10 author-link inline-block"
-					data-author-url={`/author/${encodeURIComponent(post.data.author)}/`}
+					data-author-url={`/author/${authorSlug(post.data.author)}/`}
 				>
 					<i class="fas fa-feather-alt text-xs"></i>
 					{post.data.author}

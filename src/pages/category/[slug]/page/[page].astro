@@ -5,6 +5,7 @@ import Container from '../../../../components/Container.astro';
 import PostGrid from '../../../../components/PostGrid.astro';
 import Pagination from '../../../../components/Pagination.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../../../consts';
+import { categorySlug, getCategoryName } from '../../../../lib/slug';
 
 export async function getStaticPaths() {
 	const allPosts = await getCollection('blog');
@@ -35,47 +36,25 @@ export async function getStaticPaths() {
 			const end = start + pageSize;
 			const pageData = categoryPosts.slice(start, end);
 			
-			const categorySlug = encodeURIComponent(category);
-			// Generate paths for both original and encoded versions
+			const slug = categorySlug(category);
 			paths.push({
-				params: { slug: category, page: page.toString() },
+				params: { slug, page: page.toString() },
 				props: { 
 					page: {
 						data: pageData,
 						currentPage: page,
 						lastPage: totalPages,
 						url: {
-							current: `/category/${categorySlug}/page/${page}/`,
-							prev: page === 2 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${page - 1}/`,
-							next: page < totalPages ? `/category/${categorySlug}/page/${page + 1}/` : undefined,
-							first: `/category/${categorySlug}/`,
-							last: totalPages > 1 ? `/category/${categorySlug}/page/${totalPages}/` : `/category/${categorySlug}/`,
+							current: `/category/${slug}/page/${page}/`,
+							prev: page === 2 ? `/category/${slug}/` : `/category/${slug}/page/${page - 1}/`,
+							next: page < totalPages ? `/category/${slug}/page/${page + 1}/` : undefined,
+							first: `/category/${slug}/`,
+							last: totalPages > 1 ? `/category/${slug}/page/${totalPages}/` : `/category/${slug}/`,
 						}
 					}, 
 					category 
 				},
 			});
-			// Also generate path with encoded slug for URL matching
-			if (categorySlug !== category) {
-				paths.push({
-					params: { slug: categorySlug, page: page.toString() },
-					props: { 
-						page: {
-							data: pageData,
-							currentPage: page,
-							lastPage: totalPages,
-							url: {
-								current: `/category/${categorySlug}/page/${page}/`,
-								prev: page === 2 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${page - 1}/`,
-								next: page < totalPages ? `/category/${categorySlug}/page/${page + 1}/` : undefined,
-								first: `/category/${categorySlug}/`,
-								last: totalPages > 1 ? `/category/${categorySlug}/page/${totalPages}/` : `/category/${categorySlug}/`,
-							}
-						}, 
-						category 
-					},
-				});
-			}
 		}
 	}
 	
@@ -96,13 +75,15 @@ interface Page {
 }
 
 const { page, category } = Astro.props as { page: Page; category: string };
-// Encode the category name for URLs
-const categorySlug = encodeURIComponent(category);
+// Get the slug from params and find the category name
+const slugParam = Astro.params.slug || '';
+const categoryName = getCategoryName(slugParam) || category;
+const slug = categorySlug(categoryName);
 
 // Get total post count for this category
 const allPosts = await getCollection('blog');
 const categoryPosts = allPosts.filter((post) => 
-	post.data.categories && post.data.categories.includes(category)
+	post.data.categories && post.data.categories.includes(categoryName)
 );
 const totalPostCount = categoryPosts.length;
 ---
@@ -112,13 +93,13 @@ const totalPostCount = categoryPosts.length;
 		<section>
 			<h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">
 				<i class="fa-regular fa-folder mr-2"></i>
-				{category} ({totalPostCount})
+				{categoryName} ({totalPostCount})
 			</h1>
 			<PostGrid posts={page.data} />
 			<Pagination 
 				currentPage={page.currentPage} 
 				totalPages={page.lastPage}
-				getPageUrl={(pageNum) => pageNum === 1 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${pageNum}/`}
+				getPageUrl={(pageNum) => pageNum === 1 ? `/category/${slug}/` : `/category/${slug}/page/${pageNum}/`}
 			/>
 		</section>
 	</Container>
