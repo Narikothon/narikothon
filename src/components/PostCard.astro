@@ -6,6 +6,7 @@ import { authorSlug } from '../lib/slug';
 interface Props {
 	post: {
 		id: string;
+		body?: string; // Raw markdown content from getCollection
 		data: {
 			title?: string;
 			coverImage?: any;
@@ -13,7 +14,6 @@ interface Props {
 			author?: string;
 			pubDate?: Date;
 			description?: string;
-			body?: string;
 		};
 	};
 	content?: string; // Optional raw content for reading time calculation
@@ -39,15 +39,24 @@ const {
 // Calculate reading time (average 200  words per minute)
 function calculateReadingTime(content: string | undefined): number {
 	if (!content) return 1;
-	const words = content.trim().split(/\s+/).length;
+	// Remove markdown syntax and HTML tags for accurate word count
+	const text = content
+		.replace(/```[\s\S]*?```/g, ' ') // Remove code blocks
+		.replace(/`[^`]+`/g, ' ') // Remove inline code
+		.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove markdown links but keep text
+		.replace(/[#*_~`]/g, ' ') // Remove markdown formatting
+		.replace(/<[^>]*>/g, ' ') // Remove HTML tags
+		.replace(/\s+/g, ' ') // Normalize whitespace
+		.trim();
+	const words = text.split(/\s+/).filter(word => word.length > 0).length;
 	return Math.max(1, Math.ceil(words / 200));
 }
 
 // Get excerpt from description or use a default
 const excerptText = post.data.description || '';
 
-// Use provided content for reading time, fallback to description
-const readingTimeContent = content || excerptText;
+// Use provided content, then post.body (raw markdown), then fallback to description
+const readingTimeContent = content || post.body || excerptText;
 const readingTimeMinutes = calculateReadingTime(readingTimeContent);
 
 const displayImage = post.data.coverImage || post.data.heroImage;
