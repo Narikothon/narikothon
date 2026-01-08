@@ -3,7 +3,7 @@ import { join } from 'path';
 import { authors, categories } from '../src/lib/taxonomy.js';
 
 async function validateTaxonomy() {
-	const blogDir = join(process.cwd(), 'src/content/blog');
+	const blogDir = join(process.cwd(), 'content');
 	const files = await readdir(blogDir);
 	const mdFiles = files.filter(f => f.endsWith('.md'));
 	

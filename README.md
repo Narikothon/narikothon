@@ -55,7 +55,7 @@ A modern, SEO-friendly blog built with Astro, featuring Bengali content support,
 
 ### Step 1: Create the Post File
 
-1. Navigate to `src/content/blog/`
+1. Navigate to `content/`
 2. Create a new markdown file (e.g., `110.md`)
 3. Add a corresponding image file with the same name (e.g., `110.jpg`)
 
@@ -80,7 +80,7 @@ coverImage: "110.jpg"
 - `date` (required): Publication date in `YYYY-MM-DD` format
 - `author` (required): Author name in Bengali (must exist in `taxonomy.ts`)
 - `categories` (optional): Array of category names in Bengali (must exist in `taxonomy.ts`)
-- `coverImage` (optional): Image filename (should match a file in `src/content/blog/`)
+- `coverImage` (optional): Image filename (should match a file in `content/`)
 
 ### Step 3: Write Content
 
@@ -163,7 +163,7 @@ The project automatically validates taxonomy during CI/CD:
 ## 📂 Content Folder Structure
 
 ```
-src/content/blog/
+content/
 ├── 1.md          # Post markdown file
 ├── 1.jpg          # Cover image for post 1
 ├── 2.md
@@ -263,7 +263,7 @@ npm run validate-taxonomy
 **Post not showing up?**
 - Check if author/category exists in `taxonomy.ts`
 - Verify frontmatter syntax is correct
-- Check file is in `src/content/blog/`
+- Check file is in `content/`
 
 **Build failing?**
 - Run `npm run validate-taxonomy` to check for missing taxonomy entries

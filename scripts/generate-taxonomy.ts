@@ -27,7 +27,7 @@ function generateReadableSlug(bengaliText: string): string {
 }
 
 async function generateTaxonomy() {
-	const blogDir = join(process.cwd(), 'src/content/blog');
+	const blogDir = join(process.cwd(), 'content');
 	const taxonomyFile = join(process.cwd(), 'src/lib/taxonomy.ts');
 	
 	// Read existing taxonomy
