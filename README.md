@@ -275,4 +275,9 @@ npm run validate-taxonomy
 
 ---
 
-**Credit**: This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+## 📜 Licensing
+
+- **Source code:** Proprietary License (paid or authorized use only, domain-restricted)
+- **Written content (.md):** CC BY-NC-ND 4.0
+
+Unauthorized use may result in DMCA takedown requests.
