@@ -21,10 +21,9 @@ A modern, SEO-friendly blog built with Astro, featuring Bengali content support,
 
 ```
 ├── public/              # Static assets (images, fonts, etc.)
+├── content/             # Blog post markdown files and images
 ├── src/
 │   ├── components/      # Astro components
-│   ├── content/
-│   │   └── blog/        # Blog post markdown files and images
 │   ├── layouts/         # Page layouts
 │   ├── lib/
 │   │   ├── taxonomy.ts  # Author and category slug mappings
