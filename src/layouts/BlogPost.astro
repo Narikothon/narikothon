@@ -44,12 +44,12 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 	<body>
 		<Header />
 		<main class="max-w-[48rem] mx-auto py-6 md:py-12 px-4">
-			<article class="bg-base-100 border-2 border-base-content/30 rounded-box shadow-lg" data-pagefind-body>
-				<div class="w-full mb-2">
-					{displayImage && (
-						<Image width={1020} height={510} src={displayImage} alt="" class="block mx-auto rounded-t-xl shadow-lg" />
-					)}
+		<article class="bg-base-100 border-2 border-base-content/30 rounded-box shadow-lg overflow-hidden" data-pagefind-body>
+			{displayImage && (
+				<div class="w-[calc(100%+4px)] -mt-[2px] -ml-[2px] overflow-hidden rounded-t-box">
+					<Image width={1020} height={510} src={displayImage} alt="" class="block w-full rounded-t-box" />
 				</div>
+			)}
 				<div class="w-full max-w-full m-0 p-0">
 					<div class="mb-3 md:mb-4 mt-2 md:mt-3 px-4">
 						<h2 class="m-0 py-1 md:py-2 px-2 md:px-3 text-xl md:text-2xl font-bold text-center">{title}</h2>
