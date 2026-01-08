@@ -31,8 +31,9 @@ export async function getStaticPaths() {
 		const pageData = authorPosts.slice(start, end);
 		
 		const authorSlug = encodeURIComponent(author);
+		// Generate paths for both original and encoded versions
 		paths.push({
-			params: { slug: authorSlug },
+			params: { slug: author },
 			props: { 
 				page: {
 					data: pageData,
@@ -49,6 +50,27 @@ export async function getStaticPaths() {
 				author 
 			},
 		});
+		// Also generate path with encoded slug for URL matching
+		if (authorSlug !== author) {
+			paths.push({
+				params: { slug: authorSlug },
+				props: { 
+					page: {
+						data: pageData,
+						currentPage: 1,
+						lastPage: totalPages,
+						url: {
+							current: `/author/${authorSlug}/`,
+							prev: undefined,
+							next: totalPages > 1 ? `/author/${authorSlug}/page/2/` : undefined,
+							first: `/author/${authorSlug}/`,
+							last: totalPages > 1 ? `/author/${authorSlug}/page/${totalPages}/` : `/author/${authorSlug}/`,
+						}
+					}, 
+					author 
+				},
+			});
+		}
 	}
 	
 	return paths;

@@ -36,8 +36,9 @@ export async function getStaticPaths() {
 			const pageData = categoryPosts.slice(start, end);
 			
 			const categorySlug = encodeURIComponent(category);
+			// Generate paths for both original and encoded versions
 			paths.push({
-				params: { slug: categorySlug, page: page.toString() },
+				params: { slug: category, page: page.toString() },
 				props: { 
 					page: {
 						data: pageData,
@@ -54,6 +55,27 @@ export async function getStaticPaths() {
 					category 
 				},
 			});
+			// Also generate path with encoded slug for URL matching
+			if (categorySlug !== category) {
+				paths.push({
+					params: { slug: categorySlug, page: page.toString() },
+					props: { 
+						page: {
+							data: pageData,
+							currentPage: page,
+							lastPage: totalPages,
+							url: {
+								current: `/category/${categorySlug}/page/${page}/`,
+								prev: page === 2 ? `/category/${categorySlug}/` : `/category/${categorySlug}/page/${page - 1}/`,
+								next: page < totalPages ? `/category/${categorySlug}/page/${page + 1}/` : undefined,
+								first: `/category/${categorySlug}/`,
+								last: totalPages > 1 ? `/category/${categorySlug}/page/${totalPages}/` : `/category/${categorySlug}/`,
+							}
+						}, 
+						category 
+					},
+				});
+			}
 		}
 	}
 	
