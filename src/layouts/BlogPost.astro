@@ -187,9 +187,9 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 						<!-- Next/Previous Posts -->
 						{(prevPost || nextPost) && (
 							<div id="next-prev-box" class="bg-base-200 rounded-box p-4 mb-4">
-								<div class={`flex flex-col md:flex-row gap-4 ${!prevPost && nextPost ? 'md:justify-end' : ''}`}>
+								<div class="flex flex-col md:flex-row gap-4">
 									{prevPost && (
-										<div class={`flex-1 ${nextPost ? 'md:border-r md:border-base-content/20 md:pr-4' : ''}`}>
+										<div class={`${nextPost ? 'md:flex-1 md:border-r md:border-base-content/20 md:pr-4' : ''}`}>
 											<a href={`/${prevPost.id}`} id="prev-post" class="block hover:opacity-80 transition-opacity">
 												<div class="text-left p-2">
 													<span class="block text-xs font-semibold mb-2 pt-2 opacity-70">PREVIOUS POST</span>
@@ -199,9 +199,9 @@ const readingTime = calculateReadingTime(contentForReadingTime);
 										</div>
 									)}
 									{nextPost && (
-										<div class={`${prevPost ? 'flex-1 md:pl-4' : 'md:ml-auto'}`}>
+										<div class={`self-end md:self-auto md:flex-1 md:flex md:justify-end ${prevPost ? 'md:pl-4' : ''}`}>
 											<a href={`/${nextPost.id}`} id="next-post" class="block hover:opacity-80 transition-opacity">
-												<div class={`p-2 ${prevPost ? 'text-right' : 'text-right'}`}>
+												<div class="text-right p-2">
 													<span class="block text-xs font-semibold mb-2 pt-2 opacity-70">NEXT POST</span>
 													<p class="text-sm m-0 font-bold">{nextPost.title}</p>
 												</div>
