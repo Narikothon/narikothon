@@ -34,17 +34,13 @@ allPosts.forEach((post) => {
 // Get categories with their posts (3 posts each), excluding uncategorized
 const UNCATEGORIZED = 'ক্যাটাগরিহীন';
 const categories = Array.from(postsByCategory.entries())
+	.filter(([category]) => category !== UNCATEGORIZED) // Exclude uncategorized from initial list
 	.map(([category, posts]) => ({
 		category,
 		posts: posts.slice(0, 3),
 		count: posts.length,
 	}))
-	.sort((a, b) => {
-		// Put uncategorized last
-		if (a.category === UNCATEGORIZED) return 1;
-		if (b.category === UNCATEGORIZED) return -1;
-		return b.count - a.count;
-	});
+	.sort((a, b) => b.count - a.count); // Sort by count descending
 
 // Add uncategorized at the end if it exists
 if (uncategorizedPosts.length > 0 || postsByCategory.has(UNCATEGORIZED)) {
