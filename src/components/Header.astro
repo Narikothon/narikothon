@@ -17,9 +17,16 @@ allPosts.forEach((post) => {
 	}
 });
 
-// Convert to array, sort alphabetically
+// Convert to array, sort alphabetically, but put uncategorized last
+const UNCATEGORIZED = 'ক্যাটাগরিহীন';
 const categories = Array.from(categoryCounts.keys())
-	.sort((a, b) => a.localeCompare(b));
+	.sort((a, b) => {
+		// If one is uncategorized, it should be last
+		if (a === UNCATEGORIZED) return 1;
+		if (b === UNCATEGORIZED) return -1;
+		// Otherwise, sort alphabetically
+		return a.localeCompare(b);
+	});
 ---
 
 <div class="drawer">
