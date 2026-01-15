@@ -26,6 +26,7 @@ const blog = defineCollection({
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image().optional(),
 			}).transform((data) => {
+				const UNCATEGORIZED = 'ক্যাটাগরিহীন';
 				// If 'date' is provided but 'pubDate' is not, use date as pubDate
 				let transformed = data;
 				if (data.date && !data.pubDate) {
@@ -33,6 +34,13 @@ const blog = defineCollection({
 						...data,
 						pubDate: data.date,
 						date: undefined,
+					};
+				}
+				// If categories is missing or empty, assign uncategorized
+				if (!transformed.categories || transformed.categories.length === 0) {
+					transformed = {
+						...transformed,
+						categories: [UNCATEGORIZED],
 					};
 				}
 				return transformed;
