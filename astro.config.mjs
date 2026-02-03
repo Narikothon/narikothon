@@ -14,6 +14,7 @@ export default defineConfig({
     sitemap(),
     AstroPWA({
       registerType: 'autoUpdate',
+      devOptions: { enabled: true },
       manifest: {
         name: 'Narikothon',
         short_name: 'Narikothon',

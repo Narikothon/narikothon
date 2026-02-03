@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import InstallPrompt from '../components/InstallPrompt.astro';
 import SettingsModal from '../components/SettingsModal.astro';
 import { pwaInfo } from 'virtual:pwa-info';
 
@@ -24,6 +25,7 @@ const { title, description } = Astro.props;
 		<slot />
 		<Footer />
 		<SettingsModal />
+		<InstallPrompt />
 		<script>
 			import { registerSW } from 'virtual:pwa-register';
 			registerSW({

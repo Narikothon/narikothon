@@ -1,0 +1,111 @@
+---
+// Custom "Install app" / Add to Home Screen prompt.
+// The browser's native install prompt only appears when it decides to (e.g. engagement).
+// This component listens for beforeinstallprompt and shows our own install button.
+---
+<div id="install-prompt" class="install-prompt" role="region" aria-label="Install app" hidden>
+	<p class="install-prompt__message">Install Narikothon for a better experience</p>
+	<div class="install-prompt__actions">
+		<button type="button" id="install-prompt-accept" class="btn btn-primary btn-sm">Install</button>
+		<button type="button" id="install-prompt-dismiss" class="btn btn-ghost btn-sm">Not now</button>
+	</div>
+</div>
+
+<script>
+	interface InstallPromptEvent extends Event {
+		prompt(): void;
+		userChoice: Promise<{ outcome: string }>;
+	}
+
+	(function () {
+		let deferredPrompt: InstallPromptEvent | null = null;
+		const banner = document.getElementById('install-prompt');
+		const acceptBtn = document.getElementById('install-prompt-accept');
+		const dismissBtn = document.getElementById('install-prompt-dismiss');
+		const STORAGE_KEY = 'pwa-install-dismissed';
+
+		function showBanner() {
+			if (banner && !sessionStorage.getItem(STORAGE_KEY)) {
+				banner.hidden = false;
+			}
+		}
+
+		function hideBanner() {
+			if (banner) {
+				banner.hidden = true;
+			}
+		}
+
+		window.addEventListener('beforeinstallprompt', (e) => {
+			e.preventDefault();
+			deferredPrompt = e as InstallPromptEvent;
+			showBanner();
+		});
+
+		acceptBtn?.addEventListener('click', async () => {
+			if (!deferredPrompt) return;
+			deferredPrompt.prompt();
+			const { outcome } = await deferredPrompt.userChoice;
+			if (outcome === 'accepted') {
+				hideBanner();
+			}
+			deferredPrompt = null;
+		});
+
+		dismissBtn?.addEventListener('click', () => {
+			sessionStorage.setItem(STORAGE_KEY, 'true');
+			hideBanner();
+		});
+
+		// Hide if already installed (standalone / display-mode standalone)
+		const nav = window.navigator as Window['navigator'] & { standalone?: boolean };
+		if (window.matchMedia('(display-mode: standalone)').matches || nav.standalone) {
+			hideBanner();
+		}
+	})();
+</script>
+
+<style>
+	.install-prompt {
+		position: fixed;
+		bottom: 1rem;
+		left: 1rem;
+		right: 1rem;
+		max-width: 24rem;
+		margin: 0 auto;
+		padding: 1rem;
+		background: var(--p); /* primary */
+		color: var(--pc); /* primary-content */
+		border-radius: var(--rounded-box, 1rem);
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+		z-index: 9999;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.install-prompt[hidden] {
+		display: none !important;
+	}
+	.install-prompt__message {
+		margin: 0;
+		font-size: 0.9375rem;
+		font-weight: 500;
+	}
+	.install-prompt__actions {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: flex-end;
+	}
+	.install-prompt__actions .btn-primary {
+		background: var(--pc);
+		color: var(--p);
+		border-color: var(--pc);
+	}
+	.install-prompt__actions .btn-primary:hover {
+		opacity: 0.9;
+	}
+	.install-prompt__actions .btn-ghost {
+		color: var(--pc);
+		opacity: 0.9;
+	}
+</style>
