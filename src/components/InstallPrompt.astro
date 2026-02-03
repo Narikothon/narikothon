@@ -3,11 +3,11 @@
 // The browser's native install prompt only appears when it decides to (e.g. engagement).
 // This component listens for beforeinstallprompt and shows our own install button.
 ---
-<div id="install-prompt" class="install-prompt" role="region" aria-label="Install app" hidden>
-	<p class="install-prompt__message">Install Narikothon for a better experience</p>
-	<div class="install-prompt__actions">
-		<button type="button" id="install-prompt-accept" class="btn btn-primary btn-sm">Install</button>
-		<button type="button" id="install-prompt-dismiss" class="btn btn-ghost btn-sm">Not now</button>
+<div id="install-prompt" class="install-prompt card bg-primary text-primary-content shadow-xl rounded-box border border-primary-content/10 p-4 flex flex-col gap-3" role="region" aria-label="Install app" hidden>
+	<p class="install-prompt__message m-0 text-sm font-medium">Install Narikothon for a better experience</p>
+	<div class="install-prompt__actions flex gap-2 justify-end">
+		<button type="button" id="install-prompt-accept" class="btn btn-primary btn-sm bg-primary-content text-primary border-primary-content">Install</button>
+		<button type="button" id="install-prompt-dismiss" class="btn btn-ghost btn-sm text-primary-content/90 hover:bg-primary-content/20">Not now</button>
 	</div>
 </div>
 
@@ -73,41 +73,9 @@
 		right: 1rem;
 		max-width: 24rem;
 		margin: 0 auto;
-		padding: 1rem;
-		background-color: var(--p, #008E48);
-		background-image: none;
-		color: var(--pc, #ffffff);
-		border-radius: var(--rounded-box, 1rem);
-		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 		z-index: 9999;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		border: 1px solid rgba(0, 0, 0, 0.08);
 	}
 	.install-prompt[hidden] {
 		display: none !important;
-	}
-	.install-prompt__message {
-		margin: 0;
-		font-size: 0.9375rem;
-		font-weight: 500;
-	}
-	.install-prompt__actions {
-		display: flex;
-		gap: 0.5rem;
-		justify-content: flex-end;
-	}
-	.install-prompt__actions .btn-primary {
-		background: var(--pc);
-		color: var(--p);
-		border-color: var(--pc);
-	}
-	.install-prompt__actions .btn-primary:hover {
-		opacity: 0.9;
-	}
-	.install-prompt__actions .btn-ghost {
-		color: var(--pc);
-		opacity: 0.9;
 	}
 </style>
