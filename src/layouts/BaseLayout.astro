@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import SettingsModal from '../components/SettingsModal.astro';
+import { pwaInfo } from 'virtual:pwa-info';
 
 interface Props {
 	title: string;
@@ -16,12 +17,25 @@ const { title, description } = Astro.props;
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
+		{pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
 	</head>
 	<body>
 		<Header />
 		<slot />
 		<Footer />
 		<SettingsModal />
+		<script>
+			import { registerSW } from 'virtual:pwa-register';
+			registerSW({
+				immediate: true,
+				onRegisteredSW(swScriptUrl) {
+					// console.log('SW registered:', swScriptUrl);
+				},
+				onOfflineReady() {
+					// console.log('PWA ready to work offline');
+				},
+			});
+		</script>
 	</body>
 </html>
 

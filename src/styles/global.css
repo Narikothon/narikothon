@@ -1,7 +1,65 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, valentine, lemonade, caramellatte, retro, cyberpunk, aqua, abyss;
+  themes: light --default, dark --prefersdark, nariko, valentine, lemonade, caramellatte, retro, cyberpunk, aqua, abyss;
 }
+@plugin "daisyui/theme" {
+  name: "nariko";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  /* White bg, Main #008E48, Dark #006648 on hover */
+  --color-base-100: #ffffff;
+  --color-base-200: #f5f5f5;
+  --color-base-300: #eeeeee;
+  --color-base-content: #008E48;
+  --color-primary: #008E48;
+  --color-primary-content: #ffffff;
+  --color-secondary: #006648;
+  --color-secondary-content: #ffffff;
+  --color-accent: #008E48;
+  --color-accent-content: #ffffff;
+  --color-neutral: #00443D;
+  --color-neutral-content: #ffffff;
+  --color-info: #008E48;
+  --color-info-content: #ffffff;
+  --color-success: #008E48;
+  --color-success-content: #ffffff;
+  --color-warning: #008E48;
+  --color-warning-content: #ffffff;
+  --color-error: #006648;
+  --color-error-content: #ffffff;
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* Nariko theme: hover = #006648 */
+[data-theme="nariko"] .btn-primary:hover,
+[data-theme="nariko"] .btn-primary.btn-active,
+[data-theme="nariko"] .btn-accent:hover,
+[data-theme="nariko"] .btn-accent.btn-active,
+[data-theme="nariko"] .btn-success:hover,
+[data-theme="nariko"] .btn-success.btn-active {
+  background-color: #006648;
+  border-color: #006648;
+}
+[data-theme="nariko"] .link-primary:hover,
+[data-theme="nariko"] a.text-primary:hover,
+[data-theme="nariko"] .link:hover {
+  color: #006648;
+}
+[data-theme="nariko"] .btn-ghost:hover,
+[data-theme="nariko"] .btn-ghost.btn-active {
+  background-color: oklch(0.97 0.01 145);
+  color: #006648;
+}
+
+
 @font-face {
 	font-family: "Atkinson";
 	src: url("/fonts/atkinson-regular.woff") format("woff");
